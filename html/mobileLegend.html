@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top Up Mobile Legend - HekaStore</title>
+  <link rel="stylesheet" href="../css/style_topUpGames.css" />
+  <link rel="shortcut icon" href="../img/logotoko2.png" type="image/x-icon" />
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="navbar">
+        <a href="../index.html" style="text-decoration: none; color: #f5f5f5;display: flex;align-items: center;">
+        <img src="../img/logotoko2.png" class="nav-logo" alt="Logo" />
+        <h1 class="logo">HekaStore</h1>
+        </a>
+      
+      <input type="text" placeholder="Cari Game, Voucher, Dll" class="search-bar" />
+      <div class="nav-buttons">
+        <button id="loginBtn" onclick="alert('nanti tak tambahin')">
+          Login
+        </button>
+        <button id="daftarBtn" onclick="alert('nanti tak tambahin')">
+          Daftar
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Banner -->
+  <section class="banner">
+    <img src="../img/banner/bannerml.webp" alt="Mobile Legend Banner" />
+  </section>
+
+  <!-- Container utama -->
+  <div class="container">
+    <!-- Deskripsi layanan -->
+    <div class="card layanan" id="deskripsiLayanan">
+      <div class="logo-area">
+        <img src="../img/games/logoml.webp" alt="FF Icon" style="border-radius: 10px" />
+        <h2>Mobile Legend</h2>
+      </div>
+      <br />
+      <div class="features">
+        <p>📞 Layanan Pelanggan 24/7</p>
+        <p>🔒 Pembayaran Aman</p>
+        <p>⚡ Pengiriman 5-10 menit</p>
+      </div>
+      <br />
+      <p class="desc">
+        Top Up Diamond Mobile Legend Termurah! Masukkan User/Zone ID kamu, pilih nominal,
+        lalu selesaikan pembayaran. <br><br>Diamond langsung masuk setelah 5-10 menit pemrosesan ke akun kamu.
+      </p>
+      <br />
+      <button class="btn-merah">Lihat Cara Pembelian</button>
+    </div>
+
+    <!-- Form ID -->
+    <div class="card" id="formUserId">
+      <h3>1. Masukkan User ID</h3>
+      <div id="inputId">
+         <input type="number" id="userId" name="userId" placeholder="User ID" />
+         <input type="number" id="zoneId" name="userId" placeholder="Zone ID" />
+      </div>
+      
+      <small>Untuk menemukan User ID, buka profil di pojok kiri atas dalam
+        game.</small>
+    </div>
+
+    <!-- Nominal diamond -->
+    <div class="card" id="pilihNominal">
+      <h3>2. Pilih Nominal</h3>
+      <br />
+
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('topup')">
+          Top Up
+        </button>
+        <button class="tab" onclick="switchTab('member')">Membership</button>
+      </div>
+
+      <div id="topup" class="grid active">
+        <!-- contoh item -->
+      </div>
+
+      <div id="member" class="grid"></div>
+    </div>
+
+    <!-- Metode pembayaran -->
+    <div class="card" id="metodePembayaran">
+      <h3>3. Pilih Metode Pembayaran</h3>
+      <br />
+
+      <div class="payment-group">
+        <div class="payment-retail">
+          <div class="payment" onclick="alert('hehe Sementara E-Wallet/Cash dulu')">
+            Retail
+          </div>
+          <div id="Retail" class="payment-methods"></div>
+        </div>
+
+        <div class="payment-wallet">
+          <div class="payment">E-Wallet</div>
+          <div id="EWallet" class="payment-methods"></div>
+        </div>
+
+        <div class="payment-virtual">
+          <div class="payment" onclick="alert('hehe Sementara E-Wallet/Cash dulu')">
+            Virtual Account
+          </div>
+          <div id="bank" class="payment-methods"></div>
+        </div>
+
+        <div class="payment-virtual">
+          <div class="payment">Cash</div>
+          <div id="cash" class="payment-methods">
+            <label class="payment-card">
+              <input type="radio" name="payment" value="Cash" />
+              <img src="../img/wallet/cash.png" alt="cash" class="paymentLogo" />
+              <span>Cash</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data pemesan -->
+    <div class="card" id="dataPemesan">
+      <h3>4. Data Pemesan</h3>
+
+      <input type="number" id="nowa" name="nowa" placeholder="Nomor WhatsApp" />
+      <input type="text" id="nopro" name="nopro" placeholder="Masukkan Kode Promo" />
+
+      <button href="" id="btn-hijau">Lanjutkan Pembelian</button>
+    </div>
+
+    <section class="card" id="ordered">
+      <div class="invoice-header">
+        <h2>Invoice</h2>
+        <!-- <button class="print-btn">Cetak Invoice</button> -->
+      </div>
+
+      <div class="invoice-box">
+        <div class="top-info">
+          <h3 id="invoice-id"></h3>
+          <span class="date">Tanggal Transaksi: 2025-11-21 21:49:56</span>
+        </div>
+
+        <div class="tabs">
+          <div class="tab active">Proses</div>
+        </div>
+
+        <div class="timer-box">
+          <p>Transaksi ini kedaluwarsa setelah:</p>
+          <br />
+          <span id="timer">01:00:00</span>
+        </div>
+
+        <div class="content">
+          <div class="left">
+            <img src="../img/games/logoml.webp" class="product-img" alt="Product" />
+            <div class="detail" id="dataPesanan">
+              
+            </div>
+          </div>
+
+          <div class="right" id="paymentOrdered">
+
+          </div>
+        </div><br />
+        <button class="konfirm-btn" id="konfirmasiAdmin">Konfirmasi ke Admin</button>
+        <br />
+        <a href="mobileLegend.html" style="font-size: small;">buat orderan lagi?</a>
+      </div>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <!-- Logo & Deskripsi -->
+      <div class="footer-section">
+        <div class="footer-logo">
+          <img src="../img/logotoko2.png" alt="Logo" >
+          <h3>Heka Store</h3>
+        </div>
+        <p>
+          Top up game favorit kamu di Heka Store. Layanan voucher dan top
+          up game terlengkap, termurah, dan terpercaya di Indonesia.
+        </p>
+      </div>
+
+      <!-- Reseller -->
+      <div class="footer-section">
+        <h4>Seller</h4>
+        <ul>
+          <li><a href="#">Beranda</a></li>
+          <li><a href="#">Semua Games</a></li>
+          <li><a href="#">Semua Review</a></li>
+          <li><a href="#">Daftar Layanan</a></li>
+          <li><a href="#">Cek Region Mobile Legends</a></li>
+        </ul>
+      </div>
+
+      <!-- Informasi -->
+      <div class="footer-section">
+        <h4>Informasi</h4>
+        <ul>
+          <li><a href="#">API</a></li>
+          <li><a href="#">Tentang Kami</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Syarat & Ketentuan</a></li>
+          <li><a href="#">Kebijakan Privasi</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+
+      <!-- Ikuti Kami -->
+      <div class="footer-section">
+        <h4>Ikuti Kami</h4>
+        <div class="social-icons">
+          <!-- <img src="../img/icon_tiktok.png" alt="TikTok"> -->
+          <img src="../img/sosmed/whatsapp.png" alt="WA" />
+          <img src="../img/sosmed/facebook.png" alt="FB" />
+          <img src="../img/sosmed/instagram.png" alt="IG" />
+        </div>
+
+        <h4>Pembayaran</h4>
+        <marquee class="payment-logos">
+          <img src="../img/footer/logodana.webp" alt="Dana" />
+          <img src="../img/footer/metode-gopay.webp" alt="gopay" />
+          <img src="../img/footer/metode-ovo.webp" alt="ovo" />
+          <img src="../img/footer/metode-shoopepay.webp" alt="ShopeePay" />
+        </marquee>
+      </div>
+    </div>
+
+    <div class="footer-bottom">Heka Store 2025 - All Rights Reserved</div>
+  </footer>
+
+  <script src="../js/script_mobileLegend.js"></script>
+</body>
+
+</html>
