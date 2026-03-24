@@ -47,10 +47,10 @@ function formatRupiah(num) {
 const topupDiamond = document.getElementById("topup");
 const buyDiamond = [
     {name: "Top Up Mobile Legend", price: "Rp 2.000", diamond: "5 Diamonds"},
-    {name: "Top Up Mobile Legend", price: "Rp 3.800", diamond: "10 Diamonds (9 + 1 Bonus)"},
-    {name: "Top Up Mobile Legend", price: "Rp 4.950", diamond: "14 Diamonds (13 + 1 Bonus)"},
-    {name: "Top Up Mobile Legend", price: "Rp 9.200", diamond: "28 Diamonds (25 + 3 Bonus)"},
-    {name: "Top Up Mobile Legend", price: "Rp 11.900", diamond: "36 Diamonds (33 + 3 Bonus)"},
+    {name: "Top Up Mobile Legend", price: "Rp 4.000", diamond: "10 Diamonds (9 + 1 Bonus)"},
+    {name: "Top Up Mobile Legend", price: "Rp 5.000", diamond: "14 Diamonds (13 + 1 Bonus)"},
+    {name: "Top Up Mobile Legend", price: "Rp 9.500", diamond: "28 Diamonds (25 + 3 Bonus)"},
+    {name: "Top Up Mobile Legend", price: "Rp 12.000", diamond: "36 Diamonds (33 + 3 Bonus)"},
     {name: "Top Up Mobile Legend", price: "Rp 14.000", diamond: "44 Diamonds (40 + 4 Bonus)"},
     {name: "Top Up Mobile Legend", price: "Rp 16.600", diamond: "59 Diamonds (53 + 6 Bonus)"},
     {name: "Top Up Mobile Legend", price: "Rp 21.900", diamond: "71 Diamonds (64 + 7 Bonus)"},

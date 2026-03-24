@@ -43,19 +43,30 @@ function formatRupiah(num) {
 
 // Daftar paket topup (nominal)
 const topupDiamond = document.getElementById("topup");
-const buyDiamond = [
-    {name: "Top Up Free Fire", price: "Rp 1.500", diamond: "5 Diamonds"},
-    {name: "Top Up Free Fire", price: "Rp 3.500", diamond: "20 Diamonds"},
-    {name: "Top Up Free Fire", price: "Rp 7.600", diamond: "50 Diamonds"},
-    {name: "Top Up Free Fire", price: "Rp 9.500", diamond: "70 Diamonds"},
-    {name: "Top Up Free Fire", price: "Rp 13.900", diamond: "100 Diamonds"},
-    {name: "Top Up Free Fire", price: "Rp 18.800", diamond: "140 Diamonds"},
-    {name: "Top Up Free Fire", price: "Rp 30.900", diamond: "210 Diamonds"},
-    {name: "Top Up Free Fire", price: "Rp 46.500", diamond: "350 Diamonds"},
-    {name: "Top Up Free Fire", price: "Rp 58.900", diamond: "425 Diamonds"},
-    {name: "Top Up Free Fire", price: "Rp 110.900", diamond: "860 Diamonds"},
-    {name: "Top Up Free Fire", price: "Rp 129.900", diamond: "1000 Diamonds"},
-    {name: "Top Up Free Fire", price: "Rp 187.700", diamond: "1440 Diamonds"},
+const priceList = [
+    {diamond: "5 Diamonds", price: "Rp 2.500"},
+    {diamond: "20 Diamonds", price: "Rp 5.000"},
+    {diamond: "50 Diamonds", price: "Rp 8.500"},
+    {diamond: "70 Diamonds", price: "Rp 10.000 ⭐ BEST SELLER"},
+    {diamond: "100 Diamonds", price: "Rp 14.900 🔥 RECOMMENDED"},
+    {diamond: "140 Diamonds", price: "Rp 19.800"},
+    {diamond: "210 Diamonds", price: "Rp 31.000 💎 SUPER VALUE"},
+    {diamond: "355 Diamonds", price: "Rp 52.000 🚀 HEMAT BANGET"},
+    {diamond: "425 Diamonds", price: "Rp 66.000"},
+
+    // Tambahan dari gambar
+    {diamond: "720 Diamonds", price: "Rp 105.000 🔥 VALUE"},
+    {diamond: "860 Diamonds", price: "Rp 125.000"},
+    {diamond: "930 Diamonds", price: "Rp 135.000"},
+    {diamond: "1000 Diamonds", price: "Rp 145.000 ⭐ POPULER"},
+    {diamond: "1440 Diamonds", price: "Rp 205.000 💎 BEST DEAL"},
+    {diamond: "1450 Diamonds", price: "Rp 210.000"},
+    {diamond: "2000 Diamonds", price: "Rp 285.000 🚀 BIG SAVE"},
+    {diamond: "2180 Diamonds", price: "Rp 310.000"},
+    {diamond: "2355 Diamonds", price: "Rp 335.000"},
+    {diamond: "2720 Diamonds", price: "Rp 385.000"},
+    {diamond: "3640 Diamonds", price: "Rp 515.000 💎 SULTAN"},
+    {diamond: "4000 Diamonds", price: "Rp 565.000 🔥 MAX VALUE"},
 ]
 buyDiamond.forEach(buyDiamond => {
     const card = document.createElement("div")
