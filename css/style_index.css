@@ -172,7 +172,7 @@ header {
   background-color: var(--hijau);
   display: flex;
   width: 100%;
-  overflow-x: auto;
+  overflow-x: hidden;
 }
 .leaderboard::-webkit-scrollbar {
   display: none;

@@ -43,30 +43,30 @@ function formatRupiah(num) {
 
 // Daftar paket topup (nominal)
 const topupDiamond = document.getElementById("topup");
-const priceList = [
-    {diamond: "5 Diamonds", price: "Rp 2.500"},
-    {diamond: "20 Diamonds", price: "Rp 5.000"},
-    {diamond: "50 Diamonds", price: "Rp 8.500"},
-    {diamond: "70 Diamonds", price: "Rp 10.000 ⭐ BEST SELLER"},
-    {diamond: "100 Diamonds", price: "Rp 14.900 🔥 RECOMMENDED"},
-    {diamond: "140 Diamonds", price: "Rp 19.800"},
-    {diamond: "210 Diamonds", price: "Rp 31.000 💎 SUPER VALUE"},
-    {diamond: "355 Diamonds", price: "Rp 52.000 🚀 HEMAT BANGET"},
-    {diamond: "425 Diamonds", price: "Rp 66.000"},
+const buyDiamond = [
+    {name: "Top Up Free Fire", price: "Rp 2.500",diamond: "5 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 5.000",diamond: "20 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 8.500", diamond: "50 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 10.000 ⭐ BEST SELLER", diamond: "70 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 14.900 🔥 RECOMMENDED",diamond: "100 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 19.800", diamond: "140 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 31.000 💎 SUPER VALUE", diamond: "210 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 52.000 🚀 HEMAT BANGET", diamond: "355 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 66.000", diamond: "425 Diamonds"},
 
     // Tambahan dari gambar
-    {diamond: "720 Diamonds", price: "Rp 105.000 🔥 VALUE"},
-    {diamond: "860 Diamonds", price: "Rp 125.000"},
-    {diamond: "930 Diamonds", price: "Rp 135.000"},
-    {diamond: "1000 Diamonds", price: "Rp 145.000 ⭐ POPULER"},
-    {diamond: "1440 Diamonds", price: "Rp 205.000 💎 BEST DEAL"},
-    {diamond: "1450 Diamonds", price: "Rp 210.000"},
-    {diamond: "2000 Diamonds", price: "Rp 285.000 🚀 BIG SAVE"},
-    {diamond: "2180 Diamonds", price: "Rp 310.000"},
-    {diamond: "2355 Diamonds", price: "Rp 335.000"},
-    {diamond: "2720 Diamonds", price: "Rp 385.000"},
-    {diamond: "3640 Diamonds", price: "Rp 515.000 💎 SULTAN"},
-    {diamond: "4000 Diamonds", price: "Rp 565.000 🔥 MAX VALUE"},
+    {name: "Top Up Free Fire", price: "Rp 105.000 🔥 VALUE", diamond: "720 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 125.000", diamond: "860 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 135.000", diamond: "930 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 145.000 ⭐ POPULER", diamond: "1000 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 205.000 💎 BEST DEAL", diamond: "1440 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 210.000", diamond: "1450 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 285.000 🚀 BIG SAVE", diamond: "2000 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 310.000", diamond: "2180 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 335.000", diamond: "2355 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 385.000", diamond: "2720 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 515.000 💎 SULTAN", diamond: "3640 Diamonds"},
+    {name: "Top Up Free Fire", price: "Rp 565.000 🔥 MAX VALUE", diamond: "4000 Diamonds"},
 ]
 buyDiamond.forEach(buyDiamond => {
     const card = document.createElement("div")
