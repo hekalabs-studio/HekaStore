@@ -2,7 +2,7 @@
 const games = [
   { name: "Mobile Legends", img: "./img/games/logoml.webp", link: "html/mobileLegend.html" },
   { name: "Free Fire", img: "./img/games/logoff.webp", link: "html/freefire.html" },
-  { name: "Roblox", img: "./img/games/roblox.png", link: "html/roblox.html" },
+  { name: "Roblox", img: "./img/games/roblox.webp", link: "html/roblox.html" },
   { name: "PUBG Mobile", img: "./img/games/pubg.webp", link: "" },
   { name: "Genshin Impact", img: "./img/games/logo-genshin.webp", link: "" },
   { name: "Call of Duty Mobile", img: "./img/games/logocod.webp", link: "" },

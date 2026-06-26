@@ -5,9 +5,9 @@ const nopro = document.getElementById("nopro");
 // Daftar metode pembayaran dan gambar terkait
 const payment = [
    {name :"Dana",img : "../img/wallet/dana.webp"},
-   {name :"Gopay",img : "../img/wallet/gopay.jpg"},
+   {name :"Gopay",img : "../img/wallet/gopay.webp"},
    {name :"OVO",img : "../img/wallet/ovo.webp"},
-   {name :"Qris",img : "../img/wallet/qris.png"},
+   {name :"Qris",img : "../img/wallet/qris.webp"},
 ]
 
 
