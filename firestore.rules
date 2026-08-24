@@ -1,0 +1,35 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Produk: siapa saja boleh baca (dipakai untuk render halaman topup),
+    // tapi HANYA admin/Admin SDK yang boleh menulis (lewat Firebase Console
+    // atau scripts/seedProducts.js). Klien tidak pernah menulis harga.
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if false; // hanya via Admin SDK (bypass rules) / Console
+    }
+
+    // Order: TIDAK PERNAH ditulis langsung oleh client. Semua order harus
+    // lewat Cloud Function `createOrder` (Admin SDK, bypass rules) supaya
+    // harga & total selalu dihitung & divalidasi di server, bukan di browser.
+    // Pemilik order boleh membaca order miliknya sendiri untuk cek status.
+    match /orders/{orderId} {
+      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow write: if false;
+    }
+
+    // Profil user: hanya pemilik akun yang boleh baca/tulis datanya sendiri.
+    // Field 'points' sengaja tidak boleh ditulis langsung oleh client -
+    // hanya Cloud Function (saat order berstatus 'completed') yang menambah poin.
+    match /users/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create: if request.auth != null && request.auth.uid == uid
+                    && request.resource.data.points == 0;
+      allow update: if request.auth != null && request.auth.uid == uid
+                    && request.resource.data.points == resource.data.points;
+      allow delete: if false;
+    }
+  }
+}

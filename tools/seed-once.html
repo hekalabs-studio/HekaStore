@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<title>Seed Produk — Hekaapedia (khusus admin)</title>
+<meta name="robots" content="noindex, nofollow" />
+<style>
+  body{font-family:system-ui,sans-serif;max-width:640px;margin:40px auto;padding:0 20px;color:#111}
+  .warn{background:#fff3cd;border:1px solid #ffe69c;padding:14px 16px;border-radius:8px;margin-bottom:20px}
+  button{background:#0eb193;color:#fff;border:none;padding:12px 20px;border-radius:8px;font-size:1rem;cursor:pointer}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  #log{white-space:pre-wrap;background:#111;color:#0f0;padding:14px;border-radius:8px;margin-top:16px;font-family:monospace;font-size:.85rem;max-height:340px;overflow:auto}
+  .authbox{margin:16px 0;padding:14px;border:1px solid #ddd;border-radius:8px}
+  .authbox input{padding:8px;margin-right:8px;border:1px solid #ccc;border-radius:6px}
+</style>
+</head>
+<body>
+  <h1>🌱 Seed Produk Hekaapedia</h1>
+  <div class="warn">
+    <b>Halaman ini HANYA untuk sekali pakai oleh admin.</b><br/>
+    Sebelum klik tombol di bawah, pastikan kamu sudah deploy
+    <code>firestore.rules.seed-temp</code> (rules sementara yang mengizinkan
+    tulis ke koleksi <code>products</code> untuk user yang login).
+    Setelah selesai seeding, <b>segera deploy ulang <code>firestore.rules</code>
+    yang asli</b> supaya situs kembali aman. Jangan upload/host halaman ini
+    secara permanen di production.
+  </div>
+
+  <div class="authbox">
+    <p>1. Login dulu (pakai akun yang sama seperti tombol Login di situs):</p>
+    <input id="email" type="email" placeholder="Email" />
+    <input id="password" type="password" placeholder="Password" />
+    <button id="loginBtn" type="button">Login</button>
+    <p id="authStatus" style="font-size:.85rem;color:#666">Belum login.</p>
+  </div>
+
+  <button id="seedBtn" type="button" disabled>2. Seed 90 Produk ke Firestore</button>
+  <div id="log"></div>
+
+<script type="module">
+  import { auth, db } from "../js/firebase-init.js";
+  import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+  import { doc, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+  import { PRODUCTS } from "../data/products-seed.mjs";
+
+  const logEl = document.getElementById("log");
+  const seedBtn = document.getElementById("seedBtn");
+  const authStatus = document.getElementById("authStatus");
+
+  function log(msg) {
+    logEl.textContent += msg + "\n";
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  onAuthStateChanged(auth, (user) => {
+    seedBtn.disabled = !user;
+    authStatus.textContent = user ? `Login sebagai ${user.email}` : "Belum login.";
+  });
+
+  document.getElementById("loginBtn").addEventListener("click", async () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      log("✅ Login berhasil.");
+    } catch (err) {
+      log("❌ Login gagal: " + err.message);
+    }
+  });
+
+  seedBtn.addEventListener("click", async () => {
+    seedBtn.disabled = true;
+    log(`Mulai seeding ${PRODUCTS.length} produk...`);
+
+    const counters = {};
+    let batch = writeBatch(db);
+    let opCount = 0;
+    let total = 0;
+
+    try {
+      for (const p of PRODUCTS) {
+        const key = `${p.category}-${p.type}`;
+        counters[key] = (counters[key] || 0) + 1;
+
+        const slug = p.label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+        const docId = `${p.category}-${p.type}-${slug}`.slice(0, 140);
+
+        batch.set(doc(db, "products", docId), {
+          category: p.category,
+          type: p.type,
+          label: p.label,
+          price: p.price,
+          tag: p.tag || null,
+          order: counters[key],
+          active: true,
+          updatedAt: serverTimestamp(),
+        }, { merge: true });
+
+        opCount++; total++;
+        if (opCount >= 400) {
+          await batch.commit();
+          log(`  ...${total} tersimpan`);
+          batch = writeBatch(db);
+          opCount = 0;
+        }
+      }
+      if (opCount > 0) await batch.commit();
+      log(`✅ Selesai! ${total} produk berhasil ditulis ke koleksi 'products'.`);
+      log(`\nSEKARANG: deploy ulang firestore.rules yang asli (bukan yang -seed-temp), lalu hapus/jangan host halaman ini lagi.`);
+    } catch (err) {
+      log("❌ Gagal: " + err.message);
+      log("Kemungkinan firestore.rules.seed-temp belum di-deploy, atau kamu belum login.");
+      seedBtn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

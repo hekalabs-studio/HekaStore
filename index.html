@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" >
   <meta name="viewport" content="width=device-width, initial-scale=1.0" >
-  <title>HekaStore</title>
+  <title>Hekaapedia</title>
   <link rel="stylesheet" href="css/style_index.css" >
   <link rel="stylesheet" href="css/handphone.css" media="screen and (max-width : 1024px)" >
   <link rel="shortcut icon" href="img/logotoko2.webp" type="image/x-icon" >
@@ -16,15 +16,15 @@
     <div class="navbar">
       <div class="logo-header" style="display: flex; align-items: center;">
         <img src="img/logotoko2.webp" class="nav-logo" alt="Logo" >
-        <h1 class="logo">HekaStore</h1>
+        <h1 class="logo">Hekaapedia</h1>
       </div>
       
       <input type="text" placeholder="Cari Game, Voucher, Dll" class="search-bar" >
       <div class="nav-buttons">
-        <button id="loginBtn" onclick="alert('nanti tak tambahin')">
+        <button id="loginBtn">
           Login
         </button>
-        <button id="daftarBtn" onclick="alert('nanti tak tambahin')">
+        <button id="daftarBtn">
           Daftar
         </button>
       </div>
@@ -130,11 +130,11 @@
       <div class="footer-section">
         <div class="footer-logo">
           <img src="img/logotoko2.webp" alt="Logo" >
-          <h3>Heka Store</h3>
+          <h3>Hekaapedia</h3>
         </div>
         
         <p>
-          Top up game favorit kamu di Heka Store. Layanan voucher dan top
+          Top up game favorit kamu di Hekaapedia. Layanan voucher dan top
           up game terlengkap, termurah, dan terpercaya di Indonesia.
         </p>
       </div>
@@ -184,35 +184,14 @@
       </div>
     </div>
 
-    <div class="footer-bottom">Heka Store 2025 - All Rights Reserved</div>
+    <div class="footer-bottom">Hekaapedia 2025 - All Rights Reserved</div>
   </footer>
 
   <script src="js/main.js"></script>
 
-  <!-- Firebase -->
-  <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyDP2cWgKWzKvPEwMHavgWvaP03JZNOt-uM",
-    authDomain: "hekaapedia.firebaseapp.com",
-    projectId: "hekaapedia",
-    storageBucket: "hekaapedia.firebasestorage.app",
-    messagingSenderId: "335355698420",
-    appId: "1:335355698420:web:32786bed198b56bc68d2a1",
-    measurementId: "G-275ME2X6JG"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
+  <!-- Firebase: init terpusat + Login/Daftar sungguhan (lihat js/firebase-init.js, js/auth-ui.js) -->
+  <script type="module" src="js/firebase-init.js"></script>
+  <script type="module" src="js/auth-ui.js"></script>
 </body>
 
 </html>

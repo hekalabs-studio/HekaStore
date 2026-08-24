@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Top Up Mobile Legend - HekaStore</title>
+  <title>Top Up Mobile Legend - Hekaapedia</title>
   <link rel="stylesheet" href="../css/style_topUpGames.css" />
   <link rel="shortcut icon" href="../img/logotoko2.webp" type="image/x-icon" />
 </head>
@@ -15,15 +15,15 @@
     <div class="navbar">
         <a href="../index.html" style="text-decoration: none; color: #f5f5f5;display: flex;align-items: center;">
         <img src="../img/logotoko2.webp" class="nav-logo" alt="Logo" />
-        <h1 class="logo">HekaStore</h1>
+        <h1 class="logo">Hekaapedia</h1>
         </a>
       
       <input type="text" placeholder="Cari Game, Voucher, Dll" class="search-bar" />
       <div class="nav-buttons">
-        <button id="loginBtn" onclick="alert('nanti tak tambahin')">
+        <button id="loginBtn">
           Login
         </button>
-        <button id="daftarBtn" onclick="alert('nanti tak tambahin')">
+        <button id="daftarBtn">
           Daftar
         </button>
       </div>
@@ -184,10 +184,10 @@
       <div class="footer-section">
         <div class="footer-logo">
           <img src="../img/logotoko2.webp" alt="Logo" >
-          <h3>Heka Store</h3>
+          <h3>Hekaapedia</h3>
         </div>
         <p>
-          Top up game favorit kamu di Heka Store. Layanan voucher dan top
+          Top up game favorit kamu di Hekaapedia. Layanan voucher dan top
           up game terlengkap, termurah, dan terpercaya di Indonesia.
         </p>
       </div>
@@ -221,10 +221,10 @@
       <div class="footer-section">
         <h4>Ikuti Kami</h4>
         <div class="social-icons">
-          <!-- <img src="../img/icon_tiktok.weblogotoko2.webp" alt="TikTok"> -->
-          <img src="../img/sosmed/whatsapp.weblogotoko2.webp" alt="WA" />
-          <img src="../img/sosmed/facebook.weblogotoko2.webp" alt="FB" />
-          <img src="../img/sosmed/instagram.weblogotoko2.webp" alt="IG" />
+          <!-- <img src="../img/icon_tiktok.webp" alt="TikTok"> -->
+          <img src="../img/sosmed/whatsapp.webp" alt="WA" />
+          <img src="../img/sosmed/facebook.webp" alt="FB" />
+          <img src="../img/sosmed/instagram.webp" alt="IG" />
         </div>
 
         <h4>Pembayaran</h4>
@@ -237,10 +237,19 @@
       </div>
     </div>
 
-    <div class="footer-bottom">Heka Store 2025 - All Rights Reserved</div>
+    <div class="footer-bottom">Hekaapedia 2025 - All Rights Reserved</div>
   </footer>
 
-  <script src="../js/script_mobileLegend.js"></script>
+  <script>
+    window.HEKA_PAGE_CONFIG = {
+      category: "mobilelegend",
+      serviceName: "Mobile Legends",
+      waNumber: "6289514433486"
+    };
+  </script>
+  <script type="module" src="../js/firebase-init.js"></script>
+  <script type="module" src="../js/auth-ui.js"></script>
+  <script type="module" src="../js/checkout.js"></script>
 </body>
 
 </html>
