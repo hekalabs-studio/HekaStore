@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profil Saya - Hekaapedia</title>
+  <link rel="stylesheet" href="css/style_index.css" />
+  <link rel="stylesheet" href="css/handphone.css" media="screen and (max-width : 1024px)" />
+  <link rel="shortcut icon" href="img/logotoko2.webp" type="image/x-icon" />
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="navbar">
+      <div class="logo-header" style="display: flex; align-items: center;">
+        <a href="index.html" style="text-decoration: none; color: #f5f5f5;display: flex;align-items: center;">
+          <img src="img/logotoko2.webp" class="nav-logo" alt="Logo" />
+          <h1 class="logo">Hekaapedia</h1>
+        </a>
+      </div>
+
+      <div class="nav-buttons" style="margin-left:auto;">
+        <a href="index.html">Beranda</a>
+        <button id="loginBtn">Login</button>
+        <button id="daftarBtn">Daftar</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <section class="section">
+    <h3>👤 Profil Saya</h3>
+    <div id="profileContent" style="max-width:720px;margin:0 auto;">
+      <!-- Diisi oleh profile.js -->
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <div class="footer-logo">
+          <img src="img/logotoko2.webp" alt="Logo" />
+          <h3>Hekaapedia</h3>
+        </div>
+        <p>
+          Top up game favorit kamu di Hekaapedia. Layanan voucher dan top
+          up game terlengkap, termurah, dan terpercaya di Indonesia.
+        </p>
+      </div>
+      <div class="footer-section">
+        <h4>Seller</h4>
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="index.html#listJudul">Semua Games</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Informasi</h4>
+        <ul>
+          <li><a href="index.html">Tentang Kami</a></li>
+          <li><a href="index.html">Syarat & Ketentuan</a></li>
+          <li><a href="index.html">Kebijakan Privasi</a></li>
+          <li><a href="index.html">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Ikuti Kami</h4>
+        <div class="social-icons">
+          <img src="img/sosmed/whatsapp.webp" alt="WA" />
+          <img src="img/sosmed/facebook.webp" alt="FB" />
+          <img src="img/sosmed/instagram.webp" alt="IG" />
+        </div>
+        <h4>Pembayaran</h4>
+        <marquee class="payment-logos">
+          <img src="img/footer/logodana.webp" alt="Dana" />
+          <img src="img/footer/metode-gopay.webp" alt="gopay" />
+          <img src="img/footer/metode-ovo.webp" alt="ovo" />
+          <img src="img/footer/metode-shoopepay.webp" alt="ShopeePay" />
+        </marquee>
+      </div>
+    </div>
+    <div class="footer-bottom">Hekaapedia 2025 - All Rights Reserved</div>
+  </footer>
+
+  <script type="module" src="js/firebase-init.js"></script>
+  <script type="module" src="js/auth-ui.js"></script>
+  <script type="module" src="js/profile.js"></script>
+</body>
+
+</html>

@@ -120,3 +120,106 @@ document.querySelectorAll(".social-icons img").forEach(icon => {
         icon.style.transform = "scale(1)";
     });
 });
+
+// ========================
+// Banner Slider
+// ========================
+const banners = [
+  {
+    img: "./img/banner/desain-main.webp",
+    title: "Top Up Game & Pulsa",
+    subtitle: "Harga termurah, proses cepat, dan aman.",
+    btnText: "Lihat Layanan",
+    btnLink: "#listJudul",
+  },
+  {
+    img: "./img/banner/bannerml.webp",
+    title: "Promo Diamond Game",
+    subtitle: "Diskon khusus untuk pembelian pertama.",
+    btnText: "Daftar Sekarang",
+    btnLink: "#",
+  },
+  {
+    img: "./img/banner/bannerRoblox.jpg",
+    title: "Pulsa & Token Listrik",
+    subtitle: "Mudah, cepat, dan bisa dipakai sehari-hari.",
+    btnText: "Beli Sekarang",
+    btnLink: "#listJudul",
+  },
+  {
+    img: "./img/banner/bannerff.webp",
+    title: "Diamond & Membership Game",
+    subtitle: "Mudah, cepat, dan banyak promonya",
+    btnText: "Beli Sekarang",
+    btnLink: "#listJudul",
+  },
+];
+
+function initBannerSlider() {
+  const slidesContainer = document.getElementById("bannerSlides");
+  const dotsContainer = document.getElementById("bannerDots");
+  const prevBtn = document.getElementById("bannerPrev");
+  const nextBtn = document.getElementById("bannerNext");
+  if (!slidesContainer || !dotsContainer) return;
+
+  let currentIndex = 0;
+  let intervalId = null;
+
+  function render() {
+    slidesContainer.innerHTML = banners
+      .map(
+        (b, i) => `
+      <div class="banner-slide ${i === currentIndex ? 'active' : ''}" style="background-image: url('${b.img}')">
+        <div class="banner-text">
+          <h2>${b.title}</h2>
+          <p>${b.subtitle}</p>
+          <a class="btn" href="${b.btnLink}" style="color:#0c937b;text-decoration:none;display:inline-block;">${b.btnText}</a>
+        </div>
+      </div>
+    `
+      )
+      .join("");
+
+    dotsContainer.innerHTML = banners
+      .map(
+        (_, i) => `
+      <button class="banner-dot ${i === currentIndex ? 'active' : ''}" data-index="${i}" aria-label="Slide ${i + 1}"></button>
+    `
+      )
+      .join("");
+  }
+
+  function goTo(index) {
+    currentIndex = (index + banners.length) % banners.length;
+    render();
+    resetInterval();
+  }
+
+  function next() {
+    goTo(currentIndex + 1);
+  }
+
+  function prev() {
+    goTo(currentIndex - 1);
+  }
+
+  function resetInterval() {
+    if (intervalId) clearInterval(intervalId);
+    intervalId = setInterval(next, 5000);
+  }
+
+  dotsContainer.addEventListener("click", (e) => {
+    const dot = e.target.closest(".banner-dot");
+    if (!dot) return;
+    const index = Number(dot.dataset.index);
+    if (Number.isFinite(index)) goTo(index);
+  });
+
+  prevBtn.addEventListener("click", prev);
+  nextBtn.addEventListener("click", next);
+
+  render();
+  resetInterval();
+}
+
+initBannerSlider();

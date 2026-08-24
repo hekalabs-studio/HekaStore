@@ -8,7 +8,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/fireba
 import { getAnalytics, isSupported as analyticsIsSupported } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-import { getFunctions } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-functions.js";
+// Catatan: TIDAK ada import firebase-functions di sini. Project ini pakai
+// Spark plan (gratis) yang tidak bisa deploy Cloud Functions. Validasi
+// harga & aturan order sekarang dilakukan lewat Firestore Security Rules
+// (firestore.rules) — tetap server-side dan tidak bisa dimanipulasi dari
+// browser, tapi tidak butuh Blaze plan. Lihat js/checkout.js.
 
 const firebaseConfig = {
   apiKey: "AIzaSyDP2cWgKWzKvPEwMHavgWvaP03JZNOt-uM",
@@ -23,7 +27,6 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const functions = getFunctions(app, "asia-southeast2"); // region terdekat ke ID, samakan dgn region di functions/index.js
 
 // Analytics gagal di beberapa lingkungan (mis. dibuka dari file://, atau
 // browser dengan ad-blocker) — jangan sampai melempar error yang

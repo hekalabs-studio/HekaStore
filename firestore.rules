@@ -1,35 +1,96 @@
 rules_version = '2';
 
+// Project ini pakai Spark plan (gratis) -> TIDAK ada Cloud Functions.
+// Semua validasi yang tadinya dilakukan Cloud Function `createOrder`
+// sekarang dipindah ke sini. Rules tetap dieksekusi di server Firestore,
+// jadi tetap tidak bisa dimanipulasi lewat DevTools — cuma bedanya tidak
+// butuh Blaze plan.
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Produk: siapa saja boleh baca (dipakai untuk render halaman topup),
-    // tapi HANYA admin/Admin SDK yang boleh menulis (lewat Firebase Console
-    // atau scripts/seedProducts.js). Klien tidak pernah menulis harga.
-    match /products/{productId} {
-      allow read: if true;
-      allow write: if false; // hanya via Admin SDK (bypass rules) / Console
+    function productData(productId) {
+      return get(/databases/$(database)/documents/products/$(productId)).data;
     }
 
-    // Order: TIDAK PERNAH ditulis langsung oleh client. Semua order harus
-    // lewat Cloud Function `createOrder` (Admin SDK, bypass rules) supaya
-    // harga & total selalu dihitung & divalidasi di server, bukan di browser.
-    // Pemilik order boleh membaca order miliknya sendiri untuk cek status.
-    match /orders/{orderId} {
-      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+    // Aturan pembulatan Cash: bulatkan ke atas ke kelipatan Rp 1.000.
+    function cashRounded(price) {
+      return math.ceil(price / 1000.0) * 1000;
+    }
+
+    // ---------------- Produk ----------------
+    // Publik boleh baca (dipakai render halaman topup). Tidak ada yang
+    // boleh menulis lewat client -> hanya lewat Firebase Console atau
+    // tools/seed-once.html (dengan firestore.rules.seed-temp sementara).
+    match /products/{productId} {
+      allow read: if true;
       allow write: if false;
     }
 
-    // Profil user: hanya pemilik akun yang boleh baca/tulis datanya sendiri.
-    // Field 'points' sengaja tidak boleh ditulis langsung oleh client -
-    // hanya Cloud Function (saat order berstatus 'completed') yang menambah poin.
+    // ---------------- Order / Transaksi ----------------
+    // Dibuat langsung oleh client (tidak ada Cloud Function di Spark plan),
+    // TAPI setiap field harga di-cross-check ke dokumen produk aslinya di
+    // sini. Kalau harga yang dikirim client tidak cocok dengan harga asli
+    // di Firestore, penulisan DITOLAK oleh server -> harga tidak bisa
+    // dimanipulasi walau checkout.js diubah/di-devtools.
+    match /orders/{orderId} {
+      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+
+      allow create: if
+        request.resource.data.keys().hasOnly([
+          'invoiceId','productId','category','label','basePrice','total',
+          'paymentMethod','userId','zoneId','nowa','promoCode','uid',
+          'status','createdAt'
+        ]) &&
+        request.resource.data.invoiceId is string &&
+        request.resource.data.productId is string &&
+        request.resource.data.status == 'pending_confirmation' &&
+        request.resource.data.paymentMethod in ['Qris', 'Cash'] &&
+        request.resource.data.category == productData(request.resource.data.productId).category &&
+        request.resource.data.label == productData(request.resource.data.productId).label &&
+        productData(request.resource.data.productId).active == true &&
+        request.resource.data.basePrice == productData(request.resource.data.productId).price &&
+        request.resource.data.total == (
+          request.resource.data.paymentMethod == 'Cash'
+            ? cashRounded(productData(request.resource.data.productId).price)
+            : productData(request.resource.data.productId).price
+        ) &&
+        (request.resource.data.uid == null || request.resource.data.uid == request.auth.uid) &&
+        request.resource.data.userId is string && request.resource.data.userId.size() > 0 &&
+        request.resource.data.nowa.matches('^[0-9]{10,15}$') &&
+        request.resource.data.createdAt == request.time;
+
+      // Status order (pending_confirmation -> completed, dll) hanya boleh
+      // diubah admin lewat Firebase Console (itu pakai akses IAM, bukan
+      // lewat rules ini, jadi tetap bisa walau baris di bawah "false").
+      allow update, delete: if false;
+    }
+
+    // ---------------- Profil user ----------------
     match /users/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;
-      allow create: if request.auth != null && request.auth.uid == uid
-                    && request.resource.data.points == 0;
-      allow update: if request.auth != null && request.auth.uid == uid
-                    && request.resource.data.points == resource.data.points;
+      allow create: if request.auth != null && request.auth.uid == uid;
+      allow update: if request.auth != null && request.auth.uid == uid;
       allow delete: if false;
+
+      // Poin loyalti TIDAK disimpan sebagai satu angka yang di-increment
+      // (itu butuh transaksi/Cloud Function agar aman dari race condition).
+      // Sebagai gantinya: 1 dokumen "klaim poin" per order yang sudah
+      // completed. Total poin = jumlah semua dokumen ini (dihitung client
+      // saat render, lihat js/profile.js). Aman di Spark plan karena:
+      //  - hanya bisa dibuat SEKALI per orderId (create, bukan update)
+      //  - jumlah poin di dalamnya divalidasi persis dari order.total asli
+      //  - hanya bisa diklaim kalau order itu benar milik uid ini & sudah 'completed'
+      match /pointClaims/{orderId} {
+        allow read: if request.auth != null && request.auth.uid == uid;
+        allow create: if
+          request.auth != null && request.auth.uid == uid &&
+          get(/databases/$(database)/documents/orders/$(orderId)).data.uid == uid &&
+          get(/databases/$(database)/documents/orders/$(orderId)).data.status == 'completed' &&
+          request.resource.data.keys().hasOnly(['points','claimedAt']) &&
+          request.resource.data.points == math.floor(get(/databases/$(database)/documents/orders/$(orderId)).data.total / 10000);
+        allow update, delete: if false;
+      }
     }
   }
 }

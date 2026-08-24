@@ -4,17 +4,19 @@
   text-align: center;
 }
 .nav-buttons {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
 }
 .search-bar {
-    width: 100%;
-    margin: 10px 0;
-  }
-  .card {
-    flex: 1 1 100%;
-  }
+  width: 100%;
+  margin: 10px 0;
+}
+.card {
+  flex: 1 1 100%;
+}
 .pulsaCard img {
   width: 100%;
   border-radius: 8px;
@@ -29,5 +31,21 @@
   flex: content;
   padding: 10px;
   border-radius: 10px;
+}
 
+.banner-slider {
+  padding: 120px 16px;
+}
+.banner-slides {
+  min-height: 200px;
+}
+.banner-text h2 {
+  font-size: 1.4rem;
+}
+.banner-text p {
+  font-size: 1rem;
+}
+.banner-arrow {
+  font-size: 1.3rem;
+  padding: 8px 10px;
 }

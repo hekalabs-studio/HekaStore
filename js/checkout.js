@@ -1,21 +1,19 @@
 // js/checkout.js
-// Menggantikan script_freeFire.id.js, script_mobileLegend.js, script_roblox.js,
-// script_pulsaTelkomsel.js, script_pulsaIndosat.js, script_pulsaTri.js,
-// script_pulsaXL.js, script_tokenListrik.js (total ~4.100 baris, 90% identik)
-// dengan SATU file yang dikonfigurasi lewat `window.HEKA_PAGE_CONFIG` di tiap
-// halaman HTML. Lihat bagian bawah tiap html/*.html untuk contoh config-nya.
+// Satu script generik untuk semua halaman topup (Free Fire, ML, Roblox,
+// Pulsa, Token Listrik) — dikonfigurasi lewat window.HEKA_PAGE_CONFIG.
 //
-// Perubahan penting dibanding versi lama:
-//  - Daftar produk & harga diambil dari Firestore (`products` collection),
-//    bukan hardcoded -> admin bisa ubah harga tanpa deploy ulang.
-//  - Harga final TIDAK dipercaya dari client. Saat tombol beli ditekan,
-//    kita panggil Cloud Function `createOrder` yang menghitung ulang harga
-//    dari Firestore di server, menyimpan order, dan mengembalikan invoice
-//    resmi. Ini menutup celah user mengubah harga lewat DevTools.
+// MODE SPARK PLAN (gratis, tanpa Cloud Functions):
+// Order ditulis LANGSUNG dari browser ke Firestore (koleksi `orders`).
+// Supaya harga tetap tidak bisa dimanipulasi lewat DevTools walau tanpa
+// Cloud Function, firestore.rules mencocokkan setiap field harga yang
+// dikirim terhadap dokumen produk aslinya di server sebelum mengizinkan
+// penulisan. Kalau harga tidak cocok, Firestore MENOLAK writenya sendiri
+// (permission-denied) — client tidak bisa memaksakan harga palsu.
 
-import { db, auth, functions } from "./firebase-init.js";
-import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-import { httpsCallable } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-functions.js";
+import { db, auth } from "./firebase-init.js";
+import {
+  collection, doc, setDoc, getDoc, query, where, getDocs, serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 const config = window.HEKA_PAGE_CONFIG;
 if (!config || !config.category) {
@@ -81,6 +79,7 @@ async function init(config) {
     const card = document.createElement("div");
     card.classList.add("item");
     card.dataset.productId = item.id;
+    card._productData = item; // dipakai utk render cepat, TIDAK dipercaya saat submit (lihat langkah 5)
     card.innerHTML = `
       <h4>${item.label}</h4>
       <p style="color:#00c46b;font-size:small">${formatRupiah(item.price)}${
@@ -117,7 +116,7 @@ async function init(config) {
     tabs[tabName === "topup" ? 0 : 1]?.classList.add("active");
   };
 
-  /* ---------- 4. Countdown invoice (UI only, kedaluwarsa asli dicek di server) ---------- */
+  /* ---------- 4. Countdown invoice (tampilan saja) ---------- */
   const COUNTDOWN_DURATION = 3600;
   let expireTime = null;
   let countdown = null;
@@ -143,9 +142,8 @@ async function init(config) {
     timerEl.textContent = [h, m, s].map((n) => String(n).padStart(2, "0")).join(":");
   }
 
-  /* ---------- 5. Tombol beli -> panggil Cloud Function createOrder ---------- */
+  /* ---------- 5. Tombol beli -> tulis order LANGSUNG ke Firestore ---------- */
   const buyButton = document.getElementById("btn-hijau");
-  const createOrder = httpsCallable(functions, "createOrder");
 
   buyButton.addEventListener("click", async () => {
     const selected = document.querySelector(".item.selected");
@@ -167,24 +165,63 @@ async function init(config) {
     buyButton.textContent = "Memproses...";
 
     try {
-      // Harga TIDAK dikirim dari sini — hanya productId. Server yang
-      // menentukan harga sebenarnya dari Firestore (lihat functions/index.js).
-      const result = await createOrder({
-        productId: selected.dataset.productId,
-        category: config.category,
+      const productId = selected.dataset.productId;
+
+      // Ambil ulang harga LANGSUNG dari Firestore saat ini (bukan dari
+      // grid yang mungkin sudah lama di-cache browser) supaya invoice yang
+      // ditampilkan ke pembeli sudah pasti sesuai apa yang nanti disetujui
+      // server. Ini bukan satu-satunya lapisan keamanan -> firestore.rules
+      // tetap memvalidasi ulang persis sebelum benar-benar menyimpan.
+      const productSnap = await getDoc(doc(db, "products", productId));
+      if (!productSnap.exists() || productSnap.data().active === false) {
+        alert("Produk ini sudah tidak tersedia. Muat ulang halaman.");
+        return;
+      }
+      const product = productSnap.data();
+
+      let total = product.price;
+      if (selectedPayment.value === "Cash") {
+        total = Math.ceil(total / 1000) * 1000; // harus sama persis dgn cashRounded() di firestore.rules
+      }
+
+      const invoiceId = generateInvoiceId();
+      const orderRef = doc(collection(db, "orders"));
+      const currentUser = auth.currentUser;
+
+      const orderPayload = {
+        invoiceId,
+        productId,
+        category: product.category,
+        label: product.label,
+        basePrice: product.price,
+        total,
         paymentMethod: selectedPayment.value,
         userId: userId.value,
         zoneId: zoneId ? zoneId.value : null,
         nowa: nowa.value,
-        promoCode: nopro ? nopro.value : "",
-      });
+        promoCode: nopro && nopro.value ? nopro.value : null,
+        uid: currentUser ? currentUser.uid : null, // tamu boleh checkout tanpa login
+        status: "pending_confirmation",
+        createdAt: serverTimestamp(),
+      };
 
-      const { invoiceId, total, label, orderId } = result.data;
-      renderInvoice({ invoiceId, total, label, orderId, paymentMethod: selectedPayment.value });
+      await setDoc(orderRef, orderPayload);
+
+      renderInvoice({
+        invoiceId,
+        total,
+        label: product.label,
+        orderId: orderRef.id,
+        paymentMethod: selectedPayment.value,
+      });
       startCountdown();
     } catch (err) {
-      console.error("createOrder gagal:", err);
-      alert("Gagal membuat order: " + (err.message || "Terjadi kesalahan, coba lagi."));
+      console.error("Gagal membuat order:", err);
+      if (err.code === "permission-denied") {
+        alert("Gagal membuat order: data tidak valid (kemungkinan harga produk sudah berubah). Muat ulang halaman lalu coba lagi.");
+      } else {
+        alert("Gagal membuat order: " + (err.message || "Terjadi kesalahan, coba lagi."));
+      }
     } finally {
       buyButton.disabled = false;
       buyButton.textContent = "Lanjutkan Pembelian";
@@ -195,6 +232,9 @@ async function init(config) {
     document.getElementById("invoice-id").textContent = invoiceId;
 
     const dataPesanan = document.getElementById("dataPesanan");
+    const loginNote = auth.currentUser
+      ? `<p style="font-size:.85rem;color:#0eb193;">✅ Tersimpan di <a href="${profileUrl()}" style="color:#0eb193;">Riwayat Transaksi</a> akunmu.</p>`
+      : `<p style="font-size:.85rem;color:#888;">Login supaya transaksi ini tercatat di riwayat akunmu & dapat poin.</p>`;
     dataPesanan.innerHTML = `
       <p><strong>Produk:</strong> ${label}</p>
       <p><strong>Metode:</strong> ${paymentMethod}</p>
@@ -202,6 +242,7 @@ async function init(config) {
       <p><strong>Kode Promo:</strong> ${nopro && nopro.value ? nopro.value : "-"}</p>
       <p><strong>Total Bayar:</strong> ${formatRupiah(total)}</p>
       <p><strong>Invoice:</strong> ${invoiceId}</p>
+      ${loginNote}
     `;
 
     renderPaymentOrder(paymentMethod, total);
@@ -212,10 +253,14 @@ async function init(config) {
     orderedSection.style.display = "block";
     orderedSection.scrollIntoView({ behavior: "smooth", block: "start" });
 
-    // simpan referensi orderId biar tombol konfirmasi tahu order mana yg dimaksud
     document.getElementById("konfirmasiAdmin").dataset.orderId = orderId;
     document.getElementById("konfirmasiAdmin").dataset.invoiceId = invoiceId;
     document.getElementById("konfirmasiAdmin").dataset.total = total;
+  }
+
+  function profileUrl() {
+    // checkout.js dipakai baik di root (tidak ada) maupun di html/*.html
+    return window.location.pathname.includes("/html/") ? "../profile.html" : "profile.html";
   }
 
   const orderData = [
@@ -268,7 +313,7 @@ async function init(config) {
     window.location.href = url;
   });
 
-  /* ---------- 7. Unduh QR (delegasi, sama seperti sebelumnya) ---------- */
+  /* ---------- 7. Unduh QR ---------- */
   document.addEventListener("click", async (e) => {
     const btn = e.target.closest(".download-btn");
     if (!btn) return;
@@ -288,6 +333,11 @@ async function init(config) {
       window.open(qrisImg.src, "_blank");
     }
   });
+}
+
+function generateInvoiceId() {
+  const rand = Math.floor(1000 + Math.random() * 9000);
+  return `HKA${rand}E`;
 }
 
 function formatRupiah(num) {

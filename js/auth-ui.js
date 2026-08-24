@@ -61,8 +61,13 @@ const MODAL_CSS = `
 .heka-auth-form input{width:100%;box-sizing:border-box;padding:10px 12px;margin-bottom:10px;border:1px solid #ccc;border-radius:8px;font-size:.95rem}
 .heka-auth-submit{width:100%;padding:10px;border:none;border-radius:8px;background:linear-gradient(0deg,#0eb193,#2ed9b3);color:#fff;font-weight:700;cursor:pointer}
 .heka-auth-error{color:#e63946;font-size:.85rem;min-height:1.1em;margin:-2px 0 8px}
-.heka-user-chip{display:flex;align-items:center;gap:8px;color:#f5f5f5;font-size:.9rem}
-.heka-user-chip button{background:none;border:1px solid #f5f5f5;color:#f5f5f5;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:.8rem}
+.heka-user-chip{display:flex;align-items:center;gap:8px;color:#f5f5f5;font-size:.9rem;flex-wrap:wrap}
+.heka-user-chip a{display:flex;align-items:center;gap:8px;color:inherit;text-decoration:none}
+.heka-user-chip a:hover .heka-user-name{text-decoration:underline}
+.heka-user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(0deg,#0eb193,#2ed9b3);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;flex-shrink:0}
+.heka-user-name{max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.heka-user-chip button{background:none;border:1px solid rgba(245,245,245,0.6);color:#f5f5f5;border-radius:6px;padding:5px 12px;cursor:pointer;font-size:.8rem;transition:background .15s ease,color .15s ease}
+.heka-user-chip button:hover{background:#f5f5f5;color:#0c937b}
 `;
 
 function injectModalOnce() {
@@ -133,12 +138,12 @@ function wireModalEvents() {
       try {
         const cred = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(cred.user, { displayName });
-        // Buat dokumen profil + basis sistem poin (poin HANYA boleh ditambah
-        // oleh Cloud Function saat order 'completed', lihat firestore.rules)
+        // Buat dokumen profil dasar. Poin loyalti TIDAK disimpan sebagai
+        // field di sini -> lihat users/{uid}/pointClaims di firestore.rules
+        // dan js/profile.js untuk cara poin dihitung (aman tanpa Cloud Function).
         await setDoc(doc(db, "users", cred.user.uid), {
           displayName,
           email,
-          points: 0,
           createdAt: serverTimestamp(),
         });
         closeModal();
@@ -148,6 +153,12 @@ function wireModalEvents() {
       }
     }
   });
+}
+
+function profileUrl() {
+  // auth-ui.js dipakai baik di halaman root (index.html, profile.html)
+  // maupun di html/*.html -> path ke profile.html beda tergantung lokasi.
+  return window.location.pathname.includes("/html/") ? "../profile.html" : "profile.html";
 }
 
 function renderNavForUser(user) {
@@ -171,7 +182,14 @@ function renderNavForUser(user) {
       chip.className = "heka-user-chip";
       container.appendChild(chip);
     }
-    chip.innerHTML = `<span>👋 ${user.displayName || user.email}</span><button type="button" id="hekaLogoutBtn">Logout</button>`;
+    const initial = (user.displayName || user.email || "U").charAt(0).toUpperCase();
+    chip.innerHTML = `
+      <a href="${profileUrl()}" title="Lihat profil">
+        <span class="heka-user-avatar">${initial}</span>
+        <span class="heka-user-name">${user.displayName || user.email}</span>
+      </a>
+      <button type="button" id="hekaLogoutBtn">Logout</button>
+    `;
   } else {
     loginBtn.style.display = "";
     daftarBtn.style.display = "";
