@@ -223,8 +223,9 @@
 
       <div class="nominal-custom">
 
-        <input type="text" id="customNominal">
+        <input type="text" id="customNominal" inputmode="numeric" autocomplete="off" placeholder="Atau tulis custom nominal, min. 50 Robux..." />
         <p id="perkiraanHarga"></p>
+        <p id="nominalWarning" class="nominal-warning" role="alert" aria-live="polite"></p>
       </div>
 
       <div class="tabs">
@@ -399,7 +400,18 @@
     window.HEKA_PAGE_CONFIG = {
       category: "roblox",
       serviceName: "Roblox",
-      waNumber: "6289514433486"
+      waNumber: "6289514433486",
+      // Custom nominal: user bebas isi sendiri, minimal 50 Robux.
+      // Formula mengikuti pricelist:
+      //   harga = nominal x Rp150         (50 -> 7.500 ... 3.500 -> 525.000)
+      //   DP    = round(nominal x 10/7)   (50 -> 71, 100 -> 143, 160 -> 229,
+      //                                    350 -> 500, 1.000 -> 1.429, 3.500 -> 5.000)
+      customNominal: {
+        min: 50,
+        unit: "Robux",
+        pricePerUnit: 150,
+        dpPerUnit: 10 / 7
+      }
     };
   </script>
   <script type="module" src="../js/firebase-init.js"></script>

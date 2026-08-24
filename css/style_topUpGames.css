@@ -175,11 +175,12 @@ section {
 
 /* Card */
 .card {
-  background: #f5f5f5;
-  padding: 20px;
-  border-radius: 10px;
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 16px;
   margin-bottom: 20px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e8f1ec;
+  box-shadow: 0 4px 16px rgba(16, 60, 45, 0.07);
 }
 #inputId {
   display: flex;
@@ -193,77 +194,150 @@ section {
 }
 .card h3 {
   margin-top: 0;
+  font-family: "Baloo 2", "Poppins", sans-serif;
+  font-size: 1.15rem;
+  color: #123c33;
+  padding-left: 12px;
+  border-left: 5px solid #0fd6a8;
+  letter-spacing: 0.2px;
 }
 
 /* Layanan card */
 .layanan .logo-area {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
 }
 
 .layanan img {
-  width: 60px;
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border: 3px solid #ffffff;
+  box-shadow: 0 6px 14px rgba(12, 147, 123, 0.28);
+}
+
+.layanan .logo-area h2 {
+  font-family: "Baloo 2", "Poppins", sans-serif;
+  font-size: 1.65rem;
+  letter-spacing: 0.3px;
+  color: #0c6e5c;
+}
+
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .features p {
-  margin: 3px 0;
+  margin: 0;
+  background: #ecfbf5;
+  border: 1px solid #c9f0e2;
+  color: #0b6b58;
+  padding: 7px 13px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
-.btn-merah {
-  background: linear-gradient(90deg, #0fd6a8, #14c3b3);
-  color: #f5f5f5;
-  border: none;
-  padding: 12px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: x-small;
-  margin: 5px 2px;
-}
+.btn-merah,
 .link-merah {
-  background: linear-gradient(90deg, #0fd6a8, #14c3b3);
-  color: #f5f5f5;
+  background: linear-gradient(90deg, #0fd6a8, #0a9d8f);
+  color: #fff;
   border: none;
-  padding: 12px 10px;
-  border-radius: 6px;
+  padding: 12px 20px;
+  border-radius: 12px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: x-small;
-  margin: 5px 2px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin: 6px 6px 0 0;
   display: inline-block;
   text-decoration: none;
+  box-shadow: 0 4px 12px rgba(15, 214, 168, 0.35);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+.btn-merah:hover,
+.link-merah:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(15, 214, 168, 0.45);
+  filter: brightness(1.05);
+}
+/* sembunyikan tombol kosong agar tidak jadi blob hijau */
+.btn-merah:empty {
+  display: none;
 }
 
 
 /* Input */
 input {
   width: 100%;
-  padding: 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 2px solid #dce9e2;
+  background: #fbfffd;
   margin: 10px 0;
+  font-size: 0.95rem;
+  color: #22303c;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+input:focus {
+  outline: none;
+  border-color: #0fd6a8;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(15, 214, 168, 0.15);
+}
+input::placeholder {
+  color: #9ab5ab;
+}
+#perkiraanHarga {
+  margin: 2px 0 8px;
+  font-weight: 700;
+  color: #0a9d4e;
+  min-height: 1.3em;
+}
+#perkiraanHarga.error {
+  color: #e63946;
+}
+.nominal-warning {
+  margin: 0 0 6px;
+  min-height: 1.2em;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e63946;
 }
 
 /* Tabs */
 .tabs {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  background: #e9f6f1;
+  padding: 6px;
+  border-radius: 14px;
+  margin: 4px 0 14px;
 }
 
 .tab {
   flex: 1;
-  padding: 10px;
-  border-radius: 8px;
-  background: #d9d9d9;
+  padding: 11px;
+  border-radius: 10px;
+  background: transparent;
   border: none;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 700;
+  color: #4b6b60;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .tab.active {
-  background: linear-gradient(90deg, #0fd6a8, #14c3b3);
-  color: #f5f5f5;
+  background: linear-gradient(90deg, #0fd6a8, #0a9d8f);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(15, 214, 168, 0.4);
+}
+
+.tab:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 /* Grid */
@@ -302,49 +376,107 @@ input {
 }
 
 .payment {
-  padding: 13px;
-  border-radius: 8px;
-  background: linear-gradient(90deg, #0fd6a8, #14c3b3);
-  color: #f5f5f5;
+  padding: 13px 16px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #0fd6a8, #0a9d8f);
+  color: #fff;
   font-weight: bold;
   border: none;
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(15, 214, 168, 0.3);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+.payment:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 8px 16px rgba(15, 214, 168, 0.4);
 }
 
 /* Button hijau */
 #btn-hijau {
   width: 100%;
   padding: 14px;
-  background: #10cc67;
-  color: #f5f5f5;
+  background: linear-gradient(90deg, #10cc67, #0a9d8f);
+  color: #fff;
   border: none;
   font-weight: bold;
-  border-radius: 8px;
+  font-size: 1rem;
+  letter-spacing: 0.3px;
+  border-radius: 12px;
   display: block;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
+  box-shadow: 0 6px 16px rgba(16, 204, 103, 0.35);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+#btn-hijau:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 10px 20px rgba(16, 204, 103, 0.45);
 }
 .item {
-  border-radius: 8px;
-  padding: 15px;
-  background: #f8fff8;
-  border: 1px solid #cceccb;
+  position: relative;
+  border-radius: 14px;
+  padding: 14px 15px;
+  background: linear-gradient(160deg, #ffffff 0%, #f4fbf8 100%);
+  border: 2px solid #e2f0e9;
   cursor: pointer;
   font-weight: bold;
-  transition: 0.2s;
+  color: #22303c;
+  box-shadow: 0 2px 6px rgba(16, 60, 45, 0.06);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.item::after {
+  content: "";
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(15, 214, 168, 0.18), transparent 70%);
+  pointer-events: none;
+}
+.item:hover {
+  transform: translateY(-3px);
+  border-color: #0fd6a8;
+  box-shadow: 0 8px 18px rgba(12, 147, 123, 0.2);
 }
 .item > h4,
 .item > p {
-  font-family: sans-serif;
+  font-family: "Poppins", sans-serif;
   margin: 0;
+}
+.item span {
+  display: block;
+  margin-top: 6px;
+  color: #0a9d4e;
+  font-family: "Baloo 2", "Poppins", sans-serif;
+  letter-spacing: 0.3px;
 }
 /* Efek ketika dipilih */
 .item.selected {
-  background: #d2ffe0;
-  border: 2px solid #00c46b;
-  box-shadow: 0 0 10px rgba(0, 180, 80, 0.4);
-  transform: scale(1.03);
+  background: linear-gradient(160deg, #e6fff4 0%, #ccffe9 100%);
+  border-color: #00c46b;
+  box-shadow: 0 0 0 4px rgba(0, 196, 107, 0.15), 0 8px 18px rgba(0, 180, 80, 0.28);
+  transform: translateY(-2px) scale(1.02);
+}
+.item.selected::before {
+  content: "✓";
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #00c46b;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .payment-methods {
   display: flex;

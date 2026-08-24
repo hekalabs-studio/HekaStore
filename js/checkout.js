@@ -98,12 +98,69 @@ async function init(config) {
     memberTabBtn.style.display = "none";
   }
 
+  /* ---------- 2b. Custom nominal (opsional, diaktifkan lewat HEKA_PAGE_CONFIG) ---------- */
+  const customInput = document.getElementById("customNominal");
+  const perkiraanEl = document.getElementById("perkiraanHarga");
+  const nominalWarnEl = document.getElementById("nominalWarning");
+  const customCfg = config.customNominal || null;
+  let customOrder = null; // { amount, dp, price } — terisi saat input custom valid
+  let nominalWarnTimer = null;
+
+  function showNominalWarning(msg) {
+    if (!nominalWarnEl) return;
+    nominalWarnEl.textContent = `⚠️ ${msg}`;
+    clearTimeout(nominalWarnTimer);
+    nominalWarnTimer = setTimeout(() => (nominalWarnEl.textContent = ""), 3000);
+  }
+
+  if (customInput && customCfg && perkiraanEl) {
+    customInput.addEventListener("input", () => {
+      const raw = customInput.value;
+      // Hanya angka: huruf, spasi, & karakter spesial dibuang otomatis
+      const clean = raw.replace(/\D/g, "");
+      if (clean !== raw) {
+        customInput.value = clean;
+        showNominalWarning("Hanya angka yang diperbolehkan — huruf & karakter lain dihapus.");
+      }
+      const n = Math.floor(Number(clean));
+      if (!Number.isFinite(n) || n <= 0) {
+        customOrder = null;
+        perkiraanEl.classList.remove("error");
+        perkiraanEl.textContent = "";
+        return;
+      }
+      if (n < customCfg.min) {
+        customOrder = null;
+        perkiraanEl.classList.add("error");
+        perkiraanEl.textContent = `⚠️ Minimal pembelian ${customCfg.min} ${customCfg.unit}.`;
+        return;
+      }
+      // Formula sesuai pricelist: DP = round(nominal x 10/7), harga = nominal x pricePerUnit
+      const dp = Math.round(n * customCfg.dpPerUnit);
+      const price = n * customCfg.pricePerUnit;
+      customOrder = { amount: n, dp, price };
+      perkiraanEl.classList.remove("error");
+      perkiraanEl.innerHTML =
+        `<b>${n.toLocaleString("id-ID")} ${customCfg.unit} (DP ${dp.toLocaleString("id-ID")})</b> — ${formatRupiah(price)}`;
+      // custom nominal dipakai -> batalkan pilihan item di grid
+      document.querySelectorAll(".item.selected").forEach((i) => i.classList.remove("selected"));
+    });
+  }
+
   // Pilih item: dipasang lewat delegasi supaya jalan untuk kartu yg dirender async
   document.addEventListener("click", (e) => {
     const item = e.target.closest(".item");
     if (!item || !(topupGrid.contains(item) || memberGrid.contains(item))) return;
     document.querySelectorAll(".item").forEach((i) => i.classList.remove("selected"));
     item.classList.add("selected");
+    // pilihan grid menggantikan custom nominal
+    customOrder = null;
+    if (customInput) customInput.value = "";
+    if (perkiraanEl) {
+      perkiraanEl.classList.remove("error");
+      perkiraanEl.textContent = "";
+    }
+    if (nominalWarnEl) nominalWarnEl.textContent = "";
   });
 
   /* ---------- 3. Tab switcher (dipakai onclick="switchTab(...)" di HTML) ---------- */
@@ -149,7 +206,9 @@ async function init(config) {
     const selected = document.querySelector(".item.selected");
     const selectedPayment = document.querySelector('input[name="payment"]:checked');
 
-    if (!selected) return alert("Silakan pilih nominal top up.");
+    if (!selected && !customOrder) {
+      return alert("Silakan pilih nominal top up atau isi custom nominal.");
+    }
     if (!selectedPayment) return alert("Silakan pilih metode pembayaran.");
     if (!userId.value) return alert("Silakan masukkan User ID.");
     if (zoneId && !zoneId.value) return alert("Silakan masukkan Zone ID.");
@@ -165,35 +224,70 @@ async function init(config) {
     buyButton.textContent = "Memproses...";
 
     try {
-      const productId = selected.dataset.productId;
+      // --- Tentukan produk, label, dan harga ---
+      let productId = null;
+      let label = "";
+      let basePrice = 0;
+      let category = config.category;
+      let isCustom = false;
 
-      // Ambil ulang harga LANGSUNG dari Firestore saat ini (bukan dari
-      // grid yang mungkin sudah lama di-cache browser) supaya invoice yang
-      // ditampilkan ke pembeli sudah pasti sesuai apa yang nanti disetujui
-      // server. Ini bukan satu-satunya lapisan keamanan -> firestore.rules
-      // tetap memvalidasi ulang persis sebelum benar-benar menyimpan.
-      const productSnap = await getDoc(doc(db, "products", productId));
-      if (!productSnap.exists() || productSnap.data().active === false) {
-        alert("Produk ini sudah tidak tersedia. Muat ulang halaman.");
-        return;
+      if (selected) {
+        productId = selected.dataset.productId;
+
+        // Ambil ulang harga LANGSUNG dari Firestore saat ini (bukan dari
+        // grid yang mungkin sudah lama di-cache browser) supaya invoice yang
+        // ditampilkan ke pembeli sudah pasti sesuai apa yang nanti disetujui
+        // server. Ini bukan satu-satunya lapisan keamanan -> firestore.rules
+        // tetap memvalidasi ulang persis sebelum benar-benar menyimpan.
+        const productSnap = await getDoc(doc(db, "products", productId));
+        if (!productSnap.exists() || productSnap.data().active === false) {
+          alert("Produk ini sudah tidak tersedia. Muat ulang halaman.");
+          return;
+        }
+        const product = productSnap.data();
+        label = product.label;
+        basePrice = product.price;
+        category = product.category;
+      } else {
+        // Custom nominal: harga dihitung dari formula pricelist (lihat 2b).
+        // Order TIDAK ditulis ke Firestore karena firestore.rules memvalidasi
+        // harga terhadap dokumen produk (custom nominal tidak punya dokumen).
+        // Pesanan custom dikonfirmasi manual ke admin via WhatsApp.
+        isCustom = true;
+        label = `${customOrder.amount} ${customCfg.unit} (DP ${customOrder.dp}) — Custom`;
+        basePrice = customOrder.price;
       }
-      const product = productSnap.data();
 
-      let total = product.price;
+      let total = basePrice;
       if (selectedPayment.value === "Cash") {
         total = Math.ceil(total / 1000) * 1000; // harus sama persis dgn cashRounded() di firestore.rules
       }
 
       const invoiceId = generateInvoiceId();
-      const orderRef = doc(collection(db, "orders"));
       const currentUser = auth.currentUser;
+
+      if (isCustom) {
+        // Invoice lokal (tanpa menulis ke Firestore) + konfirmasi WhatsApp
+        renderInvoice({
+          invoiceId,
+          total,
+          label,
+          orderId: "",
+          paymentMethod: selectedPayment.value,
+          saved: false,
+        });
+        startCountdown();
+        return;
+      }
+
+      const orderRef = doc(collection(db, "orders"));
 
       const orderPayload = {
         invoiceId,
         productId,
-        category: product.category,
-        label: product.label,
-        basePrice: product.price,
+        category,
+        label,
+        basePrice,
         total,
         paymentMethod: selectedPayment.value,
         userId: userId.value,
@@ -210,9 +304,10 @@ async function init(config) {
       renderInvoice({
         invoiceId,
         total,
-        label: product.label,
+        label,
         orderId: orderRef.id,
         paymentMethod: selectedPayment.value,
+        saved: true,
       });
       startCountdown();
     } catch (err) {
@@ -228,13 +323,19 @@ async function init(config) {
     }
   });
 
-  function renderInvoice({ invoiceId, total, label, orderId, paymentMethod }) {
+  function renderInvoice({ invoiceId, total, label, orderId, paymentMethod, saved = true }) {
     document.getElementById("invoice-id").textContent = invoiceId;
 
     const dataPesanan = document.getElementById("dataPesanan");
-    const loginNote = auth.currentUser
-      ? `<p style="font-size:.85rem;color:#0eb193;">✅ Tersimpan di <a href="${profileUrl()}" style="color:#0eb193;">Riwayat Transaksi</a> akunmu.</p>`
-      : `<p style="font-size:.85rem;color:#888;">Login supaya transaksi ini tercatat di riwayat akunmu & dapat poin.</p>`;
+    let loginNote;
+    if (!saved) {
+      // Custom nominal: order tidak masuk Firestore -> dikonfirmasi manual
+      loginNote = `<p style="font-size:.85rem;color:#b26a00;">⚠️ Nominal custom dikonfirmasi manual oleh admin via WhatsApp.</p>`;
+    } else {
+      loginNote = auth.currentUser
+        ? `<p style="font-size:.85rem;color:#0eb193;">✅ Tersimpan di <a href="${profileUrl()}" style="color:#0eb193;">Riwayat Transaksi</a> akunmu.</p>`
+        : `<p style="font-size:.85rem;color:#888;">Login supaya transaksi ini tercatat di riwayat akunmu & dapat poin.</p>`;
+    }
     dataPesanan.innerHTML = `
       <p><strong>Produk:</strong> ${label}</p>
       <p><strong>Metode:</strong> ${paymentMethod}</p>
@@ -253,9 +354,15 @@ async function init(config) {
     orderedSection.style.display = "block";
     orderedSection.scrollIntoView({ behavior: "smooth", block: "start" });
 
-    document.getElementById("konfirmasiAdmin").dataset.orderId = orderId;
-    document.getElementById("konfirmasiAdmin").dataset.invoiceId = invoiceId;
-    document.getElementById("konfirmasiAdmin").dataset.total = total;
+    const konfirmasiEl = document.getElementById("konfirmasiAdmin");
+    if (orderId) {
+      konfirmasiEl.dataset.orderId = orderId;
+    } else {
+      delete konfirmasiEl.dataset.orderId;
+    }
+    konfirmasiEl.dataset.invoiceId = invoiceId;
+    konfirmasiEl.dataset.total = total;
+    konfirmasiEl.dataset.label = label;
   }
 
   function profileUrl() {
@@ -295,7 +402,9 @@ async function init(config) {
     const total = konfirmasiBtn.dataset.total || "";
     const selected = document.querySelector(".item.selected");
     const selectedPayment = document.querySelector('input[name="payment"]:checked');
-    const produk = selected ? selected.querySelector("h4").innerText : "";
+    const produk = selected
+      ? selected.querySelector("h4").innerText
+      : konfirmasiBtn.dataset.label || "";
     const metode = selectedPayment ? selectedPayment.value : "";
     const waNumber = config.waNumber || "6289514433486";
 
