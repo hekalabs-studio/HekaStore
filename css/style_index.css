@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap");
 @font-face {
   font-family: "lato";
   src: url(../font/Lato-Regular.ttf);
@@ -18,9 +19,13 @@ body {
 }
 
 header {
-  background: #0c937b;
-  padding: 15px;
+  background: linear-gradient(135deg, #0c937b, #0a7d68);
+  padding: 14px 20px 0;
   color: white;
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.18);
 }
 .brand-header {
   display: flex;
@@ -33,23 +38,92 @@ header {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 14px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 12px;
+}
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: white;
 }
 .nav-logo {
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  padding: 4px;
+  transition: transform 0.3s ease;
+}
+.brand-link:hover .nav-logo {
+  transform: rotate(-8deg) scale(1.06);
 }
 .logo {
-  font-size: 2rem;
-  font-weight: 600;
-
+  font-family: "Baloo 2", "Poppins", sans-serif;
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: #ffffff;
+}
+.logo span {
+  color: #ffd94a;
 }
 
+.search-box {
+  position: relative;
+  flex: 1 1 300px;
+  max-width: 540px;
+}
 .search-bar {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: none;
-  width: 40%;
+  padding: 11px 48px 11px 18px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  outline: none;
+  width: 100%;
   min-width: 200px;
+  font-size: 0.95rem;
+  color: #222;
+  background: white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.search-bar:focus {
+  border-color: #7ef0d0;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18);
+}
+
+.quick-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 12px;
+}
+.quick-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.quick-link:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+}
+.quick-link.active {
+  background: white;
+  color: #0c937b;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .nav-buttons {
@@ -60,18 +134,32 @@ header {
 }
 
 .nav-buttons button {
-  background: white;
-  color: #0c937b;
   border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: 600;
+  padding: 9px 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
 }
-.nav-buttons button:hover {
+#loginBtn {
+  background: rgba(255, 255, 255, 0.14);
+  color: white;
+  border: 1.5px solid rgba(255, 255, 255, 0.65);
+}
+#loginBtn:hover {
+  background: rgba(255, 255, 255, 0.28);
   transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+#daftarBtn {
+  background: linear-gradient(135deg, #ffd76a, #ffb347);
+  color: #5a3b00;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+#daftarBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.22);
 }
 .nav-buttons a {
   color: #f5f5f5;
@@ -85,6 +173,11 @@ header {
   text-decoration: underline;
 }
 
+/* Agar anchor (#listJudul dll) tidak tertutup header sticky */
+section {
+  scroll-margin-top: 130px;
+}
+
 .banner-slider {
   position: relative;
   width: 100%;
@@ -92,12 +185,12 @@ header {
   background: #0c937b;
   color: white;
   text-align: center;
-  padding: 200px 20px;
+  height: clamp(300px, 38vw, 460px);
 }
 .banner-slides {
-  position: relative;
+  position: absolute;
+  inset: 0;
   width: 100%;
-  min-height: 260px;
 }
 .banner-slide {
   position: absolute;
@@ -110,29 +203,43 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
 .banner-slide.active {
   opacity: 1;
-  position: relative;
+  z-index: 1;
+  pointer-events: auto;
 }
 .banner-slide::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.35);
+  background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.6) 100%);
   z-index: 0;
 }
 .banner-text {
   position: relative;
   z-index: 1;
+  padding: 0 16px;
+  animation: bannerTextIn 0.7s ease both;
+}
+@keyframes bannerTextIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 .banner-text h2 {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 3.2vw, 2.4rem);
   margin-bottom: 10px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
 }
 .banner-text p {
-  font-size: 1.2rem;
-  margin-bottom: 15px;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  margin-bottom: 18px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+.banner-text .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 .banner-arrow {
   position: absolute;
@@ -327,9 +434,8 @@ header {
   border-radius: 8px;
 }
 .gameCard:hover .buttonGameCard,.pulsaCard:hover .buttonGameCard,.listrikCard:hover .buttonGameCard {
-  background: linear-gradient(0deg,#0eb193,#2ed9b3);
-  color: white;
-  box-shadow: 0 0 10px #dfdfdf;
+  filter: brightness(1.07);
+  box-shadow: 0 4px 12px rgba(14,177,147,.35);
 }
 .gameCard:hover ,.pulsaCard:hover ,.listrikCard:hover {
   transform: translateY(-5px);
@@ -341,15 +447,15 @@ header {
 .buttonGameCard {
   display: block;
   text-decoration: none;
-  color: black;
-  background: #dfdfdf;
+  color: white;
+  background: linear-gradient(0deg,#0eb193,#2ed9b3);
   margin-top: 10px;
   flex: content;
   padding: 10px;
   border-radius: 10px;
   font-family: lato;
+  font-weight: 600;
   transition: .2s;
-
 }
 
 /* footer */

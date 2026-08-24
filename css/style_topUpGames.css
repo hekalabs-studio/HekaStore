@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap");
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -19,9 +21,13 @@ body {
   font-family: "Poppins", sans-serif;
 }
 header {
-  background: #0c937b;
-  padding: 15px;
+  background: linear-gradient(135deg, #0c937b, #0a7d68);
+  padding: 14px 20px 0;
   color: #f5f5f5;
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.18);
 }
 
 .navbar {
@@ -29,33 +35,128 @@ header {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 14px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 12px;
+}
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: white;
 }
 .nav-logo {
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  padding: 4px;
+  transition: transform 0.3s ease;
+}
+.brand-link:hover .nav-logo {
+  transform: rotate(-8deg) scale(1.06);
 }
 .logo {
-  font-size: 2rem;
-  font-weight: 600;
+  font-family: "Baloo 2", "Poppins", sans-serif;
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: #ffffff;
+}
+.logo span {
+  color: #ffd94a;
 }
 
+.search-box {
+  position: relative;
+  flex: 1 1 300px;
+  max-width: 540px;
+}
 .search-bar {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: none;
-  width: 40%;
+  margin: 0;
+  padding: 11px 48px 11px 18px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  outline: none;
+  width: 100%;
   min-width: 200px;
+  font-size: 0.95rem;
+  color: #222;
+  background: white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.search-bar:focus {
+  border-color: #7ef0d0;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18);
 }
 
-.nav-buttons button {
-  background: #f5f5f5;
-  color: #0c937b;
-  border: none;
-  padding: 8px 14px;
-  margin-left: 5px;
-  border-radius: 6px;
+.quick-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 12px;
+}
+.quick-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  font-size: 0.85rem;
   font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.quick-link:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+}
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.nav-buttons button {
+  border: none;
+  padding: 9px 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
   cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+}
+#loginBtn {
+  background: rgba(255, 255, 255, 0.14);
+  color: white;
+  border: 1.5px solid rgba(255, 255, 255, 0.65);
+}
+#loginBtn:hover {
+  background: rgba(255, 255, 255, 0.28);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+#daftarBtn {
+  background: linear-gradient(135deg, #ffd76a, #ffb347);
+  color: #5a3b00;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+#daftarBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.22);
+}
+
+/* Agar anchor tidak tertutup header sticky */
+section {
+  scroll-margin-top: 130px;
 }
 
 /* Banner */
@@ -574,5 +675,50 @@ input {
   .left,
   .right {
     width: 100%;
+  }
+}
+
+/* -------------------- 
+   HEADER RESPONSIF 
+   -------------------- */
+@media (max-width: 768px) {
+  header {
+    padding: 12px 14px 0;
+  }
+  .navbar {
+    gap: 10px;
+  }
+  .brand-link {
+    gap: 8px;
+  }
+  .logo {
+    font-size: 1.3rem;
+  }
+  .nav-logo {
+    width: 40px;
+    height: 40px;
+  }
+  .search-box {
+    order: 3;
+    flex: 1 1 100%;
+    max-width: none;
+  }
+  .nav-buttons {
+    margin-left: auto;
+  }
+  .quick-links {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 4px;
+    padding-bottom: 10px;
+    scrollbar-width: none;
+  }
+  .quick-links::-webkit-scrollbar {
+    display: none;
+  }
+  .quick-link {
+    white-space: nowrap;
+    font-size: 0.8rem;
+    padding: 5px 12px;
   }
 }

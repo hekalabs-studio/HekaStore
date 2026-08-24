@@ -61,20 +61,44 @@ const MODAL_CSS = `
 .heka-auth-form input{width:100%;box-sizing:border-box;padding:10px 12px;margin-bottom:10px;border:1px solid #ccc;border-radius:8px;font-size:.95rem}
 .heka-auth-submit{width:100%;padding:10px;border:none;border-radius:8px;background:linear-gradient(0deg,#0eb193,#2ed9b3);color:#fff;font-weight:700;cursor:pointer}
 .heka-auth-error{color:#e63946;font-size:.85rem;min-height:1.1em;margin:-2px 0 8px}
-.heka-user-chip{display:flex;align-items:center;gap:8px;color:#f5f5f5;font-size:.9rem;flex-wrap:wrap}
-.heka-user-chip a{display:flex;align-items:center;gap:8px;color:inherit;text-decoration:none}
-.heka-user-chip a:hover .heka-user-name{text-decoration:underline}
-.heka-user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(0deg,#0eb193,#2ed9b3);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;flex-shrink:0}
-.heka-user-name{max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.heka-user-chip button{background:none;border:1px solid rgba(245,245,245,0.6);color:#f5f5f5;border-radius:6px;padding:5px 12px;cursor:pointer;font-size:.8rem;transition:background .15s ease,color .15s ease}
-.heka-user-chip button:hover{background:#f5f5f5;color:#0c937b}
+.heka-user-chip{position:relative;display:flex;align-items:center;color:#f5f5f5;font-size:.9rem}
+.heka-user-chip>a{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.45);padding:5px 14px 5px 6px;border-radius:999px;color:#fff;text-decoration:none;transition:background .2s ease,transform .2s ease,box-shadow .2s ease}
+.heka-user-chip>a:hover{background:rgba(255,255,255,.26);transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.15)}
+.heka-user-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#ffd76a,#ffb347);color:#5a3b00;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:800;flex-shrink:0;box-shadow:0 0 0 2px rgba(255,255,255,.75)}
+.heka-user-name{max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.heka-user-caret{font-size:.6rem;opacity:.85}
+.heka-user-menu{position:absolute;top:calc(100% + 10px);right:0;background:#fff;color:#222;border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.28);min-width:210px;overflow:hidden;display:none;z-index:600}
+.heka-user-menu.open{display:block;animation:hekaMenuIn .18s ease}
+@keyframes hekaMenuIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.heka-user-menu-header{padding:12px 16px;background:#f1fbf7;border-bottom:1px solid #e3f2ec}
+.heka-menu-hello{font-size:.75rem;color:#6b7c77;margin-bottom:2px}
+.heka-menu-name{font-weight:700;font-size:.95rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.heka-menu-item{display:flex;align-items:center;gap:10px;width:100%;padding:11px 16px;background:none;border:none;text-align:left;font-size:.9rem;color:#222;cursor:pointer;text-decoration:none;font-family:inherit}
+.heka-menu-item:hover{background:#ecfdf8;color:#0c937b}
+.heka-menu-logout{border-top:1px solid #eee;color:#e63946;font-weight:600}
+.heka-menu-logout:hover{background:#fdeeee;color:#c1121f}
+@media (max-width:768px){
+.heka-user-chip>a{padding:4px 10px 4px 5px}
+.heka-user-avatar{width:28px;height:28px;font-size:.8rem}
+.heka-user-name{max-width:96px;font-size:.85rem}
+.heka-user-menu{min-width:190px}
+}
 `;
+
+function injectStylesOnce() {
+  // CSS chip profil & modal harus terpasang SEJAK AWAL.
+  // Kalau hanya di-inject saat modal dibuka, user yang sudah login
+  // melihat chip profil tanpa style (berantakan) — bug lama.
+  if (document.getElementById("hekaAuthStyles")) return;
+  const style = document.createElement("style");
+  style.id = "hekaAuthStyles";
+  style.textContent = MODAL_CSS;
+  document.head.appendChild(style);
+}
 
 function injectModalOnce() {
   if (document.getElementById("hekaAuthOverlay")) return;
-  const style = document.createElement("style");
-  style.textContent = MODAL_CSS;
-  document.head.appendChild(style);
+  injectStylesOnce();
   document.body.insertAdjacentHTML("beforeend", MODAL_HTML);
 }
 
@@ -184,11 +208,19 @@ function renderNavForUser(user) {
     }
     const initial = (user.displayName || user.email || "U").charAt(0).toUpperCase();
     chip.innerHTML = `
-      <a href="${profileUrl()}" title="Lihat profil">
+      <a href="${profileUrl()}" id="hekaUserTrigger" title="Akun saya">
         <span class="heka-user-avatar">${initial}</span>
         <span class="heka-user-name">${user.displayName || user.email}</span>
+        <span class="heka-user-caret">▼</span>
       </a>
-      <button type="button" id="hekaLogoutBtn">Logout</button>
+      <div class="heka-user-menu" id="hekaUserMenu">
+        <div class="heka-user-menu-header">
+          <div class="heka-menu-hello">Halo, 👋</div>
+          <div class="heka-menu-name">${user.displayName || user.email}</div>
+        </div>
+        <a class="heka-menu-item" href="${profileUrl()}">👤 Profil Saya</a>
+        <button type="button" class="heka-menu-item heka-menu-logout" id="hekaLogoutBtn">⏻ Logout</button>
+      </div>
     `;
   } else {
     loginBtn.style.display = "";
@@ -203,6 +235,20 @@ document.addEventListener("click", (e) => {
   if (e.target && e.target.id === "hekaLogoutBtn") signOut(auth);
 });
 
+// Dropdown menu akun (avatar + nama profil) di navbar
+document.addEventListener("click", (e) => {
+  const menu = document.getElementById("hekaUserMenu");
+  if (!menu) return;
+  const trigger = e.target.closest("#hekaUserTrigger");
+  if (trigger) {
+    e.preventDefault();
+    menu.classList.toggle("open");
+    return;
+  }
+  if (!menu.contains(e.target)) menu.classList.remove("open");
+});
+
+injectStylesOnce();
 wireModalEvents();
 onAuthStateChanged(auth, (user) => renderNavForUser(user));
 

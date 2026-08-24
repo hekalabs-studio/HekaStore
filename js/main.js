@@ -50,63 +50,39 @@ pulsa.forEach(pulsa => {
 
 
   //ChooseBuy
-  let listrikCard = document.getElementsByClassName("listrikCard");
-  let choose = [document.getElementById("games"),document.getElementById("pulsa"),document.getElementById("listrik")]
-  let listJudul = document.getElementById("listJudul")
-  let pulsaCard = document.getElementsByClassName("pulsaCard");
-  let gamesCard = document.getElementsByClassName("gameCard");
+  // PENTING: koleksi kartu di-scope ke dalam #listGrid, BUKAN seluruh dokumen.
+  // Kartu hasil pencarian (js/search.js) juga memakai class "gameCard" di section
+  // terpisah di atas daftar produk. Kalau di-query global, live HTMLCollection
+  // ikut menghitung kartu hasil pencarian sehingga index bergeser dan kartu game
+  // terakhir (Super Sus) tidak ikut tersembunyi di tab Pulsa / Token Listrik.
+  const choose = [document.getElementById("games"), document.getElementById("pulsa"), document.getElementById("listrik")];
+  const listJudul = document.getElementById("listJudul");
+  const gamesCard = listGrid.getElementsByClassName("gameCard");
+  const pulsaCard = listGrid.getElementsByClassName("pulsaCard");
+  const listrikCard = listGrid.getElementsByClassName("listrikCard");
 
-  choose[0].addEventListener("click", function() {
-    listJudul.innerHTML = "🎮 Games"
-    for(let i = 0; i < 4; i++) {
-      pulsaCard[i].style.display = "none"
-    }
-    for(let i = 0; i < 8; i++) {
-      gamesCard[i].style.display = "block"
-    }
-    listrikCard[0].style.display = "none";
-    choose[0].style.background = "linear-gradient(0deg,#0eb193,#2ed9b3)";
-    choose[0].style.color = "#f5f5f5";
-    choose[1].style.background = "#dfdfdf"
-    choose[1].style.color = "black"
-    choose[2].style.background = "#dfdfdf"
-    choose[2].style.color = "black"
-  })
+  // Judul & pemilihan tab. Loop TIDAK memakai jumlah hardcoded (8 game / 4 pulsa)
+  // supaya tab tetap benar walau jumlah produk di array di atas ditambah.
+  const TAB_TITLES = ["🎮 Games", "📱 Pulsa", "⚡ Token Listrik"];
 
+  function selectTab(activeIndex) {
+    [gamesCard, pulsaCard, listrikCard].forEach((cards, groupIndex) => {
+      const display = groupIndex === activeIndex ? "block" : "none";
+      for (const card of cards) {
+        card.style.display = display;
+      }
+    });
+    choose.forEach((btn, i) => {
+      const active = i === activeIndex;
+      btn.style.background = active ? "linear-gradient(0deg,#0eb193,#2ed9b3)" : "#dfdfdf";
+      btn.style.color = active ? "#f5f5f5" : "black";
+    });
+    listJudul.innerHTML = TAB_TITLES[activeIndex];
+  }
 
-  choose[1].addEventListener("click", () => {
-    listJudul.innerHTML = "📱 Pulsa"
-    for(let i = 0; i < 4; i++) {
-      pulsaCard[i].style.display = "block"
-    }
-    for(let i = 0; i < 8; i++) {
-      gamesCard[i].style.display = "none"
-    }
-    listrikCard[0].style.display = "none";
-    choose[1].style.background = "linear-gradient(0deg,#0eb193,#2ed9b3)";
-    choose[1].style.color = "#f5f5f5";
-    choose[0].style.background = "#dfdfdf"
-    choose[0].style.color = "black"
-    choose[2].style.background = "#dfdfdf"
-    choose[2].style.color = "black"
-  })
-
-  choose[2].addEventListener("click", () => {
-    listJudul.innerHTML = "⚡ Token Listrik"
-    for(let i = 0; i < 4; i++) {
-      pulsaCard[i].style.display = "none"
-    }
-    for(let i = 0; i < 8; i++) {
-      gamesCard[i].style.display = "none"
-    }
-    listrikCard[0].style.display = "block";
-    choose[1].style.background = "#dfdfdf";
-    choose[1].style.color = "black";
-    choose[0].style.background = "#dfdfdf"
-    choose[0].style.color = "black"
-    choose[2].style.background = "linear-gradient(0deg,#0eb193,#2ed9b3)";
-    choose[2].style.color = "#f5f5f5";
-  })
+  choose[0].addEventListener("click", () => selectTab(0));
+  choose[1].addEventListener("click", () => selectTab(1));
+  choose[2].addEventListener("click", () => selectTab(2));
 
   // footer
   // Contoh: animasi hover untuk ikon sosial
@@ -223,3 +199,16 @@ function initBannerSlider() {
 }
 
 initBannerSlider();
+
+// ========================
+// Quick Links (header) -> sinkron dengan tab kategori list
+// ========================
+document.querySelectorAll(".quick-link").forEach((link) => {
+  link.addEventListener("click", () => {
+    document.querySelectorAll(".quick-link").forEach((item) => item.classList.remove("active"));
+    link.classList.add("active");
+    // Link dengan data-category (games/pulsa/listrik) men-switch tab daftar produk
+    const categoryBtn = document.getElementById(link.dataset.category || "");
+    if (categoryBtn) categoryBtn.click();
+  });
+});

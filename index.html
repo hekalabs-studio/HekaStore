@@ -4,9 +4,27 @@
 <head>
   <meta charset="UTF-8" >
   <meta name="viewport" content="width=device-width, initial-scale=1.0" >
-  <title>Hekaapedia</title>
+  <title>HekaaPedia — Top Up Game Termurah, Cepat & Terpercaya</title>
+  <!-- Preview sosial media (WhatsApp / Facebook / Twitter) -->
+  <meta name="description" content="Top up Mobile Legends, Free Fire, Roblox, Pulsa & Token Listrik di HekaaPedia. Harga termurah, proses cepat, pembayaran aman & layanan 24/7!" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="HekaaPedia" />
+  <meta property="og:title" content="HekaaPedia — Top Up Game Termurah, Cepat & Terpercaya" />
+  <meta property="og:description" content="Top up Mobile Legends, Free Fire, Roblox, Pulsa & Token Listrik di HekaaPedia. Harga termurah, proses cepat, pembayaran aman & layanan 24/7!" />
+  <meta property="og:url" content="https://hekaapedia.web.app/" />
+  <meta property="og:image" content="https://hekaapedia.web.app/img/og-banner.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:locale" content="id_ID" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="HekaaPedia — Top Up Game Termurah, Cepat & Terpercaya" />
+  <meta name="twitter:description" content="Top up Mobile Legends, Free Fire, Roblox, Pulsa & Token Listrik di HekaaPedia. Harga termurah, proses cepat, pembayaran aman & layanan 24/7!" />
+  <meta name="twitter:image" content="https://hekaapedia.web.app/img/og-banner.jpg" />
+  <meta name="theme-color" content="#0c937b" />
   <link rel="stylesheet" href="css/style_index.css" >
   <link rel="stylesheet" href="css/handphone.css" media="screen and (max-width : 1024px)" >
+  <link rel="stylesheet" href="css/leaderboard.css" >
   <link rel="shortcut icon" href="img/logotoko2.webp" type="image/x-icon" >
 </head>
 
@@ -14,12 +32,15 @@
   <!-- Header -->
   <header>
     <div class="navbar">
-      <div class="logo-header" style="display: flex; align-items: center;">
+      <a href="index.html" class="brand-link">
         <img src="img/logotoko2.webp" class="nav-logo" alt="Logo" >
-        <h1 class="logo">Hekaapedia</h1>
+        <h1 class="logo">Hekaa<span>Pedia</span></h1>
+      </a>
+
+      <div class="search-box">
+        <input type="text" id="searchBar" placeholder="Cari Game, Pulsa, Token Listrik..." class="search-bar" autocomplete="off" >
       </div>
-      
-      <input type="text" placeholder="Cari Game, Voucher, Dll" class="search-bar" >
+
       <div class="nav-buttons">
         <button id="loginBtn">
           Login
@@ -29,6 +50,14 @@
         </button>
       </div>
     </div>
+
+    <nav class="quick-links" aria-label="Navigasi cepat">
+      <a href="#bannerSlider" class="quick-link active">🏠 Beranda</a>
+      <a href="#listJudul" class="quick-link" data-category="games">🎮 Games</a>
+      <a href="#listJudul" class="quick-link" data-category="pulsa">📱 Pulsa &amp; Kuota</a>
+      <a href="#listJudul" class="quick-link" data-category="listrik">⚡ Token Listrik</a>
+      <a href="profile.html" class="quick-link">👤 Profil</a>
+    </nav>
   </header>
 
   <!-- Banner -->
@@ -52,60 +81,35 @@
     </div>
   </section>
 
-  <!-- LeaderBoaed -->
-   <section class="section">
-    <h3>LeaderBoard</h3>
-      <div class="leaderboard">
-        <div class="group-name">
-
-          <div class="name">
-            <img src="img/games/roblox.webp" alt="leaderboard" height="64" width="64">
-            <p>novemasheka</p>
-          </div>
-          <div class="name">
-            <img src="img/games/roblox.webp" alt="leaderboard" height="64" width="64">
-            <p>novemasheka</p>
-          </div>
-          <div class="name">
-            <img src="img/games/roblox.webp" alt="leaderboard" height="64" width="64">
-            <p>novemasheka</p>
-          </div>
-          <div class="name">
-            <img src="img/games/roblox.webp" alt="leaderboard" height="64" width="64">
-            <p>novemasheka</p>
-          </div>    
-          <div class="name">
-            <img src="img/games/roblox.webp" alt="leaderboard" height="64" width="64">
-            <p>novemasheka</p>
-          </div>
-        </div>
-
-        <div aria-hidden class="group-name">
-
-          <div class="name">
-            <img src="img/games/roblox.webp" alt="leaderboard" height="64" width="64">
-            <p>novemasheka</p>
-          </div>
-          <div class="name">
-            <img src="img/games/roblox.webp" alt="leaderboard" height="64" width="64">
-            <p>novemasheka</p>
-          </div>
-          <div class="name">
-            <img src="img/games/roblox.webp" alt="leaderboard" height="64" width="64">
-            <p>novemasheka</p>
-          </div>
-          <div class="name">
-            <img src="img/games/roblox.webp" alt="leaderboard" height="64" width="64">
-            <p>novemasheka</p>
-          </div>    
-          <div class="name">
-            <img src="img/games/roblox.webp" alt="leaderboard" height="64" width="64">
-            <p>novemasheka</p>
-
-          </div>
-        </div>
+  <!-- Leaderboard Top Spender (marquee) -->
+  <section class="section">
+    <h3 class="lb-marquee-title">🏆 LeaderBoard</h3>
+    <div class="lb-marquee" aria-label="10 besar Top Spender HekaaPedia">
+      <div class="lb-marquee-track">
+        <div class="lb-chip gold"><span class="lb-chip-shine"></span><span class="lb-chip-rank">1</span><span class="lb-chip-crown">👑</span><img src="img/games/roblox.webp" alt="Avatar Egzzzz1"><span class="lb-chip-info"><span class="lb-chip-name">Egzzzz1</span><span class="lb-chip-detail">Rp465.000 · 3.100 💎</span></span></div>
+        <div class="lb-chip silver"><span class="lb-chip-shine"></span><span class="lb-chip-rank">2</span><img src="img/games/roblox.webp" alt="Avatar 20pdog14"><span class="lb-chip-info"><span class="lb-chip-name">20pdog14</span><span class="lb-chip-detail">Rp304.500 · 2.100 💎</span></span></div>
+        <div class="lb-chip bronze"><span class="lb-chip-shine"></span><span class="lb-chip-rank">3</span><img src="img/games/roblox.webp" alt="Avatar overh6di"><span class="lb-chip-info"><span class="lb-chip-name">overh6di</span><span class="lb-chip-detail">Rp168.000 · 1.120 💎</span></span></div>
+        <div class="lb-chip"><span class="lb-chip-shine"></span><span class="lb-chip-rank">4</span><img src="img/games/roblox.webp" alt="Avatar arylsyhhh"><span class="lb-chip-info"><span class="lb-chip-name">arylsyhhh</span><span class="lb-chip-detail">Rp126.000 · 850 💎</span></span></div>
+        <div class="lb-chip"><span class="lb-chip-shine"></span><span class="lb-chip-rank">5</span><img src="img/games/roblox.webp" alt="Avatar LunaNeOnNight_YT"><span class="lb-chip-info"><span class="lb-chip-name">LunaNeOnNight_YT 🎁</span><span class="lb-chip-detail">Rp121.000 · 800 💎</span></span></div>
+        <div class="lb-chip"><span class="lb-chip-shine"></span><span class="lb-chip-rank">6</span><img src="img/games/roblox.webp" alt="Avatar kelinci_percobaan01"><span class="lb-chip-info"><span class="lb-chip-name">kelinci_percobaan01</span><span class="lb-chip-detail">Rp106.900 · 710 💎</span></span></div>
+        <div class="lb-chip"><span class="lb-chip-shine"></span><span class="lb-chip-rank">7</span><img src="img/games/roblox.webp" alt="Avatar SiniMain_SamaOm"><span class="lb-chip-info"><span class="lb-chip-name">SiniMain_SamaOm</span><span class="lb-chip-detail">Rp97.500 · 650 💎</span></span></div>
+        <div class="lb-chip"><span class="lb-chip-shine"></span><span class="lb-chip-rank">8</span><img src="img/games/roblox.webp" alt="Avatar Gloweneme948"><span class="lb-chip-info"><span class="lb-chip-name">Gloweneme948</span><span class="lb-chip-detail">Rp70.000 · 470 💎</span></span></div>
+        <div class="lb-chip"><span class="lb-chip-shine"></span><span class="lb-chip-rank">9</span><img src="img/games/roblox.webp" alt="Avatar relace312"><span class="lb-chip-info"><span class="lb-chip-name">relace312</span><span class="lb-chip-detail">Rp68.000 · 450 💎</span></span></div>
+        <div class="lb-chip"><span class="lb-chip-shine"></span><span class="lb-chip-rank">10</span><img src="img/games/roblox.webp" alt="Avatar zakaza970"><span class="lb-chip-info"><span class="lb-chip-name">zakaza970</span><span class="lb-chip-detail">Rp63.000 · 420 💎</span></span></div>
+        <!-- Set duplikat agar loop marquee mulus (tidak terlihat oleh screen reader) -->
+        <div class="lb-chip gold" aria-hidden="true"><span class="lb-chip-shine"></span><span class="lb-chip-rank">1</span><span class="lb-chip-crown">👑</span><img src="img/games/roblox.webp" alt=""><span class="lb-chip-info"><span class="lb-chip-name">Egzzzz1</span><span class="lb-chip-detail">Rp465.000 · 3.100 💎</span></span></div>
+        <div class="lb-chip silver" aria-hidden="true"><span class="lb-chip-shine"></span><span class="lb-chip-rank">2</span><img src="img/games/roblox.webp" alt=""><span class="lb-chip-info"><span class="lb-chip-name">20pdog14</span><span class="lb-chip-detail">Rp304.500 · 2.100 💎</span></span></div>
+        <div class="lb-chip bronze" aria-hidden="true"><span class="lb-chip-shine"></span><span class="lb-chip-rank">3</span><img src="img/games/roblox.webp" alt=""><span class="lb-chip-info"><span class="lb-chip-name">overh6di</span><span class="lb-chip-detail">Rp168.000 · 1.120 💎</span></span></div>
+        <div class="lb-chip" aria-hidden="true"><span class="lb-chip-shine"></span><span class="lb-chip-rank">4</span><img src="img/games/roblox.webp" alt=""><span class="lb-chip-info"><span class="lb-chip-name">arylsyhhh</span><span class="lb-chip-detail">Rp126.000 · 850 💎</span></span></div>
+        <div class="lb-chip" aria-hidden="true"><span class="lb-chip-shine"></span><span class="lb-chip-rank">5</span><img src="img/games/roblox.webp" alt=""><span class="lb-chip-info"><span class="lb-chip-name">LunaNeOnNight_YT 🎁</span><span class="lb-chip-detail">Rp121.000 · 800 💎</span></span></div>
+        <div class="lb-chip" aria-hidden="true"><span class="lb-chip-shine"></span><span class="lb-chip-rank">6</span><img src="img/games/roblox.webp" alt=""><span class="lb-chip-info"><span class="lb-chip-name">kelinci_percobaan01</span><span class="lb-chip-detail">Rp106.900 · 710 💎</span></span></div>
+        <div class="lb-chip" aria-hidden="true"><span class="lb-chip-shine"></span><span class="lb-chip-rank">7</span><img src="img/games/roblox.webp" alt=""><span class="lb-chip-info"><span class="lb-chip-name">SiniMain_SamaOm</span><span class="lb-chip-detail">Rp97.500 · 650 💎</span></span></div>
+        <div class="lb-chip" aria-hidden="true"><span class="lb-chip-shine"></span><span class="lb-chip-rank">8</span><img src="img/games/roblox.webp" alt=""><span class="lb-chip-info"><span class="lb-chip-name">Gloweneme948</span><span class="lb-chip-detail">Rp70.000 · 470 💎</span></span></div>
+        <div class="lb-chip" aria-hidden="true"><span class="lb-chip-shine"></span><span class="lb-chip-rank">9</span><img src="img/games/roblox.webp" alt=""><span class="lb-chip-info"><span class="lb-chip-name">relace312</span><span class="lb-chip-detail">Rp68.000 · 450 💎</span></span></div>
+        <div class="lb-chip" aria-hidden="true"><span class="lb-chip-shine"></span><span class="lb-chip-rank">10</span><img src="img/games/roblox.webp" alt=""><span class="lb-chip-info"><span class="lb-chip-name">zakaza970</span><span class="lb-chip-detail">Rp63.000 · 420 💎</span></span></div>
       </div>
-   </section>
+    </div>
+  </section>
 
   <!-- Semua Game -->
 
@@ -187,6 +191,7 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
 
   <!-- Firebase: init terpusat + Login/Daftar sungguhan (lihat js/firebase-init.js, js/auth-ui.js) -->
   <script type="module" src="js/firebase-init.js"></script>

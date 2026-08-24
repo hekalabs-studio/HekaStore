@@ -1,43 +1,47 @@
-.logo {
-  display: block;
-  width: 100%;
-  text-align: center;
+/* ===== Header / Navigasi (mobile) ===== */
+header {
+  padding: 12px 14px 0;
 }
-.nav-buttons {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+.navbar {
+  gap: 10px;
+}
+.brand-link {
   gap: 8px;
 }
-.search-bar {
-  width: 100%;
-  margin: 10px 0;
+.logo {
+  font-size: 1.3rem;
 }
-.card {
+.nav-logo {
+  width: 40px;
+  height: 40px;
+}
+.search-box {
+  order: 3;
   flex: 1 1 100%;
+  max-width: none;
 }
-.pulsaCard img {
-  width: 100%;
-  border-radius: 8px;
+.nav-buttons {
+  margin-left: auto;
 }
-.listrikCard img {width: 60%;}
-.buttonGameCard {
-  display: block;
-  text-decoration: none;
-  color: white;
-  background: linear-gradient(0deg,#0eb193,#2ed9b3);
-  margin-top: 10px;
-  flex: content;
-  padding: 10px;
-  border-radius: 10px;
+.quick-links {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 4px;
+  padding-bottom: 10px;
+  scrollbar-width: none;
+}
+.quick-links::-webkit-scrollbar {
+  display: none;
+}
+.quick-link {
+  white-space: nowrap;
+  font-size: 0.8rem;
+  padding: 5px 12px;
 }
 
+/* ===== Banner (mobile) ===== */
 .banner-slider {
-  padding: 120px 16px;
-}
-.banner-slides {
-  min-height: 200px;
+  height: 230px;
 }
 .banner-text h2 {
   font-size: 1.4rem;

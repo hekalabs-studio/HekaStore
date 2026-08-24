@@ -1,0 +1,447 @@
+@import url("https://fonts.googleapis.com/css2?family=Russo+One&display=swap");
+
+/* --------------------
+   LEADERBOARD (dipakai roblox.html & index.html)
+   -------------------- */
+.lb-card {
+  width: 100%;
+  max-width: 1100px;
+  margin: 10px auto 30px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+.lb-header {
+  text-align: center;
+  margin-bottom: 18px;
+}
+.lb-title {
+  font-family: "Baloo 2", "Poppins", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #f7b733;
+}
+.lb-subtitle {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+/* Podium 3 besar */
+.lb-podium {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.lb-top {
+  flex: 1;
+  max-width: 240px;
+  border-radius: 14px;
+  padding: 16px 10px 12px;
+  text-align: center;
+  border: 2px solid transparent;
+}
+.lb-top.gold {
+  background: linear-gradient(165deg, #fff8dc, #ffe27a);
+  border-color: #f0c419;
+  transform: scale(1.07);
+  box-shadow: 0 8px 20px rgba(240, 196, 25, 0.28);
+}
+.lb-top.silver {
+  background: linear-gradient(165deg, #f7f9fb, #dfe6ee);
+  border-color: #b8c4d0;
+}
+.lb-top.bronze {
+  background: linear-gradient(165deg, #fdf0e3, #f0cfae);
+  border-color: #cd9a63;
+}
+.lb-crown {
+  font-size: 1.6rem;
+  animation: lb-float 3s ease-in-out infinite;
+}
+.lb-medal {
+  font-size: 1.8rem;
+}
+.lb-top.gold .lb-medal {
+  font-size: 2.2rem;
+}
+.lb-name {
+  font-family: "Baloo 2", "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #22303c;
+  word-break: break-all;
+  margin: 4px 0 2px;
+}
+.lb-robux {
+  font-weight: 700;
+  color: #0a7d68;
+}
+.lb-price {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* Peringkat 4 - 10 */
+.lb-list {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+  border: 1px solid #e3efe8;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.lb-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #fbfffc;
+  transition: background 0.15s ease;
+}
+.lb-row:nth-child(even) {
+  background: #f2faf5;
+}
+.lb-row:hover {
+  background: #e9f7ef;
+}
+.lb-rank {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #fff;
+  background: linear-gradient(135deg, #0c937b, #0a7d68);
+}
+.lb-user {
+  font-weight: 600;
+  color: #22303c;
+  word-break: break-all;
+}
+.lb-gift {
+  cursor: default;
+}
+.lb-amount {
+  font-weight: 700;
+  color: #0a7d68;
+  white-space: nowrap;
+}
+.lb-rp {
+  color: #6b7280;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+/* Total keseluruhan */
+.lb-stats {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  background: linear-gradient(135deg, #0c937b, #0a7d68);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.lb-stat {
+  flex: 1;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+  color: #fff;
+}
+.lb-stat-label {
+  font-size: 0.85rem;
+  opacity: 0.92;
+}
+.lb-stat-value {
+  font-family: "Baloo 2", "Poppins", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+.lb-note {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 0.88rem;
+  font-style: italic;
+  color: #55606b;
+}
+
+/* Animasi mahkoba (fallback jika @keyframes float belum ada) */
+@keyframes lb-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@media (max-width: 560px) {
+  .lb-card {
+    padding: 16px 12px;
+  }
+  .lb-title {
+    font-size: 1.15rem;
+  }
+  .lb-podium {
+    gap: 8px;
+  }
+  .lb-top {
+    padding: 12px 6px 10px;
+  }
+  .lb-crown {
+    font-size: 1.3rem;
+  }
+  .lb-medal,
+  .lb-top.gold .lb-medal {
+    font-size: 1.5rem;
+  }
+  .lb-name {
+    font-size: 0.82rem;
+  }
+  .lb-robux {
+    font-size: 0.82rem;
+  }
+  .lb-row {
+    grid-template-columns: 34px minmax(0, 1fr) auto auto;
+    gap: 8px;
+    padding: 9px 10px;
+  }
+  .lb-rank {
+    width: 26px;
+    height: 26px;
+    font-size: 0.8rem;
+  }
+  .lb-user {
+    font-size: 0.85rem;
+  }
+  .lb-amount {
+    font-size: 0.85rem;
+  }
+  .lb-rp {
+    font-size: 0.78rem;
+  }
+}
+
+/* --------------------
+   LEADERBOARD MARQUEE (index.html)
+   -------------------- */
+.lb-marquee {
+  overflow: hidden;
+  border-radius: 16px;
+  /* fade halus di tepi kiri-kanan */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.lb-marquee-title {
+  font-family: "Russo One", "Baloo 2", sans-serif;
+  font-size: 1.35rem;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #f7b733, #fc4a1a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #f7b733;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.18));
+}
+.lb-marquee-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  padding: 30px 0 10px; /* ruang untuk mahkota & badge peringkat */
+  will-change: transform;
+  animation: lb-marquee-scroll 28s linear infinite;
+}
+.lb-marquee:hover .lb-marquee-track {
+  animation-play-state: paused;
+}
+@keyframes lb-marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.lb-chip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-right: 18px; /* margin (bukan gap track) agar loop -50% mulus */
+  border-radius: 20px;
+  padding: 10px 30px 10px 12px;
+  min-width: 252px;
+  background: linear-gradient(145deg, #35e0ae 0%, #0c937b 55%, #086e5c 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.18),
+    0 8px 18px rgba(12, 147, 123, 0.35);
+  transition: transform 0.2s ease;
+}
+.lb-chip:hover {
+  transform: translateY(-4px);
+}
+/* kilau melintas di permukaan chip (dipotong agar tetap di dalam pill) */
+.lb-chip-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+.lb-chip-shine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 45%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  transform: skewX(-15deg);
+  animation: lb-shine 5s ease-in-out infinite;
+}
+@keyframes lb-shine {
+  0%, 55% { left: -60%; }
+  90%, 100% { left: 120%; }
+}
+.lb-chip:nth-child(2n) .lb-chip-shine::before { animation-delay: 0.8s; }
+.lb-chip:nth-child(3n) .lb-chip-shine::before { animation-delay: 1.6s; }
+.lb-chip:nth-child(5n) .lb-chip-shine::before { animation-delay: 2.4s; }
+
+/* ---- Varian Top 3 ---- */
+.lb-chip.gold {
+  background: linear-gradient(145deg, #ffe27a 0%, #f7b733 48%, #e8890c 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.15),
+    0 8px 22px rgba(247, 183, 51, 0.55);
+}
+.lb-chip.gold .lb-chip-shine::before { animation-duration: 3.2s; }
+.lb-chip.silver {
+  background: linear-gradient(145deg, #f7fafc 0%, #cfd9e4 48%, #93a5b8 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.12),
+    0 8px 22px rgba(147, 165, 184, 0.5);
+}
+.lb-chip.bronze {
+  background: linear-gradient(145deg, #f3c08b 0%, #cd8f52 48%, #9c5f26 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.18),
+    0 8px 22px rgba(205, 143, 82, 0.5);
+}
+
+/* badge nomor peringkat */
+.lb-chip-rank {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Russo One", sans-serif;
+  font-size: 0.95rem;
+  color: #fff;
+  background: linear-gradient(145deg, #35e0ae, #0a7d68);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.28);
+  z-index: 2;
+}
+.lb-chip.gold .lb-chip-rank {
+  background: linear-gradient(145deg, #ffe27a, #f0a020);
+  color: #6b3d00;
+}
+.lb-chip.silver .lb-chip-rank {
+  background: linear-gradient(145deg, #f7fafc, #9fb0c0);
+  color: #37474f;
+}
+.lb-chip.bronze .lb-chip-rank {
+  background: linear-gradient(145deg, #f0b27a, #b5651d);
+  color: #fff;
+}
+
+/* mahkota melayang khusus juara 1 */
+.lb-chip-crown {
+  position: absolute;
+  top: -21px;
+  right: 14px;
+  font-size: 1.5rem;
+  animation: lb-float 2.2s ease-in-out infinite;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.3));
+  z-index: 2;
+}
+.lb-chip img {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  border: 3px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.28);
+  background: #3b5bfd; /* fallback saat gambar loading */
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.lb-chip-name {
+  color: #fff;
+  font-family: "Russo One", "Baloo 2", "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 1.02rem;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+}
+.lb-chip-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.lb-chip-detail {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+}
+@media (max-width: 560px) {
+  .lb-marquee-track {
+    padding: 24px 0 8px;
+  }
+  .lb-chip {
+    gap: 10px;
+    margin-right: 12px;
+    padding: 8px 22px 8px 10px;
+    min-width: 225px;
+    border-radius: 16px;
+  }
+  .lb-chip img {
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+  }
+  .lb-chip-name {
+    font-size: 0.82rem;
+  }
+  .lb-chip-detail {
+    font-size: 0.7rem;
+  }
+  .lb-chip-rank {
+    width: 24px;
+    height: 24px;
+    top: -8px;
+    left: -8px;
+    font-size: 0.75rem;
+  }
+  .lb-chip-crown {
+    font-size: 1.1rem;
+    top: -15px;
+    right: 10px;
+  }
+}
