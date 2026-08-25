@@ -12,7 +12,7 @@
 
 import { db, auth } from "./firebase-init.js";
 import {
-  collection, doc, setDoc, getDoc, query, where, getDocs, serverTimestamp,
+  collection, doc, setDoc, getDoc, query, where, getDocs, serverTimestamp, onSnapshot,
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 const config = window.HEKA_PAGE_CONFIG;
@@ -177,6 +177,7 @@ async function init(config) {
   const COUNTDOWN_DURATION = 3600;
   let expireTime = null;
   let countdown = null;
+  let orderStatusUnsub = null; // listener status order (dilepas saat selesai/gagal)
 
   function startCountdown() {
     expireTime = Date.now() + COUNTDOWN_DURATION * 1000;
@@ -357,12 +358,91 @@ async function init(config) {
     const konfirmasiEl = document.getElementById("konfirmasiAdmin");
     if (orderId) {
       konfirmasiEl.dataset.orderId = orderId;
+      watchOrderStatus(orderId); // pantau status -> tampilkan "Selesai" begitu admin verify
     } else {
       delete konfirmasiEl.dataset.orderId;
     }
     konfirmasiEl.dataset.invoiceId = invoiceId;
     konfirmasiEl.dataset.total = total;
     konfirmasiEl.dataset.label = label;
+  }
+
+  /* ---------- 5b. Pantau status order real-time -> indikator "Selesai" ---------- */
+  // Begitu admin klik Verify di email (status order jadi "completed" via
+  // backend Apps Script), halaman pembayaran ini otomatis menampilkan
+  // banner "Done ✅ Pesanan Selesai" TANPA perlu refresh.
+  // Catatan: firestore.rules hanya mengizinkan PEMILIK order (yang login)
+  // membaca dokumen order-nya. Jadi listener ini hanya dipasang untuk user
+  // login; tamu (checkout tanpa akun) tidak bisa membaca balik -> dilewati.
+  function watchOrderStatus(orderId) {
+    if (!orderId || !auth.currentUser) return;
+    if (orderStatusUnsub) { orderStatusUnsub(); orderStatusUnsub = null; }
+
+    const banner = ensureStatusBanner();
+    setStatusBanner(banner, "pending_confirmation");
+
+    orderStatusUnsub = onSnapshot(
+      doc(db, "orders", orderId),
+      (snap) => {
+        const status = snap.exists() ? snap.data().status : null;
+        setStatusBanner(banner, status);
+        if (status === "completed" || status === "failed") {
+          if (countdown) clearInterval(countdown);
+          const timerEl = document.getElementById("timer");
+          if (timerEl) timerEl.textContent = status === "completed" ? "Selesai" : "Dibatalkan";
+          const tab = document.querySelector("#ordered .tabs .tab");
+          if (tab) tab.textContent = status === "completed" ? "Selesai" : "Gagal";
+          if (orderStatusUnsub) { orderStatusUnsub(); orderStatusUnsub = null; }
+        }
+      },
+      (err) => {
+        // Mis. permission-denied kalau bukan pemilik. Diamkan saja (banner
+        // pending tetap tampil); jangan ganggu user dengan alert.
+        console.warn("Listener status order berhenti:", err && err.code ? err.code : err);
+      }
+    );
+  }
+
+  function ensureStatusBanner() {
+    let el = document.getElementById("orderStatusBanner");
+    if (el) return el;
+    el = document.createElement("div");
+    el.id = "orderStatusBanner";
+    el.style.cssText =
+      "margin:0 0 14px;padding:12px 14px;border-radius:12px;font-size:.9rem;font-weight:700;line-height:1.45;";
+    const box = document.querySelector("#ordered .invoice-box");
+    if (box) box.insertBefore(el, box.firstChild);
+    else {
+      const ordered = document.getElementById("ordered");
+      if (ordered) ordered.appendChild(el);
+    }
+    return el;
+  }
+
+  function setStatusBanner(el, status) {
+    if (!el) return;
+    if (status === "completed") {
+      el.style.background = "#e6f9f3";
+      el.style.color = "#0b7a63";
+      el.style.border = "1px solid #0eb193";
+      el.innerHTML =
+        "✅ <b>Done — Pesanan Selesai!</b> Pesananmu sudah diverifikasi admin. " +
+        "Poin loyalti otomatis masuk saat kamu membuka halaman Profil.";
+    } else if (status === "failed") {
+      el.style.background = "#fdecee";
+      el.style.color = "#c0303d";
+      el.style.border = "1px solid #e63946";
+      el.innerHTML =
+        "❌ <b>Pesanan ditandai gagal</b> oleh admin. Silakan hubungi admin lewat " +
+        'tombol "Konfirmasi ke Admin" di bawah.';
+    } else {
+      el.style.background = "#fff6e6";
+      el.style.color = "#8a5a00";
+      el.style.border = "1px solid #f0b429";
+      el.innerHTML =
+        "⏳ <b>Menunggu verifikasi admin.</b> Setelah pembayaran dicek & pesanan diproses, " +
+        "status di sini otomatis berubah jadi <b>Selesai ✅</b> — tidak perlu refresh halaman.";
+    }
   }
 
   function profileUrl() {

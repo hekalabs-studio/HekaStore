@@ -85,6 +85,14 @@ navigasi dengan panah kiri/kanan atau dot di bawah banner.
   `completed` → riwayat user jadi "Selesai" + poin masuk otomatis. Backend-nya
   Google Apps Script (gratis, tanpa Blaze) — setup di `apps-script/README.md`.
   Menandai `completed` juga tetap bisa manual lewat Firebase Console.
+- Alur ini berlaku untuk **semua halaman produk** (game, pulsa, token listrik,
+  dst) — backend meng-query order berdasarkan `status`, bukan kategori, jadi
+  tidak ada yang khusus Free Fire/Mobile Legends saja.
+- Halaman pembayaran menampilkan **banner status real-time**: selama menunggu
+  tampil "⏳ Menunggu verifikasi admin", dan berubah otomatis jadi
+  "✅ Done — Pesanan Selesai" begitu admin klik Verify (tanpa refresh). Ini
+  hanya untuk pembeli yang **login** (aturan Firestore cuma mengizinkan pemilik
+  order membaca dokumennya); pembeli tamu tidak melihat banner ini.
 - `functions/index.js` (integrasi Xendit + Digiflazz untuk pembayaran &
   top up otomatis) TIDAK aktif selama Spark plan — disimpan sebagai
   referensi kalau nanti upgrade ke Blaze plan.

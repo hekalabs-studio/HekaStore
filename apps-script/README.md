@@ -80,6 +80,34 @@ Ini yang membuat token script boleh membaca/menulis Firestore (bypass rules).
 - Guard `adminNotified` mencegah email dobel.
 - Token IAM tidak pernah keluar ke browser — semua di sisi Apps Script.
 
+## Troubleshooting: error 403 "insufficient authentication scopes"
+Pesan `ACCESS_TOKEN_SCOPE_INSUFFICIENT` / `Request had insufficient
+authentication scopes` = token belum punya scope `datastore`. Apps Script
+tidak bisa menebak pemakaian Firestore dari `UrlFetchApp`, jadi scope itu
+harus dari manifest **dan** script harus di-otorisasi ULANG. Perbaikan:
+
+1. **Pastikan manifest aktif & tersimpan.** Project Settings → centang
+   "Show 'appsscript.json' manifest file in editor". Buka `appsscript.json`,
+   pastikan ada blok `oauthScopes` yang memuat
+   `https://www.googleapis.com/auth/datastore`, lalu **Save** (Ctrl+S).
+2. **Otorisasi ulang** (wajib setelah scope berubah):
+   - Buka https://myaccount.google.com/permissions → cari project Apps Script
+     kamu → **Remove access**.
+   - Kembali ke editor → Run fungsi apa saja (mis. `testFirestore`) → muncul
+     **Authorization required** → **Review permissions** → sekarang ada izin
+     *"See, edit, configure, and delete your Google Cloud data"* (itu scope
+     datastore) → **Allow**.
+3. **Cek** dengan menjalankan `checkScopes()` → di Execution log harus ada
+   `.../auth/datastore` dan tanda ✅.
+4. Setelah editor OK, buat ulang deployment web app (**Deploy → Manage
+   deployments → Edit → New version**) supaya endpoint live ikut pakai
+   otorisasi baru.
+
+> Catatan: error ini soal **scope OAuth**, beda dari error IAM. Kalau scope
+> sudah benar tapi masih 403 dengan pesan *"Missing or insufficient
+> permissions"*, berarti akun pemilik script belum punya IAM role di project
+> (lihat langkah 1 Setup — role **Cloud Datastore User**).
+
 ## Kalau akun script BUKAN anggota project hekaapedia
 Alternatif: pakai **service account key** (kamu sudah familiar — lihat
 `DEPLOY.md` "Cara B"). Buat service account dengan role *Cloud Datastore User*,

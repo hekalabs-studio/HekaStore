@@ -355,3 +355,23 @@ function testFirestore() {
     + pending.filter(function (o) { return o.data.adminNotified !== true; }).length + ')' : ''));
   return pending.length;
 }
+
+// Diagnostik scope: log scope yang sedang dimiliki token.
+// HARUS memuat ".../auth/datastore". Kalau tidak ada -> manifest belum aktif
+// atau script belum di-otorisasi ulang setelah scope ditambahkan (lihat di
+// bawah). Ini penyebab error 403 "insufficient authentication scopes".
+function checkScopes() {
+  var token = ScriptApp.getOAuthToken();
+  var res = UrlFetchApp.fetch(
+    'https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=' + encodeURIComponent(token),
+    { muteHttpExceptions: true }
+  );
+  var info = {};
+  try { info = JSON.parse(res.getContentText()); } catch (e) {}
+  var scopes = (info.scope || '').split(' ');
+  console.log('Scope aktif:\n- ' + scopes.join('\n- '));
+  console.log(scopes.indexOf('https://www.googleapis.com/auth/datastore') >= 0
+    ? '✅ Scope datastore ADA — Firestore harusnya bisa diakses.'
+    : '❌ Scope datastore TIDAK ADA — otorisasi ulang script (lihat README).');
+}
+

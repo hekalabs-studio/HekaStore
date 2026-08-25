@@ -105,7 +105,9 @@ pastikan field `active` bernilai `true` dan `price` berupa angka (bukan teks).
 5. Tandai order itu selesai — lewat email Verify (klik **Tandai Selesai** di
    email admin, lihat `apps-script/README.md`) **atau** manual di Firestore
    Console (ubah `status` jadi `"completed"`). Refresh halaman Profil → poin
-   harus otomatis bertambah.
+   harus otomatis bertambah. Kalau pembeli (yang login) masih membuka halaman
+   invoice, banner **✅ Done — Pesanan Selesai** muncul di situ otomatis tanpa
+   perlu refresh (real-time via listener Firestore).
 6. Klik "Konfirmasi ke Admin" pada invoice → harus membuka WhatsApp dengan
    pesan terisi.
 
