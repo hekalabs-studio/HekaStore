@@ -333,7 +333,7 @@ async function init(config) {
       loginNote = `<p style="font-size:.85rem;color:#b26a00;">⚠️ Nominal custom dikonfirmasi manual oleh admin via WhatsApp.</p>`;
     } else {
       loginNote = auth.currentUser
-        ? `<p style="font-size:.85rem;color:#0eb193;">✅ Tersimpan di <a href="${profileUrl()}" style="color:#0eb193;">Riwayat Transaksi</a> akunmu.</p>`
+        ? `<p style="font-size:.85rem;color:#0eb193;">✅ Tersimpan di <a href="${profileUrl()}" style="color:#0eb193;">Riwayat Transaksi</a> akunmu. Status akan berubah jadi <b>Selesai</b> otomatis setelah admin memverifikasi pesananmu (poin loyalti ikut masuk).</p>`
         : `<p style="font-size:.85rem;color:#888;">Login supaya transaksi ini tercatat di riwayat akunmu & dapat poin.</p>`;
     }
     dataPesanan.innerHTML = `

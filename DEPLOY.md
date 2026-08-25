@@ -48,6 +48,15 @@ Kedua cara mengisi data yang sama dari sumber yang sama:
 `data/products-seed.mjs`. Edit harga di sana, lalu ulangi salah satu cara
 di atas kalau mau update (aman dijalankan berkali-kali).
 
+## 3. (Disarankan) Email verify order ke admin — tetap gratis
+
+Supaya tiap order baru otomatis mengirim **email ke `hekoding@gmail.com`**
+dengan tombol **Verify** (klik → order `completed` → poin user masuk), pasang
+backend Google Apps Script (gratis, tanpa Blaze). Panduan lengkap ada di
+[`apps-script/README.md`](apps-script/README.md). Tanpa langkah ini, situs
+tetap jalan — admin cukup menandai order `completed` manual lewat Firestore
+Console seperti biasa.
+
 ---
 
 ## Cara kerja order & poin (tanpa Cloud Functions)
@@ -58,8 +67,12 @@ di atas kalau mau update (aman dijalankan berkali-kali).
   cocok (mis. harga dimanipulasi lewat DevTools), Firestore sendiri yang
   menolak. Ini menggantikan peran Cloud Function validasi harga, tapi
   gratis.
-- Admin menandai order selesai secara **manual** lewat Firestore Console:
-  buka dokumen di koleksi `orders`, ubah field `status` jadi `"completed"`.
+- Tiap ada order baru, admin (`hekoding@gmail.com`) menerima **email**
+  otomatis berisi detail order + tombol **Verify** (backend gratis Google
+  Apps Script — lihat `apps-script/README.md`). Setelah item game masuk /
+  pelanggan dilayani, admin klik **Tandai Selesai** di halaman itu → order
+  jadi `"completed"`. (Masih bisa juga diubah manual lewat Firestore Console
+  kalau perlu.)
 - Begitu pembeli membuka halaman **Profil**, sistem otomatis mengecek order
   miliknya yang sudah `completed` dan mengklaim poinnya (1 dokumen di
   `users/{uid}/pointClaims/{orderId}`, nilainya divalidasi rules langsung
@@ -89,8 +102,10 @@ pastikan field `active` bernilai `true` dan `price` berupa angka (bukan teks).
    dengan `uid` terisi (kalau sedang login) dan `total` yang benar.
 4. Buka halaman **Profil** (klik nama kamu di pojok kanan atas) → order
    di atas harus muncul di Riwayat Transaksi.
-5. Di Firestore Console, ubah `status` order itu jadi `"completed"`, lalu
-   refresh halaman Profil → poin harus otomatis bertambah.
+5. Tandai order itu selesai — lewat email Verify (klik **Tandai Selesai** di
+   email admin, lihat `apps-script/README.md`) **atau** manual di Firestore
+   Console (ubah `status` jadi `"completed"`). Refresh halaman Profil → poin
+   harus otomatis bertambah.
 6. Klik "Konfirmasi ke Admin" pada invoice → harus membuka WhatsApp dengan
    pesan terisi.
 

@@ -80,7 +80,11 @@ navigasi dengan panah kiri/kanan atau dot di bawah banner.
   yang nilainya divalidasi rules langsung dari `order.total`. Lihat
   `js/profile.js` dan bagian `pointClaims` di `firestore.rules`.
 - Pembayaran menggunakan QRIS statis. User bayar manual lalu konfirmasi via WhatsApp.
-- Menandai order `completed` masih manual lewat Firebase Console (field `status`).
+- Setiap order baru mengirim **email verifikasi ke admin** (`hekoding@gmail.com`)
+  dengan tombol **Verify**. Admin klik Verify (setelah item game masuk) → order
+  `completed` → riwayat user jadi "Selesai" + poin masuk otomatis. Backend-nya
+  Google Apps Script (gratis, tanpa Blaze) — setup di `apps-script/README.md`.
+  Menandai `completed` juga tetap bisa manual lewat Firebase Console.
 - `functions/index.js` (integrasi Xendit + Digiflazz untuk pembayaran &
   top up otomatis) TIDAK aktif selama Spark plan — disimpan sebagai
   referensi kalau nanti upgrade ke Blaze plan.
