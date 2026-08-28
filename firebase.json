@@ -9,7 +9,58 @@
       ".vscode/**",
       "functions/**",
       "scripts/**",
-      "README.md"
+      "apps-script/**",
+      "*.md",
+      "*.txt",
+      "package-lock.json",
+      "convert-images.js"
+    ],
+    "headers": [
+      {
+        "source": "/**/*.{webp,jpg,jpeg,png,gif,svg,ico}",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=86400, public"
+          }
+        ]
+      },
+      {
+        "source": "/**/*.{js,css}",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, public"
+          }
+        ]
+      },
+      {
+        "source": "/**/*.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, public"
+          }
+        ]
+      },
+      {
+        "source": "/index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, public"
+          }
+        ]
+      },
+      {
+        "source": "/",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, public"
+          }
+        ]
+      }
     ]
   },
   "firestore": {
@@ -17,3 +68,4 @@
     "indexes": "firestore.indexes.json"
   }
 }
+

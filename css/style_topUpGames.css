@@ -520,127 +520,773 @@ input::placeholder {
   border-color: #888;
 }
 
-/* payment-qris */
-/* invoice */
+/* ============================================================
+   INVOICE — MODERN REDESIGN
+   ============================================================ */
+@keyframes inv-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes inv-pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(14, 177, 147, 0.45); }
+  70%  { box-shadow: 0 0 0 9px rgba(14, 177, 147, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(14, 177, 147, 0); }
+}
+@keyframes inv-dot-blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.45; transform: scale(0.8); }
+}
+@keyframes inv-slide-bg {
+  from { background-position: 0% 50%; }
+  to   { background-position: 100% 50%; }
+}
+@keyframes inv-pop {
+  0%   { transform: scale(0.6); opacity: 0; }
+  70%  { transform: scale(1.06); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes confetti-fall {
+  0%   { transform: translate3d(0, -12px, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate3d(var(--cx, 0px), 340px, 0) rotate(var(--cr, 540deg)); opacity: 0; }
+}
+
+/* --- Header: gradient brand bergerak + dekorasi --- */
 .invoice-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(90deg, #00d2ff, #006aff);
-  padding: 15px 20px;
-  color: #f5f5f5;
-  border-radius: 10px;
-  flex-wrap: wrap; /* biar gak mepet di layar kecil */
+  background: linear-gradient(120deg, #0a7d68, #0c937b 35%, #12b588 60%, #0a7d68);
+  background-size: 220% 100%;
+  animation: inv-slide-bg 7s ease-in-out infinite alternate;
+  padding: 18px 22px;
+  color: #fff;
+  border-radius: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(10, 125, 104, 0.28);
 }
-
+.invoice-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120px 70px at 88% 20%, rgba(255, 255, 255, 0.18), transparent 70%),
+    radial-gradient(160px 90px at 8% 110%, rgba(255, 255, 255, 0.12), transparent 70%);
+  pointer-events: none;
+}
+.invoice-header h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  margin: 0;
+}
+.invoice-header h2::before {
+  content: "🧾";
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+}
 .print-btn {
-  background: #f5f5f5;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  padding: 9px 18px;
+  border-radius: 999px;
   cursor: pointer;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: background 0.2s ease, transform 0.15s ease;
+  position: relative;
+  z-index: 1;
 }
+.print-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+.print-btn::before { content: "🖨️ "; }
 
-/* Box utama */
+/* --- Box utama --- */
 .invoice-box {
-  background: #f5f5f5;
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 10px;
+  background: #ffffff;
+  margin-top: 18px;
+  padding: clamp(16px, 3vw, 26px);
+  border-radius: 20px;
+  border: 1px solid #e4efe9;
+  box-shadow: 0 8px 22px rgba(16, 60, 50, 0.07);
+  position: relative;
+  overflow: hidden;
 }
+#ordered.revealed .invoice-box > * {
+  animation: inv-fade-up 0.55s ease both;
+}
+#ordered.revealed .invoice-box > *:nth-child(2) { animation-delay: 0.06s; }
+#ordered.revealed .invoice-box > *:nth-child(3) { animation-delay: 0.12s; }
+#ordered.revealed .invoice-box > *:nth-child(4) { animation-delay: 0.18s; }
+#ordered.revealed .invoice-box > *:nth-child(5) { animation-delay: 0.24s; }
+#ordered.revealed .invoice-box > *:nth-child(6) { animation-delay: 0.3s; }
+#ordered.revealed .invoice-box > *:nth-child(7) { animation-delay: 0.36s; }
 
-/* Header invoice */
+/* INV-PART-1B */
+
+/* --- Baris info atas: ID invoice + tanggal --- */
 .top-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  gap: 10px;
 }
+#invoice-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-family: "JetBrainsMono", monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #0a7d68;
+  background: #e8faf4;
+  border: 1.5px dashed #7ad7bf;
+  padding: 8px 14px;
+  border-radius: 12px;
+}
+.copy-chip {
+  border: none;
+  background: #0eb193;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 5px 11px;
+  border-radius: 999px;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: background 0.2s ease, transform 0.12s ease;
+}
+.copy-chip:hover { background: #0a7d68; transform: translateY(-1px); }
+.copy-chip:active { transform: scale(0.94); }
+.copy-chip.copied { background: #18a558; }
+.top-info .date {
+  color: #7a8a84;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.top-info .date::before { content: "🕒 "; }
 
-/* Tabs status */
-.tabs {
+/* --- Stepper status (Dibuat -> Verifikasi -> Selesai) --- */
+.order-stepper {
   display: flex;
-  margin-top: 15px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: 20px 4px 6px;
+  position: relative;
+}
+.order-stepper .step {
+  flex: 1;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.order-stepper .step .dot {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  margin: 0 auto 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  background: #e8e8e8;
+  color: #9aa5a0;
+  border: 2px solid #dfe5e2;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+.order-stepper .step .lbl {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #9aa5a0;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.order-stepper .step::before,
+.order-stepper .step::after {
+  content: "";
+  position: absolute;
+  top: 17px;
+  height: 3px;
+  background: #e2e8e5;
+  border-radius: 3px;
+  width: calc(50% - 24px);
+  transition: background 0.4s ease;
+}
+.order-stepper .step::before { left: 0; }
+.order-stepper .step::after  { right: 0; }
+.order-stepper .step:first-child::before,
+.order-stepper .step:last-child::after { display: none; }
+.order-stepper .step.is-done .dot {
+  background: linear-gradient(135deg, #0c937b, #2ed9b3);
+  border-color: transparent;
+  color: #fff;
+}
+.order-stepper .step.is-done .lbl { color: #0a7d68; }
+.order-stepper .step.is-done::before,
+.order-stepper .step.is-done::after,
+.order-stepper .step.is-active::before {
+  background: linear-gradient(90deg, #0c937b, #2ed9b3);
+}
+.order-stepper .step.is-active .dot {
+  background: #fff;
+  border-color: #0eb193;
+  color: #0a7d68;
+  animation: inv-pulse-ring 1.8s ease-out infinite;
+}
+.order-stepper .step.is-active .lbl { color: #0c937b; }
+.order-stepper.is-error .step .dot {
+  background: #fdecee;
+  border-color: #e63946;
+  color: #c0303d;
+  animation: none;
+}
+.order-stepper.is-error .step .lbl { color: #c0303d; }
+
+/* INV-PART-2 */
+/* --- Pill status di dalam invoice (scoped ke #ordered, bukan tab produk) --- */
+#ordered .tabs {
+  display: flex;
+  margin-top: 16px;
   flex-wrap: wrap;
 }
-
-.tab {
-  flex: 1;
-  padding: 12px;
-  text-align: center;
-  background: #ddd;
-  cursor: pointer;
-  border-radius: 6px;
-  margin-right: 8px;
-  min-width: 100px;
-  margin-bottom: 8px;
+#ordered .tabs .tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 1 auto;
+  padding: 8px 18px;
+  background: #e8faf4;
+  color: #0a7d68;
+  border: 1.5px solid #b9e8da;
+  cursor: default;
+  border-radius: 999px;
+  margin: 0;
+  min-width: 0;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.3px;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
-/* Timer */
+#ordered .tabs .tab::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #0eb193;
+  animation: inv-dot-blink 1.4s ease-in-out infinite;
+}
+#ordered .tabs .tab.tab--done {
+  background: #e6f9f3;
+  border-color: #0eb193;
+  color: #0b7a63;
+  animation: inv-pop 0.45s ease both;
+}
+#ordered .tabs .tab.tab--done::before {
+  content: "✓";
+  width: auto;
+  height: auto;
+  background: none;
+  animation: none;
+  font-size: 0.9rem;
+}
+#ordered .tabs .tab.tab--failed {
+  background: #fdecee;
+  border-color: #e63946;
+  color: #c0303d;
+}
+#ordered .tabs .tab.tab--failed::before {
+  background: #e63946;
+  animation: none;
+}
+
+/* --- Timer kedaluwarsa: kartu jam digital --- */
 .timer-box {
   text-align: center;
-  margin: 20px 0;
+  margin: 20px auto 4px;
+  max-width: 400px;
+  background: linear-gradient(160deg, #123c33, #1d5c4d);
+  border-radius: 18px;
+  padding: 16px 18px 14px;
+  color: #d9efe8;
+  box-shadow: 0 10px 20px rgba(18, 60, 51, 0.22);
+  position: relative;
+  overflow: hidden;
 }
-
+.timer-box::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(140px 60px at 85% 0%, rgba(46, 217, 179, 0.25), transparent 70%);
+  pointer-events: none;
+}
+.timer-box p {
+  margin: 0 0 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #9fd8c9;
+}
 #timer {
-  font-size: 32px;
-  font-weight: bold;
+  display: inline-block;
+  font-family: "JetBrainsMono", monospace;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #3ef0c2;
+  text-shadow: 0 0 14px rgba(62, 240, 194, 0.45);
+  line-height: 1.1;
+  position: relative;
+  z-index: 1;
+}
+.timer-box .timer-progress {
+  height: 5px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.14);
+  margin-top: 12px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+.timer-box .timer-progress::after {
+  content: "";
+  display: block;
+  height: 100%;
+  width: var(--p, 100%);
+  border-radius: 5px;
+  background: linear-gradient(90deg, #2ed9b3, #ffd94a);
+  transition: width 0.6s linear, background 0.4s ease;
+}
+.timer-box.warn {
+  background: linear-gradient(160deg, #4d3612, #7a5a1d);
+}
+.timer-box.warn #timer {
+  color: #ffd94a;
+  text-shadow: 0 0 14px rgba(255, 217, 74, 0.5);
+}
+.timer-box.warn .timer-progress::after {
+  background: linear-gradient(90deg, #ffb347, #ffd94a);
+}
+.timer-box.danger {
+  background: linear-gradient(160deg, #5c1d1d, #8a3030);
+  animation: inv-dot-blink 1.6s ease-in-out infinite;
+}
+.timer-box.danger #timer {
+  color: #ff8a8a;
+  text-shadow: 0 0 16px rgba(255, 138, 138, 0.55);
+}
+.timer-box.danger .timer-progress::after {
+  background: linear-gradient(90deg, #e63946, #ff8a8a);
 }
 
-/* Konten */
+/* INV-PART-2B */
+
+/* --- Konten dua kolom --- */
 .content {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
   gap: 20px;
-  flex-wrap: wrap; /* responsive */
+  margin-top: 22px;
 }
-
 .left,
 .right {
-  flex: 1;
-  background: #f2f2f2;
-  padding: 15px;
-  border-radius: 10px;
-  min-width: 280px; /* biar tidak terlalu kecil di HP */
+  background: #fbfefd;
+  border: 1px solid #e4efe9;
+  padding: 20px;
+  border-radius: 18px;
+  min-width: 0;
 }
 
 /* Gambar Produk */
 .product-img {
-  width: 120px;
-  border-radius: 10px;
+  width: 116px;
+  border-radius: 16px;
   max-width: 100%;
+  box-shadow: 0 8px 18px rgba(16, 60, 50, 0.18);
+  border: 3px solid #fff;
+  outline: 1.5px solid #dcefe7;
+  transition: transform 0.25s ease;
 }
+.product-img:hover { transform: scale(1.04) rotate(-1deg); }
 
-/* Detail teks */
-.detail p {
-  margin: 6px 0;
+/* Detail pesanan (baris label-nilai rapi) */
+.detail {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
+.detail .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  transition: background 0.15s ease;
+}
+.detail .row:hover { background: #f2faf7; }
+.detail .row .k {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #8ba39b;
+  white-space: nowrap;
+}
+.detail .row .v {
+  font-weight: 700;
+  color: #223c34;
+  text-align: right;
+  word-break: break-word;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.detail .total-row {
+  margin-top: 8px;
+  background: linear-gradient(135deg, #e8faf4, #dcf7ee);
+  border: 1.5px solid #b9e8da;
+}
+.detail .total-row .v {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0a7d68;
+}
+.copy-mini {
+  border: none;
+  background: #e4f5ef;
+  color: #0a7d68;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  line-height: 1;
+  transition: background 0.2s ease, transform 0.12s ease;
+  flex-shrink: 0;
+}
+.copy-mini:hover { background: #cdeee2; transform: translateY(-1px); }
+.copy-mini:active { transform: scale(0.9); }
+.detail .mini-note {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #f6fbf9;
+  border: 1px dashed #cfe6dd;
+}
+.detail .mini-note.ok { color: #0b7a63; }
+.detail .mini-note.warn { color: #b26a00; }
+.detail .mini-note.muted { color: #7a8a84; }
+.detail .mini-note a { color: #0eb193; font-weight: 700; }
 
-/* QR */
+/* --- Panel pembayaran --- */
+#paymentOrdered h3 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px;
+  font-size: 1rem;
+  color: #223c34;
+}
+#paymentOrdered h3::before { content: "💳"; }
+#paymentOrdered .pay-method {
+  display: inline-block;
+  background: #eef7f3;
+  border: 1px solid #d7ebe2;
+  color: #0a7d68;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
 .qris-img {
-  width: 260px;
-  max-width: 100%; /* biar menyesuaikan layar */
+  width: 230px;
+  max-width: 100%;
   display: block;
-  margin: 10px auto;
+  margin: 6px auto 14px;
+  border-radius: 18px;
+  border: 1.5px solid #e0efe8;
+  box-shadow: 0 10px 22px rgba(16, 60, 50, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
+.qris-img:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 14px 28px rgba(16, 60, 50, 0.18);
+}
+#totalPembayaran {
+  text-align: center;
+  margin: 0 0 12px;
+  color: #7a8a84;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+#totalPembayaran b {
+  display: block;
+  margin-top: 2px;
+  font-size: 1.45rem;
+  font-weight: 800;
+  background: linear-gradient(120deg, #0a7d68, #12b588);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 0.5px;
+}
+.pay-note {
+  font-size: 0.83rem;
+  color: #7a8a84;
+  line-height: 1.55;
+  background: #fff9ec;
+  border: 1px dashed #f0d9a0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-top: 12px;
+}
+.pay-note b { color: #8a5a00; }
 
-/* Tombol di bawah QR */
+/* INV-PART-3 */
+
+/* --- Tombol unduh QR dengan efek shine --- */
 .download-btn {
   width: 100%;
-  background: #00d27f;
+  background: linear-gradient(120deg, #0c937b, #2ed9b3);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
   border: none;
-  padding: 10px;
-  border-radius: 6px;
+  padding: 12px;
+  border-radius: 999px;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 6px 16px rgba(14, 177, 147, 0.35);
 }
+.download-btn::before {
+  content: "⬇ ";
+  font-size: 0.9rem;
+}
+.download-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: translateX(-130%) skewX(-18deg);
+  animation: inv-shine 3.2s ease-in-out infinite;
+}
+.download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(14, 177, 147, 0.45);
+}
+.download-btn:active { transform: scale(0.97); }
+
+/* --- Tombol konfirmasi WhatsApp --- */
 .konfirm-btn {
-  background: linear-gradient(90deg, #00d2ff, #006aff);
+  background: linear-gradient(120deg, #128c7e, #25d366);
   width: 100%;
   border: none;
-  padding: 10px;
-  border-radius: 6px;
+  padding: 14px;
+  border-radius: 999px;
   cursor: pointer;
-  font-family: lato;
-  font-weight: bold;
-  color: #f5f5f5;
+  font-family: inherit;
+  font-size: 0.98rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  color: #fff;
+  margin-top: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(18, 140, 126, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+.konfirm-btn::before { content: "💬"; font-size: 1.05rem; }
+.konfirm-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: translateX(-130%) skewX(-18deg);
+  animation: inv-shine 4s ease-in-out infinite;
+}
+.konfirm-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(18, 140, 126, 0.45);
+  filter: saturate(1.1);
+}
+.konfirm-btn:active { transform: scale(0.98); }
+
+/* Link "buat orderan lagi" -> pill ghost di tengah */
+#ordered .invoice-box > a {
+  display: table;
+  margin: 16px auto 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0a7d68;
+  text-decoration: none;
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: 1.5px dashed #9fd8c9;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+#ordered .invoice-box > a:hover {
+  background: #e8faf4;
+  border-color: #0eb193;
+  transform: translateY(-1px);
+}
+
+/* --- Banner status order (#orderStatusBanner) --- */
+#orderStatusBanner {
+  margin: 0 0 16px;
+  padding: 13px 16px;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.55;
+  border: 1px solid transparent;
+  animation: inv-fade-up 0.4s ease both;
+}
+#orderStatusBanner.st-pending {
+  background: #fff9ec;
+  color: #8a5a00;
+  border-color: #f0d9a0;
+}
+#orderStatusBanner.st-done {
+  background: #e6f9f3;
+  color: #0b7a63;
+  border-color: #0eb193;
+  animation: inv-pop 0.5s ease both;
+}
+#orderStatusBanner.st-failed {
+  background: #fdecee;
+  color: #c0303d;
+  border-color: #e63946;
+}
+
+/* --- Confetti saat pesanan selesai --- */
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+}
+.confetti i {
+  position: absolute;
+  top: -12px;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--c, #2ed9b3);
+  left: var(--x, 50%);
+  animation: confetti-fall var(--d, 2.4s) ease-in var(--dl, 0s) forwards;
+  opacity: 0;
+}
+
+/* --- Toast notifikasi kecil (copy, dsb.) --- */
+#hekaToast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translate(-50%, 16px);
+  background: #123c33;
+  color: #eafff8;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: 999px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 9999;
+}
+#hekaToast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* --- Responsif invoice --- */
+@media (max-width: 820px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+  .konfirm-btn,
+  .download-btn {
+    font-size: 0.9rem;
+  }
+}
+@media (max-width: 480px) {
+  .invoice-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  .invoice-header h2 { justify-content: center; }
+  #timer { font-size: 27px; letter-spacing: 3px; }
+  .product-img { width: 100px; }
+  .order-stepper .step .lbl { font-size: 0.62rem; }
+  .order-stepper .step .dot { width: 29px; height: 29px; font-size: 0.8rem; }
+  .order-stepper .step::before,
+  .order-stepper .step::after { width: calc(50% - 20px); }
+  .detail .row { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .detail .row .v { text-align: left; }
+}
+
+/* --- Mode cetak / simpan PDF: bersihkan halaman, invoice saja --- */
+@media print {
+  header, footer, .banner-slider, .section:not(#ordered), .chooseBuy,
+  #formUserId, #pilihNominal, #metodePembayaran, #dataPemesan, #deskripsiLayanan,
+  #orderStatusBanner, .timer-box, .print-btn, .order-stepper {
+    display: none !important;
+  }
+  #ordered {
+    display: block !important;
+  }
+  body { background: #fff; }
+  .invoice-box {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  .left, .right { border: 1px solid #ddd; }
+  .download-btn { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .invoice-header,
+  #timer,
+  #ordered .tabs .tab::before,
+  .order-stepper .step.is-active .dot,
+  .download-btn::after,
+  .konfirm-btn::after,
+  .timer-box.danger {
+    animation: none !important;
+  }
 }
 
 #ordered {
@@ -779,24 +1425,6 @@ input::placeholder {
 /* --------------------
    RESPONSIVE BREAKPOINTS
    -------------------- */
-
-/* HP kecil (≤480px) */
-@media (max-width: 480px) {
-
-  .invoice-header {
-    flex-direction: column;
-    text-align: center;
-    gap: 10px;
-  }
-
-  #timer {
-    font-size: 28px;
-  }
-
-  .product-img {
-    width: 100px;
-  }
-}
 
 /* Tablet (≤768px) */
 @media (max-width: 768px) {
