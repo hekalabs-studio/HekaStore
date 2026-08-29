@@ -1134,6 +1134,10 @@ input::placeholder {
   transform: translateX(-130%) skewX(-18deg);
   animation: inv-shine 4s ease-in-out infinite;
 }
+@keyframes inv-shine {
+  0%        { transform: translateX(-130%) skewX(-18deg); }
+  55%, 100% { transform: translateX(230%) skewX(-18deg); }
+}
 .konfirm-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 26px rgba(18, 140, 126, 0.45);
