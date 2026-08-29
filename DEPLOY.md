@@ -99,7 +99,7 @@ pastikan field `active` bernilai `true` dan `price` berupa angka (bukan teks).
 2. Daftar akun baru dari tombol Daftar.
 3. Pilih nominal + Qris/Cash, isi User ID & no WA, klik "Lanjutkan
    Pembelian" → cek Firestore Console, dokumen baru muncul di `orders`
-   dengan `uid` terisi (kalau sedang login) dan `total` yang benar.
+   dengan `uid` + `userEmail` terisi (checkout sekarang WAJIB login dulu) dan `total` yang benar.
 4. Buka halaman **Profil** (klik nama kamu di pojok kanan atas) → order
    di atas harus muncul di Riwayat Transaksi.
 5. Tandai order itu selesai — lewat email Verify (klik **Tandai Selesai** di

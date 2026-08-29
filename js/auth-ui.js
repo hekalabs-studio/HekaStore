@@ -24,6 +24,7 @@ const MODAL_HTML = `
 <div id="hekaAuthOverlay" class="heka-auth-overlay" hidden>
   <div class="heka-auth-modal" role="dialog" aria-modal="true" aria-labelledby="hekaAuthTitle">
     <button type="button" class="heka-auth-close" aria-label="Tutup">&times;</button>
+    <p id="hekaAuthNote" class="heka-auth-note" hidden></p>
     <div class="heka-auth-tabs">
       <button type="button" class="heka-auth-tab active" data-tab="login">Login</button>
       <button type="button" class="heka-auth-tab" data-tab="register">Daftar</button>
@@ -61,6 +62,7 @@ const MODAL_CSS = `
 .heka-auth-form input{width:100%;box-sizing:border-box;padding:10px 12px;margin-bottom:10px;border:1px solid #ccc;border-radius:8px;font-size:.95rem}
 .heka-auth-submit{width:100%;padding:10px;border:none;border-radius:8px;background:linear-gradient(0deg,#0eb193,#2ed9b3);color:#fff;font-weight:700;cursor:pointer}
 .heka-auth-error{color:#e63946;font-size:.85rem;min-height:1.1em;margin:-2px 0 8px}
+.heka-auth-note{background:#e6f9f3;border:1.5px solid #b5e8d9;color:#0b7a63;font-size:.84rem;padding:9px 12px;border-radius:8px;margin:0 0 12px;line-height:1.45}
 .heka-user-chip{position:relative;display:flex;align-items:center;color:#f5f5f5;font-size:.9rem}
 .heka-user-chip>a{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.45);padding:5px 14px 5px 6px;border-radius:999px;color:#fff;text-decoration:none;transition:background .2s ease,transform .2s ease,box-shadow .2s ease}
 .heka-user-chip>a:hover{background:rgba(255,255,255,.26);transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.15)}
@@ -109,14 +111,22 @@ function setTab(tab) {
   document.getElementById("hekaAuthTitle").textContent = tab === "login" ? "Masuk ke Hekaapedia" : "Buat Akun Hekaapedia";
 }
 
-function openModal(defaultTab = "login") {
+function openModal(defaultTab = "login", note = "") {
   injectModalOnce();
   setTab(defaultTab);
+  // Note opsional: pesan konteks kenapa modal auth dibuka (mis. wajib login utk beli)
+  const noteEl = document.getElementById("hekaAuthNote");
+  if (noteEl) {
+    noteEl.innerHTML = note || "";
+    noteEl.hidden = !note;
+  }
   document.getElementById("hekaAuthOverlay").hidden = false;
 }
 function closeModal() {
   const overlay = document.getElementById("hekaAuthOverlay");
   if (overlay) overlay.hidden = true;
+  const noteEl = document.getElementById("hekaAuthNote");
+  if (noteEl) noteEl.hidden = true;
 }
 
 function friendlyAuthError(err) {
@@ -256,4 +266,4 @@ onAuthStateChanged(auth, (user) => renderNavForUser(user));
 export function getCurrentUser() {
   return auth.currentUser;
 }
-export { auth };
+export { auth, openModal };

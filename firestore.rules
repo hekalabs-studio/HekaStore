@@ -28,18 +28,18 @@ service cloud.firestore {
     }
 
     // ---------------- Order / Transaksi ----------------
-    // Dibuat langsung oleh client (tidak ada Cloud Function di Spark plan),
-    // TAPI setiap field harga di-cross-check ke dokumen produk aslinya di
-    // sini. Kalau harga yang dikirim client tidak cocok dengan harga asli
-    // di Firestore, penulisan DITOLAK oleh server -> harga tidak bisa
-    // dimanipulasi walau checkout.js diubah/di-devtools.
+    // WAJIB LOGIN: setiap order WAJIB punya pemilik (uid) supaya pendataan &
+    // riwayat transaksi bekerja. Client sudah memintanya lewat gate di
+    // checkout.js; di sini server MENOLAK order tamu tanpa uid — lapisan
+    // ke-2 kalau client diubah lewat DevTools. Setiap field harga tetap
+    // di-cross-check ke dokumen produk aslinya sebelum write diizinkan.
     match /orders/{orderId} {
       allow read: if request.auth != null && resource.data.uid == request.auth.uid;
 
       allow create: if
         request.resource.data.keys().hasOnly([
           'invoiceId','productId','category','label','basePrice','total',
-          'paymentMethod','userId','zoneId','nowa','promoCode','uid',
+          'paymentMethod','userId','zoneId','nowa','promoCode','uid','userEmail',
           'status','createdAt'
         ]) &&
         request.resource.data.invoiceId is string &&
@@ -55,7 +55,8 @@ service cloud.firestore {
             ? cashRounded(productData(request.resource.data.productId).price)
             : productData(request.resource.data.productId).price
         ) &&
-        (request.resource.data.uid == null || request.resource.data.uid == request.auth.uid) &&
+        request.resource.data.uid == request.auth.uid &&
+        request.resource.data.userEmail == request.auth.token.email &&
         request.resource.data.userId is string && request.resource.data.userId.size() > 0 &&
         request.resource.data.nowa.matches('^[0-9]{10,15}$') &&
         request.resource.data.createdAt == request.time;

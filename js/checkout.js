@@ -11,9 +11,11 @@
 // (permission-denied) — client tidak bisa memaksakan harga palsu.
 
 import { db, auth } from "./firebase-init.js";
+import { openModal } from "./auth-ui.js";
 import {
   collection, doc, setDoc, getDoc, query, where, getDocs, serverTimestamp, onSnapshot,
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 const config = window.HEKA_PAGE_CONFIG;
 if (!config || !config.category) {
@@ -215,8 +217,70 @@ async function init(config) {
 
   /* ---------- 5. Tombol beli -> tulis order LANGSUNG ke Firestore ---------- */
   const buyButton = document.getElementById("btn-hijau");
+  let pendingResume = false; // true = user sedang diminta login, setelah login pembelian dilanjutkan otomatis
+  let pendingResumeAt = 0;
 
-  buyButton.addEventListener("click", async () => {
+  // Banner kecil di kartu data pemesan: mengingatkan wajib login / menampilkan akun aktif.
+  function ensureLoginGateHint() {
+    if (document.getElementById("loginGateHint")) return;
+    const card = buyButton.closest(".card");
+    if (!card) return;
+    const hint = document.createElement("div");
+    hint.id = "loginGateHint";
+    hint.addEventListener("click", (e) => {
+      if (e.target.closest(".gate-login-btn")) {
+        openModal("login", "Silakan <b>Login / Daftar</b> dulu untuk melanjutkan pembelian.");
+      }
+    });
+    buyButton.insertAdjacentElement("beforebegin", hint);
+    if (!document.getElementById("loginGateStyles")) {
+      const st = document.createElement("style");
+      st.id = "loginGateStyles";
+      st.textContent = `
+        #loginGateHint{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0 4px;padding:11px 14px;border-radius:10px;font-size:.86rem;background:#fff9ec;border:1.5px solid #f0d9a0;color:#8a5a00}
+        #loginGateHint.ok{background:#e6f9f3;border-color:#b5e8d9;color:#0b7a63}
+        #loginGateHint .gate-login-btn{margin-left:auto;border:none;border-radius:8px;padding:7px 14px;font-weight:700;font-size:.82rem;cursor:pointer;color:#fff;background:linear-gradient(0deg,#0eb193,#2ed9b3);font-family:inherit}
+        #loginGateHint .gate-login-btn:hover{filter:brightness(1.06)}
+      `;
+      document.head.appendChild(st);
+    }
+  }
+  function updateLoginGateHint(user) {
+    ensureLoginGateHint();
+    const hint = document.getElementById("loginGateHint");
+    if (!hint) return;
+    if (user) {
+      hint.classList.add("ok");
+      hint.innerHTML = `✅ Membeli sebagai <b>${user.displayName || user.email}</b> — transaksi otomatis tercatat di <b>Riwayat Transaksi</b> akunmu.`;
+    } else {
+      hint.classList.remove("ok");
+      hint.innerHTML = `🔒 Pembelian wajib <b>login / daftar</b> dulu supaya transaksimu terdata &amp; masuk riwayat. <button type="button" class="gate-login-btn">Login / Daftar</button>`;
+    }
+  }
+  updateLoginGateHint(auth.currentUser);
+  onAuthStateChanged(auth, (user) => {
+    updateLoginGateHint(user);
+    // Setelah berhasil login/daftar dari gate, lanjutkan proses pembelian
+    // otomatis (maks. 3 menit setelah tombol beli diklik).
+    if (user && pendingResume && Date.now() - pendingResumeAt < 180000) {
+      pendingResume = false;
+      handlePurchase();
+    }
+  });
+
+  async function handlePurchase() {
+    // ===== WAJIB LOGIN =====
+    // Order selalu terkait akun pemiliknya: pendataan & riwayat transaksi
+    // berfungsi. firestore.rules juga menolak order tanpa uid (lapisan ke-2
+    // di server, jadi tetap aman walau script ini diubah lewat DevTools).
+    const me = auth.currentUser;
+    if (!me) {
+      pendingResume = true;
+      pendingResumeAt = Date.now();
+      openModal("login", `Silakan <b>Login / Daftar</b> dulu untuk melanjutkan pembelian.<br>Setelah login, pesananmu <b>otomatis dilanjutkan</b> &amp; tercatat di riwayat.`);
+      return;
+    }
+
     const selected = document.querySelector(".item.selected");
     const selectedPayment = document.querySelector('input[name="payment"]:checked');
 
@@ -278,7 +342,6 @@ async function init(config) {
       }
 
       const invoiceId = generateInvoiceId();
-      const currentUser = auth.currentUser;
 
       if (isCustom) {
         // Invoice lokal (tanpa menulis ke Firestore) + konfirmasi WhatsApp
@@ -308,7 +371,8 @@ async function init(config) {
         zoneId: zoneId ? zoneId.value : null,
         nowa: nowa.value,
         promoCode: nopro && nopro.value ? nopro.value : null,
-        uid: currentUser ? currentUser.uid : null, // tamu boleh checkout tanpa login
+        uid: me.uid, // wajib login (divalidasi ulang oleh firestore.rules)
+        userEmail: me.email || "",
         status: "pending_confirmation",
         createdAt: serverTimestamp(),
       };
@@ -335,7 +399,9 @@ async function init(config) {
       buyButton.disabled = false;
       buyButton.textContent = "Lanjutkan Pembelian";
     }
-  });
+  }
+
+  buyButton.addEventListener("click", handlePurchase);
 
   function renderInvoice({ invoiceId, total, label, orderId, paymentMethod, saved = true }) {
     injectInvoiceEnhancements();
@@ -349,18 +415,21 @@ async function init(config) {
 
     const dataPesanan = document.getElementById("dataPesanan");
     const uidValue = `${userId.value}${zoneId ? " (" + zoneId.value + ")" : ""}`;
+    const me = auth.currentUser;
+    const akunRow = me
+      ? `<div class="row"><span class="k">Akun</span><span class="v">${me.email || me.displayName || me.uid}</span></div>`
+      : "";
     let loginNote;
     if (!saved) {
       // Custom nominal: order tidak masuk Firestore -> dikonfirmasi manual
       loginNote = `<div class="mini-note warn">⚠️ Nominal custom dikonfirmasi manual oleh admin via WhatsApp.</div>`;
-    } else if (auth.currentUser) {
-      loginNote = `<div class="mini-note ok">✅ Tersimpan di <a href="${profileUrl()}">Riwayat Transaksi</a> akunmu. Status berubah jadi <b>Selesai</b> otomatis setelah admin memverifikasi (poin loyalti ikut masuk).</div>`;
     } else {
-      loginNote = `<div class="mini-note muted">Login supaya transaksi ini tercatat di riwayat akunmu &amp; dapat poin.</div>`;
+      loginNote = `<div class="mini-note ok">✅ Tersimpan di <a href="${profileUrl()}">Riwayat Transaksi</a> akunmu. Status berubah jadi <b>Selesai</b> otomatis setelah admin memverifikasi (poin loyalti ikut masuk).</div>`;
     }
     dataPesanan.innerHTML = `
       <div class="row"><span class="k">Produk</span><span class="v">${label}</span></div>
       <div class="row"><span class="k">Metode</span><span class="v">${paymentMethod}</span></div>
+      ${akunRow}
       <div class="row"><span class="k">User ID</span><span class="v">${uidValue}<button class="copy-mini" data-copy="${uidValue}" title="Salin User ID">📋</button></span></div>
       <div class="row"><span class="k">Kode Promo</span><span class="v">${nopro && nopro.value ? nopro.value : "—"}</span></div>
       <div class="row"><span class="k">Invoice</span><span class="v">${invoiceId}<button class="copy-mini" data-copy="${invoiceId}" title="Salin ID Invoice">📋</button></span></div>
