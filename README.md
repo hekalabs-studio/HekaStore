@@ -18,8 +18,32 @@ Contoh kategori yang sudah ada:
 - `freefire`, `mobilelegend`, `roblox` (game)
 - `pulsatelkomsel`, `pulsaindosat`, `pulsaxl`, `pulsatri` (pulsa)
 - `tokenlistrik` (token listrik)
+- `jasadigital` (jasa digital HekaLabs Studio: website, UI/UX, edit video, IoT, Python)
 
 Untuk kategori baru, cukup tambahkan data produk dengan `category` yang baru.
+
+## Halaman Jasa Digital
+`html/jasaDigital.html` mempromosikan jasa HekaLabs Studio (web development,
+UI/UX, edit video, IoT, tools Python) dengan portofolio
+(Smartoring, EasyCounting, Hekaapedia) dan alur order generic yang sama dengan
+halaman top up (invoice, timer, konfirmasi WA).
+
+Halaman ini memakai `window.HEKA_PAGE_CONFIG` di `js/checkout.js`:
+
+```javascript
+window.HEKA_PAGE_CONFIG = {
+  category: "jasadigital",          // kategori produk di Firestore
+  serviceName: "Jasa Digital HekaLabs Studio",
+  waNumber: "6289514433486",
+  idLabel: "Deskripsi Proyek",       // label input user (default "User ID")
+  orderVerb: "pesan",                // kata kerja di pesan WA (default "top up")
+};
+```
+
+Semua opsi bersifat opsional — halaman lama tanpa `HEKA_PAGE_CONFIG` tetap
+jalan dengan default. Style khusus halaman ada di `css/jasaDigital.css`, dan
+link promosi Jasa Digital sudah dipasang di nav/footer semua halaman +
+section `#jasaPromo` di `index.html`.
 
 ## Setup (Spark Plan - Gratis)
 

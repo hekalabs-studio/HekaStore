@@ -34,7 +34,7 @@
     <p id="authStatus" style="font-size:.85rem;color:#666">Belum login.</p>
   </div>
 
-  <button id="seedBtn" type="button" disabled>2. Seed 90 Produk ke Firestore</button>
+  <button id="seedBtn" type="button" disabled>2. Seed Produk ke Firestore</button>
   <div id="log"></div>
 
 <script type="module">
@@ -46,6 +46,8 @@
   const logEl = document.getElementById("log");
   const seedBtn = document.getElementById("seedBtn");
   const authStatus = document.getElementById("authStatus");
+  // Jumlah produk selalu ikut data/products-seed.mjs (jangan hardcode).
+  seedBtn.textContent = `2. Seed ${PRODUCTS.length} Produk ke Firestore`;
 
   function log(msg) {
     logEl.textContent += msg + "\n";

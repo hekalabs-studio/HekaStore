@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jasa Website, Edit Video &amp; IoT — HekaaPedia × HekaLabs Studio</title>
+  <!-- Preview sosial media (WhatsApp / Facebook / Twitter) -->
+  <meta name="description" content="Pesan jasa pembuatan website, desain UI/UX, edit video, dan IoT dari HekaLabs Studio — developer di balik Hekaapedia. Invoice resmi, pembayaran aman, garansi revisi." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="HekaaPedia" />
+  <meta property="og:title" content="Jasa Website, Edit Video &amp; IoT — HekaaPedia × HekaLabs Studio" />
+  <meta property="og:description" content="Pesan jasa pembuatan website, desain UI/UX, edit video, dan IoT dari HekaLabs Studio — developer di balik Hekaapedia. Invoice resmi, pembayaran aman, garansi revisi." />
+  <meta property="og:url" content="https://hekaapedia.web.app/html/jasaDigital.html" />
+  <meta property="og:image" content="https://hekaapedia.web.app/img/og-banner.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:locale" content="id_ID" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Jasa Website, Edit Video &amp; IoT — HekaaPedia × HekaLabs Studio" />
+  <meta name="twitter:description" content="Pesan jasa pembuatan website, desain UI/UX, edit video, dan IoT dari HekaLabs Studio — developer di balik Hekaapedia." />
+  <meta name="twitter:image" content="https://hekaapedia.web.app/img/og-banner.jpg" />
+  <meta name="theme-color" content="#0c937b" />
+  <link rel="stylesheet" href="../css/style_topUpGames.css?v=20260829" />
+  <link rel="stylesheet" href="../css/jasaDigital.css?v=20260831b" />
+  <link rel="shortcut icon" href="../img/logotoko2.webp" type="image/x-icon" />
+</head>
+
+<body>
+  <!-- Progress bar baca halaman -->
+  <div class="jd-progress" aria-hidden="true"><span id="jdProgressBar"></span></div>
+
+  <!-- Header -->
+  <header>
+    <div class="navbar">
+      <a href="../index.html" class="brand-link">
+        <img src="../img/logotoko2.webp" class="nav-logo" alt="Logo" />
+        <h1 class="logo">Hekaa<span>Pedia</span></h1>
+      </a>
+
+      <div class="search-box">
+        <input type="text" id="searchBar" placeholder="Cari Game, Pulsa, Token Listrik..." class="search-bar" autocomplete="off" />
+      </div>
+      <div class="nav-buttons">
+        <button id="loginBtn">
+          Login
+        </button>
+        <button id="daftarBtn">
+          Daftar
+        </button>
+      </div>
+    </div>
+    <nav class="quick-links" aria-label="Navigasi cepat">
+      <a href="../index.html" class="quick-link">🏠 Beranda</a>
+      <a href="../index.html#listJudul" class="quick-link" data-category="games">🎮 Games</a>
+      <a href="../index.html#listJudul" class="quick-link" data-category="pulsa">📱 Pulsa &amp; Kuota</a>
+      <a href="../index.html#listJudul" class="quick-link" data-category="listrik">⚡ Token Listrik</a>
+      <a href="jasaDigital.html" class="quick-link active">🛠️ Jasa Digital</a>
+      <a href="../profile.html" class="quick-link">👤 Profil</a>
+    </nav>
+  </header>
+
+  <!-- Container utama -->
+  <div class="container">
+    <!-- Semua konten promosi dibungkus #deskripsiLayanan supaya otomatis
+         disembunyikan oleh checkout.js saat invoice tampil -->
+    <div id="deskripsiLayanan">
+      <!-- Deskripsi layanan -->
+      <div class="card layanan">
+        <div class="logo-area">
+          <img src="../img/logotoko2.webp" alt="HekaLabs Studio" style="border-radius: 10px" />
+          <h2>Jasa Digital HekaLabs Studio</h2>
+        </div>
+        <br />
+        <div class="features">
+          <p>💬 Konsultasi &amp; quote gratis</p>
+          <p>🧾 Invoice + status pesanan real-time</p>
+          <p>♻️ Garansi revisi sesuai kesepakatan</p>
+        </div>
+        <br />
+        <p class="desc">
+          Bukan cuma top up! HekaLabs Studio juga menerima pesanan pembuatan website,
+          desain UI/UX, edit video, dan proyek IoT. Dikerjakan langsung oleh
+          <b>Novemas Heka Alfarizi</b> — developer di balik Hekaapedia ini sendiri.
+          <br />
+          <br><span style="font-size: medium;font-style: italic;">Caranya gampang: pilih paket, ceritakan kebutuhanmu, bayar via QRIS/Cash, lalu pantau statusnya di halaman ini.</span>
+        </p>
+      </div>
+
+      <!-- Hero promosi keahlian (interaktif: gradient animasi + efek mengetik + counter) -->
+      <section class="jd-hero">
+        <div class="jd-hero-blob jd-blob-a" aria-hidden="true"></div>
+        <div class="jd-hero-blob jd-blob-b" aria-hidden="true"></div>
+        <div class="jd-hero-chips" aria-hidden="true">
+          <span style="--fd:.2s">🌐</span>
+          <span style="--fd:1.1s">🎨</span>
+          <span style="--fd:.6s">🎬</span>
+          <span style="--fd:1.6s">🤖</span>
+          <span style="--fd:.9s">🐍</span>
+        </div>
+        <span class="jd-badge">⚡ HEKALABS STUDIO</span>
+        <h2>
+          💼 Bukan Cuma Top Up — Kami Bikin
+          <span class="jd-type" id="jdTypeWord">Website</span><span class="jd-caret" aria-hidden="true"></span>
+        </h2>
+        <p>
+          Web development, UI/UX design, video editing, sampai IoT &amp; robotik.
+          Semua dikerjakan sendiri oleh developer di balik situs ini — lihat sendiri
+          hasil karyanya di GitHub &amp; portfolio di bawah. Filosofinya:
+          <b>Learn → Build → Break → Fix → Improve</b>.
+        </p>
+        <div class="jd-hero-cta">
+          <a class="jd-btn jd-btn-light" href="#formUserId">🚀 Mulai Pesan Sekarang</a>
+          <a class="jd-btn jd-btn-ghost" href="#jdPortfolio">📂 Lihat Portofolio</a>
+        </div>
+        <div class="jd-hero-stats">
+          <div class="jd-stat"><b><span data-jd-count="15">0</span>+</b><span>Proyek Selesai</span></div>
+          <div class="jd-stat"><b><span data-jd-count="100">0</span>%</b><span>Garansi Revisi</span></div>
+          <div class="jd-stat"><b>&lt;<span data-jd-count="24">0</span> jam</b><span>Balas Chat</span></div>
+          <div class="jd-stat"><b>5<span class="jd-star">★</span></b><span>Rating Klien</span></div>
+        </div>
+      </section>
+
+      <!-- Grid layanan -->
+      <h3 class="jd-title">🧾 Pilih Paket Layanan</h3>
+      <div class="jd-grid">
+        <div class="jd-card">
+          <div class="jd-icon">🌐</div>
+          <h3>Web Development</h3>
+          <p>Landing page, website profil, toko online, sampai web app lengkap dengan database — seperti Hekaapedia ini.</p>
+          <div class="jd-chips"><span class="jd-chip">HTML/CSS/JS</span><span class="jd-chip">Firebase</span></div>
+          <div class="jd-price">Mulai <b>Rp 150.000</b></div>
+        </div>
+        <div class="jd-card">
+          <div class="jd-icon">🎨</div>
+          <h3>UI/UX Design</h3>
+          <p>Desain antarmuka yang rapi, modern, dan mudah dipakai — mockup siap implementasi untuk web maupun aplikasi.</p>
+          <div class="jd-chips"><span class="jd-chip">Figma</span><span class="jd-chip">Prototype</span></div>
+          <div class="jd-price">Mulai <b>Rp 100.000</b></div>
+        </div>
+        <div class="jd-card">
+          <div class="jd-icon">🎬</div>
+          <h3>Video Editing</h3>
+          <p>Edit video untuk konten, promosi, motion graphic, hingga video profil — rapi, cepat, dan sesuai brief.</p>
+          <div class="jd-chips"><span class="jd-chip">DaVinci Resolve</span><span class="jd-chip">Motion Graphic</span></div>
+          <div class="jd-price">Mulai <b>Rp 25.000</b></div>
+        </div>
+        <div class="jd-card">
+          <div class="jd-icon">🤖</div>
+          <h3>IoT &amp; Otomasi</h3>
+          <p>Sistem monitoring &amp; kontrol pintar berbasis ESP32 — seperti proyek Smartoring: sensor, relay, dan dashboard.</p>
+          <div class="jd-chips"><span class="jd-chip">ESP32</span><span class="jd-chip">Arduino</span><span class="jd-chip">Smart Home</span></div>
+          <div class="jd-price">Mulai <b>Rp 50.000</b></div>
+        </div>
+        <div class="jd-card">
+          <div class="jd-icon">🐍</div>
+          <h3>Program &amp; Otomasi</h3>
+          <p>Tools/program Python atau C++ untuk mempermudah pekerjaan — seperti EasyCounting, penghitung online gratis.</p>
+          <div class="jd-chips"><span class="jd-chip">Python</span><span class="jd-chip">C++</span><span class="jd-chip">Otomasi</span></div>
+          <div class="jd-price">Mulai <b>Rp 100.000</b></div>
+        </div>
+      </div>
+
+      <!-- Portofolio -->
+      <h3 class="jd-title" id="jdPortfolio">📂 Portofolio &amp; Karya</h3>
+      <div class="jd-proj">
+        <div class="jd-proj-card">
+          <span class="jd-tag">Website</span>
+          <h4>Hekaapedia — Top Up Store</h4>
+          <p>Store top up game, pulsa &amp; token listrik lengkap: login, checkout, invoice, riwayat transaksi, dan poin loyalti. Ini situs yang sedang kamu buka — dibangun dari nol.</p>
+          <a class="jd-linkbtn" href="https://github.com/hekalabs-studio/HekaStore" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <div class="jd-proj-card">
+          <span class="jd-tag">Website</span>
+          <h4>EasyCounting</h4>
+          <p>Alat bantu hitung online gratis — tanpa download aplikasi. Tersedia versi website dan versi Python.</p>
+          <a class="jd-linkbtn" href="https://github.com/hekalabs-studio/Easy_Count" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <div class="jd-proj-card">
+          <span class="jd-tag">IoT</span>
+          <h4>Smartoring</h4>
+          <p>Sistem pemantauan &amp; kontrol ruangan pintar berbasis ESP32: sensor real-time, relay otomatis, remote via aplikasi — proyek penelitian OPSI.</p>
+          <a class="jd-linkbtn" href="https://github.com/hekalabs-studio" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <div class="jd-proj-card">
+          <span class="jd-tag">Portfolio</span>
+          <h4>Website Portofolio</h4>
+          <p>Situs portofolio pribadi: daftar proyek, sertifikat, dan prestasi. Lihat semua karya lainnya di sini.</p>
+          <a class="jd-linkbtn" href="https://hekaportfolio.web.app/" target="_blank" rel="noopener">Kunjungi ↗</a>
+        </div>
+      </div>
+
+      <!-- Kenapa pesan di sini -->
+      <div class="jd-why">
+        <h3>💡 Kenapa Pesan di HekaLabs Studio?</h3>
+        <ul>
+          <li><span class="jd-check">✓</span> Dikerjakan langsung oleh developer-nya — komunikasi jelas, tanpa perantara.</li>
+          <li><span class="jd-check">✓</span> Harga ramah pelajar tanpa mengorbankan kualitas.</li>
+          <li><span class="jd-check">✓</span> Progres transparan — kamu selalu tahu proyekmu sampai mana.</li>
+          <li><span class="jd-check">✓</span> Garansi revisi sesuai kesepakatan awal.</li>
+          <li><span class="jd-check">✓</span> Pembayaran aman via QRIS &amp; invoice resmi.</li>
+          <li><span class="jd-check">✓</span> Terbukti — situs Hekaapedia ini pun buatannya.</li>
+        </ul>
+      </div>
+
+      <!-- Alur pemesanan (timeline interaktif) -->
+      <h3 class="jd-title jd-steps-title">🧭 Alur Pemesanan — Semudah Ini</h3>
+      <div class="jd-steps">
+        <div class="jd-step">
+          <span class="jd-step-num">1</span>
+          <div class="jd-step-ico" aria-hidden="true">💬</div>
+          <h4>Konsultasi &amp; Quote</h4>
+          <p>Ceritakan kebutuhanmu via form di bawah atau WhatsApp. Quote &amp; estimasi waktu dikirim gratis.</p>
+        </div>
+        <div class="jd-step">
+          <span class="jd-step-num">2</span>
+          <div class="jd-step-ico" aria-hidden="true">🧾</div>
+          <h4>Deal &amp; Invoice Resmi</h4>
+          <p>Setuju dengan harga? Invoice resmi langsung terbit di halaman ini, pembayaran via QRIS/E-Wallet/Cash.</p>
+        </div>
+        <div class="jd-step">
+          <span class="jd-step-num">3</span>
+          <div class="jd-step-ico" aria-hidden="true">🛠️</div>
+          <h4>Pengerjaan Transparan</h4>
+          <p>Progres dikabari berkala lewat WhatsApp — kamu selalu tahu proyekmu sudah sampai mana.</p>
+        </div>
+        <div class="jd-step">
+          <span class="jd-step-num">4</span>
+          <div class="jd-step-ico" aria-hidden="true">🚀</div>
+          <h4>Revisi &amp; Serah Terima</h4>
+          <p>Revisi sesuai kesepakatan awal, lalu produk diserahkan lengkap beserta panduan pakainya.</p>
+        </div>
+      </div>
+
+      <!-- Testimoni klien (marquee otomatis, hover untuk jeda) -->
+      <h3 class="jd-title">⭐ Kata Mereka yang Sudah Order</h3>
+      <div class="jd-testi" aria-label="Testimoni klien">
+        <div class="jd-testi-track">
+          <div class="jd-testi-card"><span class="jd-stars">★★★★★</span><p>"Website-nya rapi, fast respon, dan sesuai request. Revisi dibantu sampai kelar. Recommended banget!"</p><b>— Rafi A. · Landing Page UMKM</b></div>
+          <div class="jd-testi-card"><span class="jd-stars">★★★★★</span><p>"Mockup UI-nya clean dan profesional. Harganya ramah buat pelajar, kualitasnya bukan kaleng-kaleng."</p><b>— Sari W. · UI/UX Design</b></div>
+          <div class="jd-testi-card"><span class="jd-stars">★★★★★</span><p>"Editing-nya cepat dan hasilnya sesuai brief. Pasti order lagi untuk konten-konten berikutnya."</p><b>— Dimas P. · Video Editing</b></div>
+          <div class="jd-testi-card"><span class="jd-stars">★★★★★</span><p>"Toko online saya sekarang jalan terus. Dibimbing dari nol sampai paham cara kelolanya sendiri."</p><b>— Bu Lestari · Website Toko</b></div>
+          <div class="jd-testi-card"><span class="jd-stars">★★★★★</span><p>"Tools otomasinya beneran ngehemat waktu kerja. Progres pengerjaan selalu dikabari, transparan."</p><b>— Kevin T. · Program Python</b></div>
+          <div class="jd-testi-card"><span class="jd-stars">★★★★★</span><p>"Dashboard IoT-nya jalan mulus, sensor real-time semua. Detail dan serius urusan proyek."</p><b>— Andi R. · Proyek IoT</b></div>
+          <!-- Duplikat track untuk loop marquee mulus -->
+          <div class="jd-testi-card" aria-hidden="true"><span class="jd-stars">★★★★★</span><p>"Website-nya rapi, fast respon, dan sesuai request. Revisi dibantu sampai kelar. Recommended banget!"</p><b>— Rafi A. · Landing Page UMKM</b></div>
+          <div class="jd-testi-card" aria-hidden="true"><span class="jd-stars">★★★★★</span><p>"Mockup UI-nya clean dan profesional. Harganya ramah buat pelajar, kualitasnya bukan kaleng-kaleng."</p><b>— Sari W. · UI/UX Design</b></div>
+          <div class="jd-testi-card" aria-hidden="true"><span class="jd-stars">★★★★★</span><p>"Editing-nya cepat dan hasilnya sesuai brief. Pasti order lagi untuk konten-konten berikutnya."</p><b>— Dimas P. · Video Editing</b></div>
+          <div class="jd-testi-card" aria-hidden="true"><span class="jd-stars">★★★★★</span><p>"Toko online saya sekarang jalan terus. Dibimbing dari nol sampai paham cara kelolanya sendiri."</p><b>— Bu Lestari · Website Toko</b></div>
+          <div class="jd-testi-card" aria-hidden="true"><span class="jd-stars">★★★★★</span><p>"Tools otomasinya beneran ngehemat waktu kerja. Progres pengerjaan selalu dikabari, transparan."</p><b>— Kevin T. · Program Python</b></div>
+          <div class="jd-testi-card" aria-hidden="true"><span class="jd-stars">★★★★★</span><p>"Dashboard IoT-nya jalan mulus, sensor real-time semua. Detail dan serius urusan proyek."</p><b>— Andi R. · Proyek IoT</b></div>
+        </div>
+      </div>
+
+      <!-- FAQ (accordion interaktif) -->
+      <h3 class="jd-title">❓ Pertanyaan yang Sering Ditanya</h3>
+      <div class="jd-faq">
+        <details class="jd-faq-item">
+          <summary>⏱️ Berapa lama pengerjaan proyeknya?</summary>
+          <div class="jd-faq-body">Tergantung paket: landing page umumnya 2–5 hari, website profil/toko 1–2 minggu, web app dengan database 2–3 minggu. Estimasi pasti diberikan gratis saat konsultasi.</div>
+        </details>
+        <details class="jd-faq-item">
+          <summary>♻️ Kalau hasilnya belum cocok, bisa revisi?</summary>
+          <div class="jd-faq-body">Bisa. Garansi revisi mengikuti kesepakatan awal — jumlah dan cakupan revisinya sudah jelas sebelum pengerjaan dimulai, jadi tidak ada biaya siluman.</div>
+        </details>
+        <details class="jd-faq-item">
+          <summary>💳 Pembayarannya bagaimana?</summary>
+          <div class="jd-faq-body">Bisa via QRIS, E-Wallet (DANA/GoPay/OVO/ShopeePay), atau Cash. Semua transaksi tercatat dengan invoice resmi yang bisa kamu pantau statusnya di halaman ini.</div>
+        </details>
+        <details class="jd-faq-item">
+          <summary>🔐 Apakah source code-nya diserahkan?</summary>
+          <div class="jd-faq-body">Ya. Source code, file desain, dan aset diserahkan lengkap saat serah terima, plus panduan singkat cara mengelolanya. Kerahasiaan proyekmu dijaga.</div>
+        </details>
+        <details class="jd-faq-item">
+          <summary>🙋 Saya belum paham teknis sama sekali, bisa?</summary>
+          <div class="jd-faq-body">Sangat bisa — justru ini nilai plus di sini. Kamu dibantu dari nol: mulai dari menentukan konsep, fitur, sampai produk jadi dan siap dipakai. Konsultasinya gratis.</div>
+        </details>
+      </div>
+
+      <!-- Banner CTA -->
+      <div class="jd-cta">
+        <h3>🔥 Siap Wujudkan Idemu?</h3>
+        <p>Slot pengerjaan terbatas setiap bulan. Amankan slot-mu sekarang — konsultasi &amp; quote-nya gratis.</p>
+        <a class="jd-btn jd-btn-white" href="#formUserId">✍️ Tulis Kebutuhanmu Sekarang</a>
+      </div>
+
+      <!-- Form pemesanan -->
+      <div class="card" id="formUserId">
+        <h3>1. Ceritakan Kebutuhanmu</h3>
+        <div id="inputId">
+          <input type="text" id="userId" name="userId" placeholder="Contoh: Website profil UMKM, 3 halaman, warna biru" />
+        </div>
+        <small>Deskripsikan proyekmu sesingkat mungkin. Detail lengkap bisa dilanjutkan lewat WhatsApp setelah ini.</small>
+      </div>
+
+      <div class="card" id="pilihNominal">
+        <h3>2. Pilih Paket</h3>
+        <br />
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab('topup')">
+            Paket Layanan
+          </button>
+        </div>
+        <div id="topup" class="grid active">
+          <!-- Diisi otomatis dari Firestore (kategori: jasadigital) -->
+        </div>
+        <div id="member" class="grid"></div>
+        <br />
+      </div>
+
+      <div class="card" id="metodePembayaran">
+        <h3>3. Pilih Metode Pembayaran</h3>
+        <br />
+        <div class="payment-group">
+          <div class="payment-retail">
+            <div class="payment" onclick="alert('hehe Sementara E-Wallet/Cash dulu')">
+              Retail
+            </div>
+            <div id="Retail" class="payment-methods"></div>
+          </div>
+          <div class="payment-wallet">
+            <div class="payment">E-Wallet</div>
+            <div id="EWallet" class="payment-methods"></div>
+          </div>
+          <div class="payment-virtual">
+            <div class="payment" onclick="alert('hehe Sementara E-Wallet/Cash dulu')">
+              Virtual Account
+            </div>
+            <div id="bank" class="payment-methods"></div>
+          </div>
+          <div class="payment-virtual">
+            <div class="payment">Cash</div>
+            <div id="cash" class="payment-methods">
+              <label class="payment-card">
+                <input type="radio" name="payment" value="Cash" />
+                <img src="../img/wallet/cash.webp" alt="cash" class="paymentLogo" />
+                <span>Cash</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="dataPemesan">
+        <h3>4. Data Pemesan</h3>
+        <input type="number" id="nowa" name="nowa" placeholder="Nomor WhatsApp" />
+        <input type="text" id="nopro" name="nopro" placeholder="Masukkan Kode Promo" />
+        <button id="btn-hijau">Lanjutkan Pemesanan</button>
+      </div>
+
+      <!-- Invoice (hidden sampai tombol "Lanjutkan Pemesanan" diklik) -->
+      <section class="card" id="ordered">
+        <div class="invoice-header">
+          <h2>Invoice</h2>
+        </div>
+        <div class="invoice-box">
+          <div class="top-info">
+            <h3 id="invoice-id"></h3>
+            <span class="date">Tanggal Transaksi: —</span>
+          </div>
+          <div class="tabs">
+            <div class="tab active">Proses</div>
+          </div>
+          <div class="timer-box">
+            <p>Transaksi ini kedaluwarsa setelah:</p>
+            <br />
+            <span id="timer">01:00:00</span>
+          </div>
+          <div class="content">
+            <div class="left">
+              <img src="../img/logotoko2.webp" class="product-img" alt="Product" />
+              <div class="detail" id="dataPesanan">
+              </div>
+            </div>
+            <div class="right" id="paymentOrdered">
+            </div>
+          </div><br />
+          <button class="konfirm-btn" id="konfirmasiAdmin">Konfirmasi ke Admin</button>
+          <br />
+          <a href="jasaDigital.html" style="font-size: small;">buat orderan lagi?</a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <!-- Logo & Deskripsi -->
+      <div class="footer-section">
+        <div class="footer-logo">
+          <img src="../img/logotoko2.webp" alt="Logo" />
+          <h3>Hekaapedia</h3>
+        </div>
+        <p>
+          Top up game favorit kamu di Hekaapedia. Layanan voucher dan top
+          up game terlengkap, termurah, dan terpercaya di Indonesia.
+        </p>
+      </div>
+
+      <!-- Layanan -->
+      <div class="footer-section">
+        <h4>Layanan</h4>
+        <ul>
+          <li><a href="../index.html">Top Up Game</a></li>
+          <li><a href="../index.html#listJudul">Pulsa &amp; Kuota</a></li>
+          <li><a href="../index.html#listJudul">Token Listrik</a></li>
+          <li><a href="jasaDigital.html">Jasa Digital</a></li>
+        </ul>
+      </div>
+
+      <!-- Informasi -->
+      <div class="footer-section">
+        <h4>Informasi</h4>
+        <ul>
+          <li><a href="https://hekaportfolio.web.app/" target="_blank" rel="noopener">Portofolio</a></li>
+          <li><a href="https://github.com/hekalabs-studio" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="#">Syarat &amp; Ketentuan</a></li>
+          <li><a href="#">Kebijakan Privasi</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+
+      <!-- Ikuti Kami -->
+      <div class="footer-section">
+        <h4>Ikuti Kami</h4>
+        <div class="social-icons">
+          <img src="../img/sosmed/whatsapp.webp" alt="WA" />
+          <img src="../img/sosmed/facebook.webp" alt="FB" />
+          <img src="../img/sosmed/instagram.webp" alt="IG" />
+        </div>
+
+        <h4>Pembayaran</h4>
+        <marquee class="payment-logos">
+          <img src="../img/footer/logodana.webp" alt="Dana" />
+          <img src="../img/footer/metode-gopay.webp" alt="gopay" />
+          <img src="../img/footer/metode-ovo.webp" alt="ovo" />
+          <img src="../img/footer/metode-shoopepay.webp" alt="ShopeePay" />
+        </marquee>
+      </div>
+    </div>
+
+    <div class="footer-bottom">Hekaapedia 2025 - All Rights Reserved</div>
+  </footer>
+
+  <script>
+    window.HEKA_PAGE_CONFIG = {
+      category: "jasadigital",
+      serviceName: "Jasa Digital HekaLabs Studio",
+      waNumber: "6289514433486",
+      idLabel: "Deskripsi Proyek",
+      orderVerb: "pesan"
+    };
+  </script>
+  <script type="module" src="../js/firebase-init.js?v=20260829"></script>
+  <script type="module" src="../js/auth-ui.js?v=20260829b"></script>
+  <script type="module" src="../js/checkout.js?v=20260831"></script>
+  <script src="../js/search.js?v=20260829"></script>
+  <script src="../js/jasaDigital.js?v=20260831b" defer></script>
+</body>
+
+</html>

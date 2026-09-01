@@ -1,0 +1,608 @@
+/* ============================================================
+   css/jasaDigital.css
+   Khusus halaman html/jasaDigital.html (Jasa Digital HekaLabs Studio)
+   Dipakai bersama css/style_topUpGames.css (header, footer, card).
+   ============================================================ */
+
+/* ---------- Hero intro (interaktif) ---------- */
+.jd-hero {
+  position: relative;
+  overflow: hidden;
+  margin-top: 22px;
+  padding: 30px 26px 26px;
+  border-radius: 18px;
+  background: linear-gradient(130deg, #0c937b, #0a7d68, #0eaa8a, #0c937b);
+  background-size: 300% 300%;
+  animation: jd-gradient 14s ease infinite;
+  color: #fff;
+  box-shadow: 0 10px 26px rgba(12, 147, 123, 0.25);
+}
+.jd-hero h2 {
+  font-family: "Baloo 2", "Poppins", sans-serif;
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+.jd-hero p {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  opacity: 0.94;
+  position: relative;
+  z-index: 1;
+}
+.jd-hero .jd-badge {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  position: relative;
+  z-index: 1;
+  animation: jd-pop 0.5s ease both;
+}
+
+/* Kata yang diketik + kursor berkedip */
+.jd-type { color: #9ffbe3; }
+.jd-caret {
+  display: inline-block;
+  width: 3px;
+  height: 1.05em;
+  margin-left: 3px;
+  background: #9ffbe3;
+  vertical-align: -0.15em;
+  border-radius: 2px;
+  animation: jd-blink 1s steps(1) infinite;
+}
+
+/* Blob cahaya mengambang */
+.jd-hero-blob {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 65%);
+  animation: jd-blob-float 9s ease-in-out infinite;
+  pointer-events: none;
+}
+.jd-blob-a { width: 220px; height: 220px; top: -70px; right: -60px; }
+.jd-blob-b { width: 170px; height: 170px; bottom: -70px; left: -50px; animation-delay: 2.5s; }
+
+/* Emoji ikon mengambang */
+.jd-hero-chips span {
+  position: absolute;
+  font-size: 1.5rem;
+  opacity: 0.45;
+  animation: jd-chip-float 6s ease-in-out infinite;
+  animation-delay: var(--fd, 0s);
+  pointer-events: none;
+}
+.jd-hero-chips span:nth-child(1) { top: 18px;  right: 6%; }
+.jd-hero-chips span:nth-child(2) { top: 45%;  right: 13%; }
+.jd-hero-chips span:nth-child(3) { bottom: 22%; right: 4%; }
+.jd-hero-chips span:nth-child(4) { top: 14%;  left: 4%; }
+.jd-hero-chips span:nth-child(5) { bottom: 14%; left: 12%; }
+
+/* Tombol hero */
+.jd-hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+  position: relative;
+  z-index: 1;
+}
+.jd-btn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.jd-btn-light { background: #fff; color: #0a7d68; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18); }
+.jd-btn-light:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22); }
+.jd-btn-ghost { border: 1.5px solid rgba(255, 255, 255, 0.65); color: #fff; }
+.jd-btn-ghost:hover { background: rgba(255, 255, 255, 0.14); transform: translateY(-3px); }
+.jd-btn-white { background: #fff; color: #0a7d68; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2); }
+.jd-btn-white:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.26); }
+.jd-btn .jd-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(0);
+  animation: jd-ripple 0.6s ease-out forwards;
+  pointer-events: none;
+}
+.jd-btn-light .jd-ripple, .jd-btn-white .jd-ripple { background: rgba(12, 147, 123, 0.25); }
+
+/* Statistik hero (counter) */
+.jd-hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+  position: relative;
+  z-index: 1;
+}
+.jd-stat {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 14px;
+  padding: 10px 16px;
+  min-width: 112px;
+  text-align: center;
+  backdrop-filter: blur(4px);
+  animation: jd-pop 0.5s ease both;
+}
+.jd-stat:nth-child(1) { animation-delay: 0.35s; }
+.jd-stat:nth-child(2) { animation-delay: 0.47s; }
+.jd-stat:nth-child(3) { animation-delay: 0.59s; }
+.jd-stat:nth-child(4) { animation-delay: 0.71s; }
+.jd-stat b {
+  display: block;
+  font-size: 1.25rem;
+  font-family: "Baloo 2", "Poppins", sans-serif;
+  line-height: 1.2;
+}
+.jd-stat .jd-star { color: #ffd76a; font-size: 0.85em; }
+.jd-stat span { font-size: 0.72rem; opacity: 0.9; }
+
+/* ---------- Grid layanan ---------- */
+.jd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 22px;
+}
+.jd-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 1.5px solid transparent;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  scroll-margin-top: 130px; /* offset header sticky saat di-link dari search */
+}
+.jd-card:hover {
+  transform: translateY(-4px);
+  border-color: #2ed9b3;
+  box-shadow: 0 12px 28px rgba(12, 147, 123, 0.16);
+}
+.jd-card .jd-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #0c937b, #2ed9b3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+.jd-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+  color: #103b34;
+}
+.jd-card p {
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: #4a5a56;
+  margin-bottom: 10px;
+}
+.jd-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.jd-chip {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #0c937b;
+  background: #e6faf4;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.jd-price {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0a7d68;
+  border-top: 1px dashed #d5e6e0;
+  padding-top: 10px;
+}
+.jd-price b {
+  font-size: 0.95rem;
+}
+
+/* ---------- Judul section ---------- */
+.jd-title {
+  margin-top: 26px;
+  font-size: 1.15rem;
+  color: #103b34;
+}
+
+/* ---------- Portofolio ---------- */
+.jd-proj {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 14px;
+}
+.jd-proj-card {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.jd-proj-card h4 {
+  font-size: 0.98rem;
+  color: #103b34;
+}
+.jd-proj-card p {
+  font-size: 0.83rem;
+  line-height: 1.55;
+  color: #4a5a56;
+  flex: 1;
+}
+.jd-proj-card .jd-tag {
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #0c937b;
+}
+.jd-linkbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0c937b;
+  text-decoration: none;
+  border: 1.5px solid #0c937b;
+  border-radius: 999px;
+  padding: 6px 14px;
+  transition: background 0.2s ease, color 0.2s ease;
+  width: fit-content;
+}
+.jd-linkbtn:hover {
+  background: #0c937b;
+  color: #fff;
+}
+
+/* ---------- Kenapa pesan di sini ---------- */
+.jd-why {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin-top: 22px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+.jd-why ul {
+  list-style: none;
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 10px;
+}
+.jd-why li {
+  font-size: 0.88rem;
+  color: #33463f;
+  display: flex;
+  gap: 9px;
+  line-height: 1.55;
+}
+.jd-why li span.jd-check {
+  color: #0c937b;
+  font-weight: 800;
+}
+
+/* ============================================================
+   Animasi & interaksi tambahan (v2 — meyakinkan + interaktif)
+   ============================================================ */
+
+/* ---------- Keyframes ---------- */
+@keyframes jd-gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+@keyframes jd-blob-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-18px, 16px) scale(1.08); }
+}
+@keyframes jd-chip-float {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50%      { transform: translateY(-14px) rotate(6deg); }
+}
+@keyframes jd-blink {
+  0%, 49%  { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes jd-pop {
+  0%   { transform: scale(0.85); opacity: 0; }
+  70%  { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes jd-ripple {
+  to { transform: scale(2.4); opacity: 0; }
+}
+@keyframes jd-bounce {
+  0%, 100% { transform: translateY(0); }
+  35%      { transform: translateY(-7px); }
+  65%      { transform: translateY(-3px); }
+}
+@keyframes jd-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes jd-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes jd-cta-shine {
+  0%        { transform: translateX(-130%) skewX(-18deg); }
+  55%, 100% { transform: translateX(230%) skewX(-18deg); }
+}
+
+/* Scroll mulus untuk anchor CTA */
+html { scroll-behavior: smooth; }
+.jd-title { scroll-margin-top: 130px; }
+#formUserId, #pilihNominal, #metodePembayaran, #dataPemesan { scroll-margin-top: 130px; }
+
+/* ---------- Kartu layanan: shine sweep + ikon memantul ---------- */
+.jd-card { position: relative; overflow: hidden; }
+.jd-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(46, 217, 179, 0.16), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.65s ease;
+  pointer-events: none;
+}
+.jd-card:hover::after { left: 135%; }
+.jd-card:hover .jd-icon { animation: jd-bounce 0.55s ease; }
+
+/* Kartu portofolio & langkah: lift halus */
+.jd-proj-card, .jd-step {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.jd-proj-card:hover, .jd-step:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 26px rgba(12, 147, 123, 0.15);
+}
+
+/* ---------- Alur pemesanan (timeline) ---------- */
+.jd-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+.jd-step {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  padding: 26px 18px 18px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+.jd-step-num {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0c937b, #2ed9b3);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(12, 147, 123, 0.35);
+}
+.jd-step-ico { font-size: 1.7rem; margin-bottom: 6px; }
+.jd-step h4 { font-size: 0.98rem; color: #103b34; margin-bottom: 5px; }
+.jd-step p { font-size: 0.8rem; color: #4a5a56; line-height: 1.55; }
+
+/* ---------- Testimoni (marquee) ---------- */
+.jd-testi {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  margin-top: 14px;
+  padding: 14px 0;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+.jd-testi-track {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+  animation: jd-marquee 36s linear infinite;
+}
+.jd-testi:hover .jd-testi-track { animation-play-state: paused; }
+.jd-testi::before,
+.jd-testi::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 46px;
+  z-index: 1;
+  pointer-events: none;
+}
+.jd-testi::before { left: 0;  background: linear-gradient(90deg, #fff, transparent); }
+.jd-testi::after  { right: 0; background: linear-gradient(-90deg, #fff, transparent); }
+.jd-testi-card {
+  width: 300px;
+  flex-shrink: 0;
+  background: #f6fdfb;
+  border: 1px solid #e2f5ee;
+  border-radius: 14px;
+  padding: 16px;
+}
+.jd-testi-card .jd-stars { color: #f5b50a; letter-spacing: 2px; font-size: 0.85rem; }
+.jd-testi-card p { font-size: 0.85rem; line-height: 1.6; color: #33463f; margin: 8px 0 10px; }
+.jd-testi-card b { font-size: 0.8rem; color: #0a7d68; }
+/* ---------- FAQ (accordion) ---------- */
+.jd-faq {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+.jd-faq-item {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.jd-faq-item[open] { border-color: #2ed9b3; box-shadow: 0 8px 22px rgba(12, 147, 123, 0.12); }
+.jd-faq-item summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 14px 44px 14px 16px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #103b34;
+  position: relative;
+}
+.jd-faq-item summary::-webkit-details-marker { display: none; }
+.jd-faq-item summary::after {
+  content: "+";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0c937b;
+  transition: transform 0.25s ease;
+}
+.jd-faq-item[open] summary::after { content: "–"; transform: translateY(-50%) rotate(180deg); }
+.jd-faq-item .jd-faq-body {
+  padding: 0 16px 14px;
+  font-size: 0.85rem;
+  color: #4a5a56;
+  line-height: 1.65;
+  animation: jd-fade-up 0.3s ease both;
+}
+
+/* ---------- Banner CTA ---------- */
+.jd-cta {
+  position: relative;
+  overflow: hidden;
+  margin-top: 26px;
+  border-radius: 18px;
+  padding: 26px 24px;
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(135deg, #0a7d68, #0c937b 45%, #14b392);
+  box-shadow: 0 10px 26px rgba(12, 147, 123, 0.28);
+}
+.jd-cta::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  animation: jd-cta-shine 4.5s ease-in-out infinite;
+  pointer-events: none;
+}
+.jd-cta h3 {
+  font-family: "Baloo 2", "Poppins", sans-serif;
+  font-size: 1.35rem;
+  margin-bottom: 6px;
+}
+.jd-cta p { font-size: 0.92rem; opacity: 0.94; margin-bottom: 14px; }
+
+/* ---------- Progress bar baca halaman ---------- */
+.jd-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 1200;
+  pointer-events: none;
+}
+.jd-progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #0c937b, #2ed9b3, #9ffbe3);
+  border-radius: 0 3px 3px 0;
+  transition: width 0.08s linear;
+}
+
+/* ---------- Reveal on scroll (butuh class jd-js dari jasaDigital.js) ---------- */
+html.jd-js .jd-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition-delay: var(--rd, 0s);
+}
+html.jd-js .jd-reveal.jd-in { opacity: 1; transform: none; }
+
+/* ---------- Responsif ---------- */
+@media screen and (max-width: 768px) {
+  .jd-hero {
+    padding: 24px 18px 20px;
+  }
+  .jd-hero-chips span { opacity: 0.3; }
+  .jd-hero-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .jd-stat { min-width: 0; }
+  .jd-grid,
+  .jd-proj,
+  .jd-steps {
+    grid-template-columns: 1fr;
+  }
+  .jd-testi-card { width: 260px; }
+  .jd-testi::before, .jd-testi::after { width: 28px; }
+}
+
+/* ---------- Aksesibilitas: kurangi gerakan ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .jd-hero,
+  .jd-hero-blob,
+  .jd-hero-chips span,
+  .jd-stat,
+  .jd-caret,
+  .jd-testi-track,
+  .jd-cta::after,
+  .jd-faq-item .jd-faq-body,
+  html.jd-js .jd-reveal {
+    animation: none !important;
+    transition: none !important;
+  }
+  html.jd-js .jd-reveal {
+    opacity: 1;
+    transform: none;
+  }
+  html { scroll-behavior: auto; }
+}

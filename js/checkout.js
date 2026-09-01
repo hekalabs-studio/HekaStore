@@ -288,7 +288,7 @@ async function init(config) {
       return alert("Silakan pilih nominal top up atau isi custom nominal.");
     }
     if (!selectedPayment) return alert("Silakan pilih metode pembayaran.");
-    if (!userId.value) return alert("Silakan masukkan User ID.");
+    if (!userId.value) return alert("Silakan masukkan " + (config.idLabel || "User ID") + ".");
     if (zoneId && !zoneId.value) return alert("Silakan masukkan Zone ID.");
     if (!nowa.value) return alert("Silakan masukkan Nomor WhatsApp.");
     if (nowa.value.length < 10 || nowa.value.length > 15 || !/^\d+$/.test(nowa.value)) {
@@ -303,6 +303,10 @@ async function init(config) {
 
     try {
       // --- Tentukan produk, label, dan harga ---
+      // config.idLabel: label khusus untuk field identitas/pesanan.
+      // Dipakai "User ID" di halaman top up, tapi bisa diganti (mis.
+      // "Deskripsi Proyek" di halaman Jasa Digital).
+      const idLabel = config.idLabel || "User ID";
       let productId = null;
       let label = "";
       let basePrice = 0;
@@ -430,7 +434,7 @@ async function init(config) {
       <div class="row"><span class="k">Produk</span><span class="v">${label}</span></div>
       <div class="row"><span class="k">Metode</span><span class="v">${paymentMethod}</span></div>
       ${akunRow}
-      <div class="row"><span class="k">User ID</span><span class="v">${uidValue}<button class="copy-mini" data-copy="${uidValue}" title="Salin User ID">📋</button></span></div>
+      <div class="row"><span class="k">${config.idLabel || "User ID"}</span><span class="v">${uidValue}<button class="copy-mini" data-copy="${uidValue}" title="Salin">📋</button></span></div>
       <div class="row"><span class="k">Kode Promo</span><span class="v">${nopro && nopro.value ? nopro.value : "—"}</span></div>
       <div class="row"><span class="k">Invoice</span><span class="v">${invoiceId}<button class="copy-mini" data-copy="${invoiceId}" title="Salin ID Invoice">📋</button></span></div>
       <div class="row total-row"><span class="k">Total Bayar</span><span class="v">${formatRupiah(total)}</span></div>
@@ -589,10 +593,10 @@ async function init(config) {
 
     const url =
       `https://wa.me/${waNumber}?text=` +
-      `Saya ingin top up ${encodeURIComponent(config.serviceName)} dengan nominal *${encodeURIComponent(produk)}*` +
+      `Saya ingin ${config.orderVerb || "top up"} ${encodeURIComponent(config.serviceName)} dengan pilihan *${encodeURIComponent(produk)}*` +
       `%0Amenggunakan metode pembayaran *${encodeURIComponent(metode)}*.` +
       `%0AInvoice: *${encodeURIComponent(invoiceId)}*` +
-      `%0AUser ID: *${encodeURIComponent(userId.value)}${zoneId ? " (" + encodeURIComponent(zoneId.value) + ")" : ""}*` +
+      `%0A${config.idLabel || "User ID"}: *${encodeURIComponent(userId.value)}${zoneId ? " (" + encodeURIComponent(zoneId.value) + ")" : ""}*` +
       `%0ANomor WhatsApp: *${encodeURIComponent(nowa.value)}*` +
       `%0AKode Promo: *${encodeURIComponent(nopro && nopro.value ? nopro.value : "tidak ada")}*.` +
       `%0A*Total Pembayaran: ${encodeURIComponent(formatRupiah(Number(total)))}*` +

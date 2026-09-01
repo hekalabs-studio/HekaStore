@@ -31,6 +31,8 @@
     { name: "Pulsa XL", img: P + "img/pulsa/xl.webp", link: IN_HTML_DIR ? "pulsaXL.html" : "html/pulsaXL.html", category: "Pulsa", keywords: "xl axis kuota data paket" },
     // Token Listrik
     { name: "Token Listrik PLN", img: P + "img/logopln.webp", link: IN_HTML_DIR ? "tokenListrik.html" : "html/tokenListrik.html", category: "Token Listrik", keywords: "listrik pln prabayar token" },
+    // Jasa Digital (HekaLabs Studio)
+    { name: "Jasa Digital", img: P + "img/logotoko2.webp", link: IN_HTML_DIR ? "jasaDigital.html" : "html/jasaDigital.html", category: "Jasa Digital", keywords: "jasa website web app landing page ui ux desain edit video motion graphic iot smart home python hekalabs developer program" },
   ];
 
   const SEARCH_CSS = `

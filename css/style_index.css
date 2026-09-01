@@ -555,3 +555,83 @@ section {
     }
 }
 
+/* ===== Jasa Digital promo (section #jasaPromo di index.html) ===== */
+.jasa-promo {
+  padding: 26px 20px 6px;
+}
+.jasa-promo h3 {
+  font-family: "Baloo 2", "Poppins", sans-serif;
+  font-size: 1.35rem;
+  color: #0c6b5c;
+  text-align: center;
+}
+.jasa-promo-sub {
+  text-align: center;
+  font-size: 0.92rem;
+  color: #55707a;
+  max-width: 620px;
+  margin: 6px auto 18px;
+}
+.jasa-promo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.jasa-promo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: white;
+  border: 1.5px solid rgba(12, 147, 123, 0.18);
+  border-radius: 16px;
+  padding: 18px 16px;
+  text-decoration: none;
+  color: #1d3b34;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.jasa-promo-card:hover {
+  transform: translateY(-5px);
+  border-color: #0c937b;
+  box-shadow: 0 10px 22px rgba(14, 177, 147, 0.22);
+}
+.jasa-promo-icon { font-size: 1.7rem; }
+.jasa-promo-card b { font-size: 1rem; color: #0c6b5c; }
+.jasa-promo-card small { color: #5b6b68; line-height: 1.45; }
+.jasa-promo-card em {
+  font-style: normal;
+  font-weight: 700;
+  color: #0c937b;
+  margin-top: 6px;
+  font-size: 0.85rem;
+}
+.jasa-promo-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+.jasa-promo-cta {
+  display: inline-block;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 11px 22px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0c937b, #2ed9b3);
+  color: white;
+  box-shadow: 0 4px 14px rgba(14, 177, 147, 0.35);
+  transition: transform 0.15s ease, filter 0.2s ease;
+}
+.jasa-promo-cta:hover { transform: translateY(-2px); filter: brightness(1.06); }
+.jasa-promo-cta.ghost {
+  background: white;
+  color: #0c937b;
+  border: 1.5px solid #0c937b;
+  box-shadow: none;
+}
+
+

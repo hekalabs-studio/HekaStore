@@ -129,6 +129,14 @@ const banners = [
     btnText: "Beli Sekarang",
     btnLink: "#listJudul",
   },
+  {
+    gradient: "linear-gradient(135deg, #0c937b 0%, #0eb193 45%, #2ed9b3 100%)",
+    icon: "🛠️",
+    title: "Jasa Digital HekaLabs Studio",
+    subtitle: "Website, UI/UX, edit video, IoT — kerjakan proyekmu sekarang.",
+    btnText: "Pesan Jasa",
+    btnLink: "html/jasaDigital.html",
+  },
 ];
 
 function initBannerSlider() {
@@ -145,9 +153,11 @@ function initBannerSlider() {
     slidesContainer.innerHTML = banners
       .map(
         (b, i) => `
-      <div class="banner-slide ${i === currentIndex ? 'active' : ''}" style="background-image: url('${b.img}')">
+      <div class="banner-slide ${i === currentIndex ? 'active' : ''}" style="${
+        b.gradient ? "background:" + b.gradient : "background-image:url('" + b.img + "')"
+      }">
         <div class="banner-text">
-          <h2>${b.title}</h2>
+          <h2>${b.icon ? b.icon + " " : ""}${b.title}</h2>
           <p>${b.subtitle}</p>
           <a class="btn" href="${b.btnLink}" style="color:#0c937b;text-decoration:none;display:inline-block;">${b.btnText}</a>
         </div>
