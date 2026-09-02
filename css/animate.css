@@ -15,12 +15,18 @@ html.an-js {
   scroll-behavior: smooth;
 }
 
+/*
+   Reveal state. PENTING: setelah transisi selesai, animate.js MENGHAPUS
+   atribut data-an dari elemen, jadi elemen "kembali milik" CSS-nya sendiri
+   (hover, scale, transform bawaan) — itulah yang bikin hover terasa hidup
+   dan tidak kaku. Elemen reveal tidak punya transform permanen, jadi pelepasan
+   ini tidak pernah menyebabkan lompatan visual.
+*/
 html.an-js [data-an] {
   opacity: 0;
   transition:
-    opacity 0.62s cubic-bezier(0.22, 0.61, 0.36, 1),
-    transform 0.62s cubic-bezier(0.22, 0.61, 0.36, 1);
-  transition-delay: var(--an-delay, 0ms);
+    opacity 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) var(--an-delay, 0ms),
+    transform 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) var(--an-delay, 0ms);
 }
 html.an-js [data-an="up"]    { transform: translateY(28px); }
 html.an-js [data-an="down"]  { transform: translateY(-18px); }
@@ -28,7 +34,12 @@ html.an-js [data-an="left"]  { transform: translateX(-26px); }
 html.an-js [data-an="right"] { transform: translateX(26px); }
 html.an-js [data-an="zoom"]  { transform: scale(0.94); }
 html.an-js [data-an="fade"]  { transform: none; }
-html.an-js [data-an].an-in   { opacity: 1; transform: none; }
+/* "pop" (podium top-3): dari kecil + pegas, mendarat dengan pantulan */
+html.an-js [data-an="pop"] {
+  transform: scale(0.35) translateY(26px);
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+html.an-js [data-an].an-in { opacity: 1; transform: none; }
 
 /* Gambar baru benar-benar muncul setelah ter-decode (bebas layout shift) */
 html.an-js img[data-an-img] {
@@ -113,6 +124,12 @@ html.an-js .banner:hover img {
 }
 
 /* ---------- 7. Kartu: angkat halus saat hover ---------- */
+/*
+   NOTE: aturan transition hover ini ASLINYA menutupi transition reveal pada
+   elemen yang sekaligus target reveal. Masalahnya sudah diatasi dengan
+   animate.js yang melepas atribut data-an setelah reveal — sehingga aturan di
+   sini hanya dipakai untuk hover, dan hover jadi responsif (0.28s + pegas).
+*/
 html.an-js .card,
 html.an-js .item,
 html.an-js .payment-card,
@@ -123,7 +140,7 @@ html.an-js .jasa-promo-card,
 html.an-js .jd-card,
 html.an-js .lb-card {
   transition:
-    transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.28s cubic-bezier(0.34, 1.4, 0.64, 1),
     box-shadow 0.3s ease,
     border-color 0.3s ease;
 }

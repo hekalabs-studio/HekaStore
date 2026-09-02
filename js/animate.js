@@ -38,19 +38,53 @@
     ".listrikCard",
     ".jasa-promo-card",
     ".lb-card",
+    ".lb-top",
+    ".lb-row",
     "#profileContent > *"
   ].join(", ");
 
   /* Arah masuk per kelompok, supaya tidak semua halaman terasa sama. */
   function directionFor(el) {
     if (el.classList.contains("banner")) return "zoom";
+    if (el.classList.contains("lb-top")) return "pop"; // podium memantul
+    if (el.classList.contains("lb-row")) return "left"; // baris ranking meluncur
     if (el.classList.contains("features") || el.tagName === "P") return "left";
     if (el.classList.contains("quick-links") || el.classList.contains("tabs")) return "down";
     if (el.closest && el.closest("footer")) return "up";
     return "up";
   }
 
+  /* Jeda per elemen. Podium punya dramanya sendiri: emas duluan, lalu perak,
+     baru perunggu — seperti upacara piala. */
+  function delayFor(el, idx) {
+    var d = Math.min(Math.max(idx, 0), 8) * 55;
+    var parent = el.parentElement;
+    if (parent && parent.classList && parent.classList.contains("lb-podium")) {
+      if (el.classList.contains("gold")) d = 0;
+      else if (el.classList.contains("silver")) d = 120;
+      else if (el.classList.contains("bronze")) d = 240;
+    }
+    return d;
+  }
+
+  /* Setelah reveal selesai, elemen dikembalikan ke CSS aslinya: hapus
+     atribut gerbang agar hover/transform bawaan bekerja 100% responsif. */
+  function release(el) {
+    el.classList.remove("an-in");
+    el.removeAttribute("data-an");
+    el.style.removeProperty("--an-delay");
+  }
+
   var seen = new WeakSet();
+
+  function reveal(el) {
+    el.classList.add("an-in");
+    /* Transisi 0.65s + jeda stagger -> lepas gerbang setelahnya. */
+    var d = parseInt((el.style.getPropertyValue("--an-delay") || "0").replace(/[^0-9]/g, ""), 10) || 0;
+    setTimeout(function () {
+      if (el.isConnected) release(el);
+    }, d + 900);
+  }
 
   var io = null;
   if ("IntersectionObserver" in window) {
@@ -58,7 +92,7 @@
       function (entries) {
         entries.forEach(function (entry) {
           if (!entry.isIntersecting) return;
-          entry.target.classList.add("an-in");
+          reveal(entry.target);
           io.unobserve(entry.target);
         });
       },
@@ -76,11 +110,11 @@
     var parent = el.parentElement;
     if (parent) {
       var idx = Array.prototype.indexOf.call(parent.children, el);
-      el.style.setProperty("--an-delay", Math.min(Math.max(idx, 0), 8) * 55 + "ms");
+      el.style.setProperty("--an-delay", delayFor(el, idx) + "ms");
     }
 
     if (io) io.observe(el);
-    else el.classList.add("an-in"); // browser tua: tampilkan saja
+    else reveal(el); // browser tua: tampilkan + lepas
   }
 
   function scan(scope) {
@@ -123,7 +157,7 @@
     Array.prototype.forEach.call(stuck, function (el) {
       var r = el.getBoundingClientRect();
       if (r.bottom > 0 && r.top < window.innerHeight && r.height > 0) {
-        el.classList.add("an-in");
+        reveal(el);
         if (io) io.unobserve(el);
       }
     });
@@ -176,6 +210,9 @@
       var r = el.getBoundingClientRect();
       var dx = (e.clientX - r.left) / r.width - 0.5;
       var dy = (e.clientY - r.top) / r.height - 0.5;
+      /* Transisi inline CEPAT: transform harus mengikuti mouse nyaris
+         instan, bukan mengambang di belakang (ini penyebab "hover kaku"). */
+      el.style.transition = "transform 0.12s ease-out";
       el.style.transform =
         "translateY(-5px) perspective(600px) rotateX(" +
         (-dy * 5).toFixed(2) +
@@ -185,6 +222,7 @@
     });
     el.addEventListener("mouseleave", function () {
       el.style.transform = "";
+      el.style.transition = ""; // kembali ke transisi CSS (pegas hover)
     });
   }
 
