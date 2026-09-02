@@ -102,16 +102,14 @@ function build() {
   add("tokenlistrik", "topup", "150.000 Token Listrik", "Rp 155.000");
   add("tokenlistrik", "topup", "200.000 Token Listrik", "Rp 205.000");
   /* Jasa Digital (HekaLabs Studio) — web dev, UI/UX, video editing, IoT */
-  add("jasadigital", "topup", "Landing Page / Website 1 Halaman", "Rp 150.000", "🚀 TERMURAH");
-  add("jasadigital", "topup", "Website Multi Halaman (Profil / UMKM)", "Rp 500.000", "⭐ RECOMMENDED");
-  add("jasadigital", "topup", "Website Top Up Store Lengkap (seperti Hekaapedia)", "Rp 750.000", "💎 BEST SELLER");
+  add("jasadigital", "topup", "Landing Page / Website 1 Halaman", "Rp 15.000", "🚀 TERMURAH");
+  add("jasadigital", "topup", "Website Multi Halaman (Profil / UMKM)", "Rp 25.000", "⭐ RECOMMENDED");
+  add("jasadigital", "topup", "Website Top Up Store Lengkap (seperti Hekaapedia)", "Rp 30.000", "💎 BEST SELLER");
   add("jasadigital", "topup", "Jasa Edit Video (maks 1 menit)", "Rp 25.000");
-  add("jasadigital", "topup", "Jasa Edit Video (maks 5 menit)", "Rp 75.000");
-  add("jasadigital", "topup", "Jasa Desain UI/UX (maks 5 halaman)", "Rp 100.000");
-  add("jasadigital", "topup", "Konsultasi & Setup IoT / Smart Home", "Rp 50.000");
-  add("jasadigital", "topup", "Tools Otomasi / Program Python", "Rp 100.000");
-
-  return list;
+  add("jasadigital", "topup", "Jasa Edit Video (maks 5 menit)", "Rp 35.000");
+  add("jasadigital", "topup", "Jasa Desain UI/UX (maks 5 halaman)", "Rp 20.000");
+  add("jasadigital", "topup", "Konsultasi & Setup IoT / Smart Home", "Rp 15.000");
+  add("jasadigital", "topup", "Tools Otomasi / Program Python", "Rp 30.000");
 
   return list;
 }

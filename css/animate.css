@@ -1,0 +1,309 @@
+/* ==========================================================================
+   animate.css — lapisan animasi & micro-interaction bersama (HekaStore)
+   Dipakai oleh: index.html, profile.html, dan seluruh halaman top up di html/
+   Cara kerja  : js/animate.js memberi atribut [data-an] pada elemen yang ada
+                 di DOM (termasuk yang baru dibuat belakangan oleh checkout.js
+                 dan main.js), lalu menampilkannya saat masuk viewport.
+                 Tanpa JS, konten tetap tampil normal — animasi ini murni bonus.
+   Catatan     : sengaja TIDAK memakai ::before/::after pada class warisan
+                 (.item, .konfirm-btn, .timer-box, .invoice-header, .tab, dll)
+                 karena pseudo-element tersebut sudah dipakai style lama.
+   ========================================================================== */
+
+/* ---------- 1. Gerbang: aktif hanya bila animate.js ikut termuat ---------- */
+html.an-js {
+  scroll-behavior: smooth;
+}
+
+html.an-js [data-an] {
+  opacity: 0;
+  transition:
+    opacity 0.62s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.62s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition-delay: var(--an-delay, 0ms);
+}
+html.an-js [data-an="up"]    { transform: translateY(28px); }
+html.an-js [data-an="down"]  { transform: translateY(-18px); }
+html.an-js [data-an="left"]  { transform: translateX(-26px); }
+html.an-js [data-an="right"] { transform: translateX(26px); }
+html.an-js [data-an="zoom"]  { transform: scale(0.94); }
+html.an-js [data-an="fade"]  { transform: none; }
+html.an-js [data-an].an-in   { opacity: 1; transform: none; }
+
+/* Gambar baru benar-benar muncul setelah ter-decode (bebas layout shift) */
+html.an-js img[data-an-img] {
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+html.an-js img[data-an-img].an-loaded { opacity: 1; }
+
+/* ---------- 2. Keyframes ---------- */
+@keyframes an-ripple {
+  to { transform: scale(3.1); opacity: 0; }
+}
+@keyframes an-kenburns {
+  from { transform: scale(1.02); }
+  to   { transform: scale(1.11) translateY(-1.2%); }
+}
+@keyframes an-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(-8deg); }
+  75%      { transform: rotate(8deg); }
+}
+@keyframes an-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes an-glowline {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(46, 217, 179, 0); }
+  50%      { box-shadow: 0 0 18px 2px rgba(46, 217, 179, 0.45); }
+}
+
+/* ---------- 3. Progress baca (elemen di-inject oleh animate.js) ---------- */
+#anProgress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: 9999;
+  pointer-events: none;
+  background: rgba(10, 125, 104, 0.08);
+}
+#anProgress > i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #0eb193, #2ed9b3 55%, #ffd94a);
+  box-shadow: 0 0 10px rgba(46, 217, 179, 0.7);
+  transition: width 0.12s linear;
+}
+
+/* ---------- 4. Ripple tombol (span di-inject oleh animate.js) ---------- */
+html.an-js .an-rip {
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+html.an-js .an-ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  background: rgba(255, 255, 255, 0.42);
+  pointer-events: none;
+  animation: an-ripple 0.62s ease-out forwards;
+}
+
+/* ---------- 5. Header menempel saat scroll ---------- */
+html.an-js .navbar.an-stuck,
+html.an-js header.an-stuck > .navbar {
+  box-shadow: 0 8px 24px rgba(6, 54, 45, 0.14);
+}
+html.an-js .navbar.an-stuck {
+  border-bottom-color: rgba(46, 217, 179, 0.35);
+}
+
+/* ---------- 6. Banner: Ken Burns pelan, berhenti saat hover ---------- */
+html.an-js .banner img {
+  transform-origin: 50% 55%;
+  animation: an-kenburns 20s ease-in-out infinite alternate;
+}
+html.an-js .banner:hover img {
+  animation-play-state: paused;
+}
+
+/* ---------- 7. Kartu: angkat halus saat hover ---------- */
+html.an-js .card,
+html.an-js .item,
+html.an-js .payment-card,
+html.an-js .gameCard,
+html.an-js .pulsaCard,
+html.an-js .listrikCard,
+html.an-js .jasa-promo-card,
+html.an-js .jd-card,
+html.an-js .lb-card {
+  transition:
+    transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+html.an-js .item:hover,
+html.an-js .payment-card:hover,
+html.an-js .gameCard:hover,
+html.an-js .pulsaCard:hover,
+html.an-js .listrikCard:hover,
+html.an-js .jasa-promo-card:hover,
+html.an-js .jd-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 30px rgba(10, 125, 104, 0.18);
+  border-color: rgba(46, 217, 179, 0.75);
+}
+
+/* Kartu nominal yang sedang dipilih: sedikit lebih "naik" + garis aksen */
+html.an-js .item.selected,
+html.an-js .payment-card:has(input:checked) {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(14, 177, 147, 0.24);
+}
+
+/* Ikon pada kartu promo ikut bergerak saat kartunya di-hover */
+html.an-js .jasa-promo-card:hover .jasa-promo-icon,
+html.an-js .jd-card:hover .jd-icon {
+  transform: translateY(-3px) scale(1.12) rotate(-5deg);
+}
+html.an-js .jasa-promo-icon,
+html.an-js .jd-icon {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Thumbnail game membesar halus di dalam bingkainya */
+html.an-js .gameCard img,
+html.an-js .pulsaCard img,
+html.an-js .listrikCard img {
+  transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+html.an-js .gameCard:hover img,
+html.an-js .pulsaCard:hover img,
+html.an-js .listrikCard:hover img {
+  transform: scale(1.08);
+}
+
+/* ---------- 8. Tab, quick link, chip ---------- */
+html.an-js .tab,
+html.an-js .quick-link,
+html.an-js .jd-chip,
+html.an-js .lb-chip {
+  transition:
+    transform 0.22s ease,
+    background-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+html.an-js .tab:hover,
+html.an-js .quick-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(10, 125, 104, 0.16);
+}
+html.an-js .tab:active,
+html.an-js .quick-link:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ---------- 9. Tombol utama: glow + tekan ---------- */
+html.an-js #btn-hijau,
+html.an-js .konfirm-btn,
+html.an-js .chooseBuy button,
+html.an-js .buttonGameCard,
+html.an-js .jasa-promo-cta,
+html.an-js .download-btn,
+html.an-js .banner .btn {
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.28s ease,
+    filter 0.28s ease;
+}
+html.an-js #btn-hijau:hover:not(:disabled),
+html.an-js .konfirm-btn:hover:not(:disabled),
+html.an-js .chooseBuy button:hover,
+html.an-js .buttonGameCard:hover,
+html.an-js .jasa-promo-cta:hover,
+html.an-js .download-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(12, 147, 123, 0.34);
+  filter: saturate(1.12) brightness(1.04);
+}
+html.an-js #btn-hijau:active:not(:disabled),
+html.an-js .konfirm-btn:active:not(:disabled),
+html.an-js .buttonGameCard:active,
+html.an-js .jasa-promo-cta:active {
+  transform: translateY(-1px) scale(0.985);
+}
+/* Tombol sedang diproses: denyut lembut, bukan diam saja */
+html.an-js #btn-hijau:disabled,
+html.an-js .konfirm-btn:disabled {
+  animation: an-glowline 1.6s ease-in-out infinite;
+}
+
+/* ---------- 10. Input & search: fokus bercahaya ---------- */
+html.an-js input:not([type="radio"]):not([type="checkbox"]):focus,
+html.an-js select:focus,
+html.an-js textarea:focus {
+  border-color: rgba(46, 217, 179, 0.9);
+  box-shadow: 0 0 0 4px rgba(46, 217, 179, 0.16);
+  outline: none;
+}
+html.an-js input,
+html.an-js select,
+html.an-js textarea {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+html.an-js .search-box:focus-within {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(10, 125, 104, 0.16);
+}
+
+/* ---------- 11. Logo & ikon sosial ---------- */
+html.an-js .footer-logo:hover img,
+html.an-js .logo-area:hover img,
+html.an-js .brand:hover img {
+  animation: an-wiggle 0.55s ease-in-out;
+}
+html.an-js .social-icons img,
+html.an-js .payment-logos img {
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.28s ease;
+}
+html.an-js .social-icons img:hover,
+html.an-js .payment-logos img:hover {
+  transform: translateY(-5px) scale(1.14) rotate(-5deg);
+  filter: drop-shadow(0 6px 10px rgba(10, 125, 104, 0.28));
+}
+
+/* ---------- 12. Chip harga berdenyut saat nominal dipilih ---------- */
+@keyframes an-tick {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.14); }
+  100% { transform: scale(1); }
+}
+html.an-js .an-tick {
+  animation: an-tick 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---------- 13. Footer naik lebih lambat (kesan "teduh") ---------- */
+html.an-js .footer-bottom[data-an] {
+  transition-duration: 0.9s;
+}
+
+/* ---------- 14. Layar kecil: animasi diperhemat ---------- */
+@media (max-width: 640px) {
+  html.an-js [data-an] {
+    transition-duration: 0.45s;
+  }
+  html.an-js .banner img {
+    animation: none;
+  }
+  html.an-js .item:hover,
+  html.an-js .payment-card:hover {
+    transform: none;
+  }
+}
+
+/* ---------- 15. Hormati preferensi minim gerakan ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html.an-js {
+    scroll-behavior: auto;
+  }
+  html.an-js *,
+  html.an-js *::before,
+  html.an-js *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  html.an-js [data-an],
+  html.an-js img[data-an-img] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
