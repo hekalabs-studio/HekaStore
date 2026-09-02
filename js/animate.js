@@ -298,6 +298,25 @@
     });
   }
 
+  /* ---------- Petunjuk "bisa digeser" pada baris chip navigasi ----------
+     Di layar sempit baris .quick-links di-scroll horizontal dan scrollbarnya
+     disembunyikan. Kalau isinya benar-benar overflow, pasang kelas .swipeable
+     agar CSS menampilkan panah "geser" yang menempel di ujung kanan baris.
+     Kalau tidak overflow (layar cukup lebar), panahnya tidak muncul. */
+  var swipeHintNavs = [];
+  function updateSwipeHints() {
+    Array.prototype.forEach.call(swipeHintNavs, function (nav) {
+      nav.classList.toggle("swipeable", nav.scrollWidth > nav.clientWidth + 1);
+    });
+  }
+  function bindSwipeHints(scope) {
+    var navs = (scope || document).querySelectorAll(".quick-links");
+    Array.prototype.forEach.call(navs, function (nav) {
+      if (swipeHintNavs.indexOf(nav) === -1) swipeHintNavs.push(nav);
+    });
+    updateSwipeHints();
+  }
+
   /* ---------- Inisialisasi (fail-open: error = halaman kembali normal) ---------- */
   function init() {
     try {
@@ -306,9 +325,15 @@
       bindRipples(document);
       bindTilts(document);
       bindImages(document);
+      bindSwipeHints(document);
       buildChrome();
       sweep();
       window.addEventListener("load", sweep);
+      window.addEventListener("resize", updateSwipeHints, { passive: true });
+      /* Ukuran chip bisa berubah setelah font selesai dimuat. */
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(updateSwipeHints, function () {});
+      }
       setTimeout(sweep, 2500);
       setTimeout(sweep, 6000); // jaring pengaman terakhir
     } catch (err) {

@@ -1502,6 +1502,36 @@ input::placeholder {
   .quick-links::-webkit-scrollbar {
     display: none;
   }
+  /* ===== Tanda "bisa digeser" di baris chip =====
+     Muncul hanya kalau barisnya benar-benar overflow (class .swipeable
+     dipasang oleh js/animate.js). Di-sticky-kan ke ujung kanan area yang
+     terlihat, jadi selalu tampak sebagai petunjuk geser. */
+  .quick-links.swipeable::after {
+    content: "geser \203A";
+    position: sticky;
+    right: 16px;
+    flex: 0 0 auto;
+    align-self: center;
+    margin-left: 4px;
+    padding: 6px 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: #0c937b;
+    background: rgba(12, 147, 123, 0.07);
+    border: 1px dashed rgba(12, 147, 123, 0.45);
+    border-radius: 999px;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: qlSwipeHint 1.5s ease-in-out infinite;
+  }
+  @keyframes qlSwipeHint {
+    0%, 100% { transform: translateX(0); opacity: 0.8; }
+    50% { transform: translateX(5px); opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .quick-links.swipeable::after { animation: none; }
+  }
   .quick-link {
     flex: 0 0 auto;
     scroll-snap-align: start;
