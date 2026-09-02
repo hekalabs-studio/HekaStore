@@ -221,6 +221,9 @@ section {
   position: relative;
   z-index: 1;
   padding: 0 16px;
+}
+/* Animasi teks diaktifkan oleh class .active, sehingga restart setiap slide terpilih. */
+.banner-slide.active .banner-text {
   animation: bannerTextIn 0.7s ease both;
 }
 @keyframes bannerTextIn {

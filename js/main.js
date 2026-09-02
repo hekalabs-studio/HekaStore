@@ -148,12 +148,20 @@ function initBannerSlider() {
 
   let currentIndex = 0;
   let intervalId = null;
+  let isHovering = false;
+
+  // Preload gambar banner agar slide berikutnya tidak sempat tampil kosong/putar lagi.
+  banners.forEach((b) => {
+    if (!b.img) return;
+    const preloader = new Image();
+    preloader.src = b.img;
+  });
 
   function render() {
     slidesContainer.innerHTML = banners
       .map(
         (b, i) => `
-      <div class="banner-slide ${i === currentIndex ? 'active' : ''}" style="${
+      <div class="banner-slide ${i === 0 ? 'active' : ''}" style="${
         b.gradient ? "background:" + b.gradient : "background-image:url('" + b.img + "')"
       }">
         <div class="banner-text">
@@ -169,15 +177,25 @@ function initBannerSlider() {
     dotsContainer.innerHTML = banners
       .map(
         (_, i) => `
-      <button class="banner-dot ${i === currentIndex ? 'active' : ''}" data-index="${i}" aria-label="Slide ${i + 1}"></button>
+      <button class="banner-dot ${i === 0 ? 'active' : ''}" data-index="${i}" aria-label="Slide ${i + 1}"></button>
     `
       )
       .join("");
   }
 
+  function update() {
+    slidesContainer.querySelectorAll(".banner-slide").forEach((slide, i) => {
+      slide.classList.toggle("active", i === currentIndex);
+    });
+    dotsContainer.querySelectorAll(".banner-dot").forEach((dot, i) => {
+      dot.classList.toggle("active", i === currentIndex);
+    });
+  }
+
   function goTo(index) {
-    currentIndex = (index + banners.length) % banners.length;
-    render();
+    const nextIndex = (index + banners.length) % banners.length;
+    currentIndex = nextIndex;
+    update();
     resetInterval();
   }
 
@@ -190,7 +208,11 @@ function initBannerSlider() {
   }
 
   function resetInterval() {
-    if (intervalId) clearInterval(intervalId);
+    if (intervalId) {
+      clearInterval(intervalId);
+      intervalId = null;
+    }
+    if (isHovering) return;
     intervalId = setInterval(next, 5000);
   }
 
@@ -201,10 +223,27 @@ function initBannerSlider() {
     if (Number.isFinite(index)) goTo(index);
   });
 
-  prevBtn.addEventListener("click", prev);
-  nextBtn.addEventListener("click", next);
+  if (prevBtn) prevBtn.addEventListener("click", prev);
+  if (nextBtn) nextBtn.addEventListener("click", next);
+
+  // Jeda autoplay saat kursor berada di banner, supaya user bisa membaca/klik CTA.
+  const sliderEl = document.getElementById("bannerSlider");
+  if (sliderEl) {
+    sliderEl.addEventListener("mouseenter", () => {
+      isHovering = true;
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    });
+    sliderEl.addEventListener("mouseleave", () => {
+      isHovering = false;
+      resetInterval();
+    });
+  }
 
   render();
+  update();
   resetInterval();
 }
 
