@@ -309,6 +309,22 @@
      kanan yang tampak dan di ujung kanan hanya panah kiri.
      Tidak overflow = tidak ada panah. */
   var swipeHintWraps = [];
+  /* ===== Akurasi tap pada baris chip (penting di layar sentuh) =====
+     Dua penyebab klasik "sudah nyalan chip A tapi malah ketemu chip B":
+     1) Jari baru saja melepas setelah menggeser (atau baris masih meluncur
+        karena inersia/scroll-snap) -> klik mendarat di chip yang posisinya
+        sudah bergeser, misalnya mau ke Jasa Digital malah kena Pulsa/Games.
+     2) Fade 14px di tepi baris (mask-image) murni visual: chip yang
+        setengah-terserbar di balik fade masih bisa ditekan, jadi ketukan
+        di tepi baris mengenai chip yang tidak tampak utuh.
+     Penanggulangannya:
+     A) Anti-misfire (pointerdown + click di bindSwipeHints): catat
+        scrollLeft saat pointer menyentuh; click yang tiba pada posisi
+        scroll yang sudah berubah > 2px ditelan karena berasal dari gestur
+        geser, bukan ketukan. Ketukan bersih (baris diam) selalu dilewati.
+     B) Arahkan hit-test mengikuti visual: chip hanya bisa ditekan kalau
+        bagian yang tampil di area "solid" (di luar fade) minimal ~28px. */
+  var QL_FADE = 16; // sedikit lebih besar dari fade mask 14px di CSS
   function setSwipeHintState(wrap) {
     var nav = wrap.querySelector(".quick-links") || wrap;
     var overflow = nav.scrollWidth > nav.clientWidth + 1;
@@ -321,8 +337,31 @@
     wrap.classList.toggle("swipe-can-left", overflow && !atStart);
     wrap.classList.toggle("swipe-can-right", overflow && !atEnd);
   }
+  function refreshQlWrap(wrap) {
+    setSwipeHintState(wrap);
+    var nav = wrap.querySelector(".quick-links") || wrap;
+    var rect = nav.getBoundingClientRect();
+    var solidL = rect.left + QL_FADE;
+    var solidR = rect.right - QL_FADE;
+    var chips = wrap.querySelectorAll(".quick-link");
+    Array.prototype.forEach.call(chips, function (chip) {
+      var r = chip.getBoundingClientRect();
+      if (r.width === 0 || r.right <= rect.left || r.left >= rect.right) {
+        chip.style.pointerEvents = "none"; // tersembunyi total di luar baris
+        return;
+      }
+      var solid = Math.max(
+        0,
+        Math.min(r.right, solidR) - Math.max(r.left, solidL)
+      );
+      /* Terlihat solid minimal 28px (atau 30% lebar chip, kalau lebih kecil)
+         supaya "serpihan" di balik fade tidak bisa ditekan. */
+      chip.style.pointerEvents =
+        solid >= Math.min(28, r.width * 0.3) ? "auto" : "none";
+    });
+  }
   function updateSwipeHints() {
-    Array.prototype.forEach.call(swipeHintWraps, setSwipeHintState);
+    Array.prototype.forEach.call(swipeHintWraps, refreshQlWrap);
   }
   function bindSwipeHints(scope) {
     var wraps = (scope || document).querySelectorAll(".quick-links-wrap");
@@ -330,12 +369,48 @@
       if (swipeHintWraps.indexOf(wrap) === -1) {
         swipeHintWraps.push(wrap);
         var nav = wrap.querySelector(".quick-links") || wrap;
+        /* ---- Anti klik salah target (misfire) pada layar sentuh ----
+           Skenario bug: jari menyentuh baris, baris bergeser (bisa hanya
+           sedikit, lalu di-settle oleh scroll-snap), dan browser tetap
+           menerbitkan click di posisi jari — yang kini jatuh di chip lain
+           (mau ke "Jasa Digital" malah "Pulsa"/"Games" yang tersingkap).
+           Deteksinya presisi, tanpa jendela waktu: catat scrollLeft saat
+           pointer menyentuh (pointerdown). Kalau click tiba pada saat
+           scrollLeft sudah berubah > 2px, berarti baris bergerak selama
+           gestur itu -> click-nya adalah sisa gestur geser, telan.
+           Ketukan bersih (baris diam) selalu dilewati, jadi tidak ada
+           ketukan niat yang tertelan. Capture: jalan lebih dulu dari
+           handler per-chip (main.js) dan navigasi bawaan anchor. */
+        var downScroll = null;
+        var downTime = 0;
+        wrap.addEventListener(
+          "pointerdown",
+          function () {
+            downScroll = nav.scrollLeft;
+            downTime = Date.now();
+          },
+          { passive: true }
+        );
+        wrap.addEventListener(
+          "click",
+          function (e) {
+            if (downScroll === null) return; // klik tanpa gestur pointer -> biarkan
+            if (Date.now() - downTime > 1000) return; // gestur lama/stale -> biarkan
+            if (Math.abs(nav.scrollLeft - downScroll) <= 2) return; // ketukan bersih
+            var link =
+              e.target && e.target.closest ? e.target.closest(".quick-link") : null;
+            if (!link) return;
+            e.preventDefault();
+            e.stopPropagation();
+          },
+          true
+        );
         /* Ikuti posisi scroll secara real-time (passive, tanpa jank). */
         nav.addEventListener(
           "scroll",
           function () {
             requestAnimationFrame(function () {
-              setSwipeHintState(wrap);
+              refreshQlWrap(wrap);
             });
           },
           { passive: true }
