@@ -1504,33 +1504,66 @@ input::placeholder {
   }
   /* ===== Tanda "bisa digeser" di baris chip =====
      Muncul hanya kalau barisnya benar-benar overflow (class .swipeable
-     dipasang oleh js/animate.js). Di-sticky-kan ke ujung kanan area yang
-     terlihat, jadi selalu tampak sebagai petunjuk geser. */
-  .quick-links.swipeable::after {
-    content: "geser \203A";
-    position: sticky;
-    right: 16px;
-    flex: 0 0 auto;
-    align-self: center;
-    margin-left: 4px;
-    padding: 6px 10px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.4px;
-    color: #0c937b;
-    background: rgba(12, 147, 123, 0.07);
-    border: 1px dashed rgba(12, 147, 123, 0.45);
-    border-radius: 999px;
-    white-space: nowrap;
-    pointer-events: none;
-    animation: qlSwipeHint 1.5s ease-in-out infinite;
+     dipasang oleh js/animate.js pada pembungkus .quick-links-wrap).
+     Isinya hanya dua panah bulat kecil: ‹ di kiri dan › di kanan, chevron
+     putih di atas latar gelap agar kontras. Panah di-position absolute di
+     atas pembungkus (yang tidak ikut scroll), jadi tidak menggeser layout,
+     tidak menutup chip, dan tidak terseret scroll-snap. .swipe-can-left /
+     .swipe-can-right mengikuti posisi scroll yang aktual. */
+  .quick-links-wrap {
+    position: relative;
   }
-  @keyframes qlSwipeHint {
-    0%, 100% { transform: translateX(0); opacity: 0.8; }
-    50% { transform: translateX(5px); opacity: 1; }
+  .quick-links-wrap.swipeable::before,
+  .quick-links-wrap.swipeable::after {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1;
+    color: #ffffff;
+    background: rgba(17, 24, 39, 0.55);
+    border-radius: 999px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 2;
+  }
+  .quick-links-wrap.swipeable::before {
+    content: "\2039";
+    left: 16px;
+  }
+  .quick-links-wrap.swipeable::after {
+    content: "\203A";
+    right: 16px;
+  }
+  .quick-links-wrap.swipeable.swipe-can-left::before {
+    opacity: 1;
+    animation: qlSwipeHintL 1.5s ease-in-out infinite;
+  }
+  .quick-links-wrap.swipeable.swipe-can-right::after {
+    opacity: 1;
+    animation: qlSwipeHintR 1.5s ease-in-out infinite;
+  }
+  @keyframes qlSwipeHintL {
+    0%, 100% { transform: translateY(-50%); opacity: 0.75; }
+    50% { transform: translateY(-50%) translateX(-3px); opacity: 1; }
+  }
+  @keyframes qlSwipeHintR {
+    0%, 100% { transform: translateY(-50%); opacity: 0.75; }
+    50% { transform: translateY(-50%) translateX(3px); opacity: 1; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .quick-links.swipeable::after { animation: none; }
+    .quick-links-wrap.swipeable.swipe-can-left::before,
+    .quick-links-wrap.swipeable.swipe-can-right::after {
+      animation: none;
+    }
   }
   .quick-link {
     flex: 0 0 auto;

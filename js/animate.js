@@ -29,7 +29,7 @@
     ".section",
     ".card",
     ".features p",
-    ".quick-links",
+    ".quick-links-wrap",
     ".tabs",
     ".item",
     ".payment-card",
@@ -49,7 +49,7 @@
     if (el.classList.contains("lb-top")) return "pop"; // podium memantul
     if (el.classList.contains("lb-row")) return "left"; // baris ranking meluncur
     if (el.classList.contains("features") || el.tagName === "P") return "left";
-    if (el.classList.contains("quick-links") || el.classList.contains("tabs")) return "down";
+    if (el.classList.contains("quick-links-wrap") || el.classList.contains("tabs")) return "down";
     if (el.closest && el.closest("footer")) return "up";
     return "up";
   }
@@ -301,18 +301,46 @@
   /* ---------- Petunjuk "bisa digeser" pada baris chip navigasi ----------
      Di layar sempit baris .quick-links di-scroll horizontal dan scrollbarnya
      disembunyikan. Kalau isinya benar-benar overflow, pasang kelas .swipeable
-     agar CSS menampilkan panah "geser" yang menempel di ujung kanan baris.
-     Kalau tidak overflow (layar cukup lebar), panahnya tidak muncul. */
-  var swipeHintNavs = [];
+     pada pembungkus .quick-links-wrap (yang tidak ikut scroll) supaya CSS
+     bisa menggambar dua panah kecil (‹ di kiri, › di kanan, putih) di atas
+     tepi baris tanpa menggeser layout, tanpa menutup chip, dan tanpa
+     terseret scroll-snap. Kelas .swipe-can-left / .swipe-can-right dipelihara
+     mengikuti posisi scroll yang aktual, jadi di ujung kiri hanya panah
+     kanan yang tampak dan di ujung kanan hanya panah kiri.
+     Tidak overflow = tidak ada panah. */
+  var swipeHintWraps = [];
+  function setSwipeHintState(wrap) {
+    var nav = wrap.querySelector(".quick-links") || wrap;
+    var overflow = nav.scrollWidth > nav.clientWidth + 1;
+    /* scroll-snap-align: start bisa menggeser posisi istirahat beberapa
+       piksel untuk menyelaraskan chip pertama; beri kelonggaran 4px supaya
+       panah kiri hanya muncul kalau user benar-benar sudah menggeser. */
+    var atStart = nav.scrollLeft <= 4;
+    var atEnd = nav.scrollLeft + nav.clientWidth >= nav.scrollWidth - 1;
+    wrap.classList.toggle("swipeable", overflow);
+    wrap.classList.toggle("swipe-can-left", overflow && !atStart);
+    wrap.classList.toggle("swipe-can-right", overflow && !atEnd);
+  }
   function updateSwipeHints() {
-    Array.prototype.forEach.call(swipeHintNavs, function (nav) {
-      nav.classList.toggle("swipeable", nav.scrollWidth > nav.clientWidth + 1);
-    });
+    Array.prototype.forEach.call(swipeHintWraps, setSwipeHintState);
   }
   function bindSwipeHints(scope) {
-    var navs = (scope || document).querySelectorAll(".quick-links");
-    Array.prototype.forEach.call(navs, function (nav) {
-      if (swipeHintNavs.indexOf(nav) === -1) swipeHintNavs.push(nav);
+    var wraps = (scope || document).querySelectorAll(".quick-links-wrap");
+    Array.prototype.forEach.call(wraps, function (wrap) {
+      if (swipeHintWraps.indexOf(wrap) === -1) {
+        swipeHintWraps.push(wrap);
+        var nav = wrap.querySelector(".quick-links") || wrap;
+        /* Ikuti posisi scroll secara real-time (passive, tanpa jank). */
+        nav.addEventListener(
+          "scroll",
+          function () {
+            requestAnimationFrame(function () {
+              setSwipeHintState(wrap);
+            });
+          },
+          { passive: true }
+        );
+      }
     });
     updateSwipeHints();
   }
