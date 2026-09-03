@@ -258,6 +258,14 @@ html.an-js textarea {
 html.an-js .search-box:focus-within {
   transform: translateY(-1px);
   box-shadow: 0 10px 24px rgba(10, 125, 104, 0.16);
+  /* transform di atas membuat .search-box jadi stacking context sendiri
+     (z-index: auto = level 0). Dropdown saran (z-index: 700) ikut "terjebak"
+     di dalamnya, lalu kalah dari .quick-links-wrap yang muncul setelahnya
+     di DOM — baris chip pun menggambar di ATAS bagian atas dropdown.
+     z-index eksplisit mengangkat seluruh konteks .search-box di atas
+     .quick-links-wrap (z auto/0) selama search fokus, tanpa mengubah
+     perilaku swipe/panah quick-links. Menu user (z-600) tetap di atas. */
+  z-index: 10;
 }
 
 /* ---------- 11. Logo & ikon sosial ---------- */
