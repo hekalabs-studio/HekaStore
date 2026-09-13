@@ -119,6 +119,19 @@ Sebaiknya dihapus dari hosting production setelah tidak diperlukan lagi
 (bukan halaman untuk pengunjung biasa, cuma dipakai admin sekali di awal
 atau saat update harga massal).
 
+**Cara hapus dari hosting:** hapus/rename file-nya, lalu `firebase deploy
+--only hosting`. Perlu diingat: halaman ini memanggil `../js/firebase-init.js`
+dan `../data/products-seed.mjs` lewat path relatif, jadi ia **harus** tetap
+di dalam folder publik (`tools/`) selama masih dipakai dari URL production.
+Karena itu jangan menambahkan `tools/**` ke `ignore` di `firebase.json` selama
+alur seeding ini masih dibutuhkan.
+
+**File tooling lain sudah aman dari hosting:** `tools/dash-clean.js`,
+`tools/test-dash-guard.js`, `tools/test-dash-guard-dom.js`, dan
+`tools/make-og-banner.ps1` dikeluarkan lewat `ignore` di `firebase.json`.
+Semuanya murni dijalankan dari terminal, bukan dari browser, jadi tidak ada
+yang perlu mengaksesnya lewat URL.
+
 ## Kalau nanti upgrade ke Blaze plan
 `functions/index.js` sudah disiapkan (integrasi Xendit untuk pembayaran
 otomatis + Digiflazz untuk top up otomatis ke akun game), tapi TIDAK aktif

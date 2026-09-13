@@ -13,7 +13,11 @@
       "*.md",
       "*.txt",
       "package-lock.json",
-      "convert-images.js"
+      "convert-images.js",
+      "tools/dash-clean.js",
+      "tools/test-dash-guard.js",
+      "tools/test-dash-guard-dom.js",
+      "tools/make-og-banner.ps1"
     ],
     "headers": [
       {
