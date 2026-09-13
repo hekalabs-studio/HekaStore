@@ -17,6 +17,12 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
+/* Pembuang tanda garis panjang (em dash U+2014 dsb.) dari teks yang diketik
+   pengunjung sebelum disimpan ke Firestore, supaya data mentahnya sama bersih
+   dengan yang ditampilkan. Fungsinya disediakan js/dash-guard.js; kalau guard
+   belum ikut termuat, nilai dikembalikan apa adanya (bukan error). */
+const noDash = (v) => (typeof v === "string" && window.HekaDash ? window.HekaDash.clean(v) : v);
+
 const config = window.HEKA_PAGE_CONFIG;
 if (!config || !config.category) {
   console.error("HEKA_PAGE_CONFIG belum diisi di halaman ini. checkout.js dihentikan.");
@@ -367,14 +373,14 @@ async function init(config) {
         invoiceId,
         productId,
         category,
-        label,
+        label: noDash(label),
         basePrice,
         total,
         paymentMethod: selectedPayment.value,
-        userId: userId.value,
-        zoneId: zoneId ? zoneId.value : null,
-        nowa: nowa.value,
-        promoCode: nopro && nopro.value ? nopro.value : null,
+        userId: noDash(userId.value),
+        zoneId: zoneId ? noDash(zoneId.value) : null,
+        nowa: noDash(nowa.value),
+        promoCode: nopro && nopro.value ? noDash(nopro.value) : null,
         uid: me.uid, // wajib login (divalidasi ulang oleh firestore.rules)
         userEmail: me.email || "",
         status: "pending_confirmation",
