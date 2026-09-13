@@ -9,10 +9,43 @@ function toNumber(rupiahStr) {
   return Number(String(rupiahStr).replace(/[^0-9]/g, ""));
 }
 
+/* Tanda garis panjang (em dash U+2014, en dash U+2013, minus U+2212, dsb.)
+   tidak boleh ikut tersimpan ke Firestore karena akan tampil mentah di kartu
+   produk & struk checkout. Hyphen ASCII "-" sengaja dibiarkan (mis. "e-mail").
+   Aturannya sama dengan js/dash-guard.js: angka jadi "s/d", sisanya jadi koma. */
+const DASH_RUNS = /[\u2010\u2011\u2012\u2013\u2014\u2015\u2212\u2E3A\u2E3B\uFE58\uFE63\uFF0D]+/g;
+function noDash(value) {
+  const str = String(value == null ? "" : value);
+  if (!DASH_RUNS.test(str)) return str;
+  DASH_RUNS.lastIndex = 0;
+  const chunks = str.split(DASH_RUNS);
+  let out = chunks[0];
+  for (let i = 1; i < chunks.length; i++) {
+    const left = out;
+    const right = chunks[i];
+    const lt = left.replace(/\s+$/, "");
+    const rt = right.replace(/^\s+/, "");
+    let rep;
+    if (lt === "" || rt === "") rep = "";
+    else if (/\d$/.test(lt) && /^\d/.test(rt)) rep = " s/d ";
+    else if (/^rp[\s.\d]/i.test(rt) && /(\d|rb|jt|ribu|juta|miliar)$/i.test(lt)) rep = " s/d ";
+    else if (/\s$/.test(left) && /^\s/.test(right)) rep = ", ";
+    else rep = /\s$/.test(left) || /^\s/.test(right) ? " " : ", ";
+    out += rep + right;
+  }
+  return out.replace(/[ \t]{2,}/g, " ").replace(/[ \t]+([,.;:!])/g, "$1");
+}
+
 function build() {
   const list = [];
   const add = (category, type, label, price, tag) =>
-    list.push({ category, type, label, price: toNumber(price), tag: tag || null });
+    list.push({
+      category,
+      type,
+      label: noDash(label),
+      price: toNumber(price),
+      tag: tag ? noDash(tag) : null,
+    });
 
   /* Free Fire */
   add("freefire", "topup", "5 Diamonds", "Rp 2.500");
@@ -101,15 +134,13 @@ function build() {
   add("tokenlistrik", "topup", "100.000 Token Listrik", "Rp 105.000");
   add("tokenlistrik", "topup", "150.000 Token Listrik", "Rp 155.000");
   add("tokenlistrik", "topup", "200.000 Token Listrik", "Rp 205.000");
-  /* Jasa Digital (HekaLabs Studio) — web dev, UI/UX, video editing, IoT */
+  /* Jasa Digital (HekaLabs Studio): web dev, video editing, IoT */
   add("jasadigital", "topup", "Landing Page / Website 1 Halaman", "Rp 15.000", "🚀 TERMURAH");
   add("jasadigital", "topup", "Website Multi Halaman (Profil / UMKM)", "Rp 25.000", "⭐ RECOMMENDED");
   add("jasadigital", "topup", "Website Top Up Store Lengkap (seperti Hekaapedia)", "Rp 30.000", "💎 BEST SELLER");
   add("jasadigital", "topup", "Jasa Edit Video (maks 1 menit)", "Rp 25.000");
   add("jasadigital", "topup", "Jasa Edit Video (maks 5 menit)", "Rp 35.000");
-  add("jasadigital", "topup", "Jasa Desain UI/UX (maks 5 halaman)", "Rp 20.000");
   add("jasadigital", "topup", "Konsultasi & Setup IoT / Smart Home", "Rp 15.000");
-  add("jasadigital", "topup", "Tools Otomasi / Program Python", "Rp 30.000");
 
   return list;
 }

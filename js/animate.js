@@ -1,5 +1,5 @@
 /* ==========================================================================
-   animate.js — lapisan animasi & micro-interaction bersama (HekaStore)
+   animate.js: lapisan animasi & micro-interaction bersama (HekaStore)
    Vanilla JS, tanpa build step. Berpasangan dengan css/animate.css.
 
    Prinsip:
@@ -55,7 +55,7 @@
   }
 
   /* Jeda per elemen. Podium punya dramanya sendiri: emas duluan, lalu perak,
-     baru perunggu — seperti upacara piala. */
+     baru perunggu, seperti upacara piala. */
   function delayFor(el, idx) {
     var d = Math.min(Math.max(idx, 0), 8) * 55;
     var parent = el.parentElement;
@@ -372,7 +372,7 @@
         /* ---- Anti klik salah target (misfire) pada layar sentuh ----
            Skenario bug: jari menyentuh baris, baris bergeser (bisa hanya
            sedikit, lalu di-settle oleh scroll-snap), dan browser tetap
-           menerbitkan click di posisi jari — yang kini jatuh di chip lain
+           menerbitkan click di posisi jari, yang kini jatuh di chip lain
            (mau ke "Jasa Digital" malah "Pulsa"/"Games" yang tersingkap).
            Deteksinya presisi, tanpa jendela waktu: catat scrollLeft saat
            pointer menyentuh (pointerdown). Kalau click tiba pada saat

@@ -1,6 +1,6 @@
 // js/checkout.js
 // Satu script generik untuk semua halaman topup (Free Fire, ML, Roblox,
-// Pulsa, Token Listrik) — dikonfigurasi lewat window.HEKA_PAGE_CONFIG.
+// Pulsa, Token Listrik), dikonfigurasi lewat window.HEKA_PAGE_CONFIG.
 //
 // MODE SPARK PLAN (gratis, tanpa Cloud Functions):
 // Order ditulis LANGSUNG dari browser ke Firestore (koleksi `orders`).
@@ -8,7 +8,7 @@
 // Cloud Function, firestore.rules mencocokkan setiap field harga yang
 // dikirim terhadap dokumen produk aslinya di server sebelum mengizinkan
 // penulisan. Kalau harga tidak cocok, Firestore MENOLAK writenya sendiri
-// (permission-denied) — client tidak bisa memaksakan harga palsu.
+// (permission-denied), client tidak bisa memaksakan harga palsu.
 
 import { db, auth } from "./firebase-init.js";
 import { openModal } from "./auth-ui.js";
@@ -105,7 +105,7 @@ async function init(config) {
   const perkiraanEl = document.getElementById("perkiraanHarga");
   const nominalWarnEl = document.getElementById("nominalWarning");
   const customCfg = config.customNominal || null;
-  let customOrder = null; // { amount, dp, price } — terisi saat input custom valid
+  let customOrder = null; // { amount, dp, price }; terisi saat input custom valid
   let nominalWarnTimer = null;
 
   function showNominalWarning(msg) {
@@ -122,7 +122,7 @@ async function init(config) {
       const clean = raw.replace(/\D/g, "");
       if (clean !== raw) {
         customInput.value = clean;
-        showNominalWarning("Hanya angka yang diperbolehkan — huruf & karakter lain dihapus.");
+        showNominalWarning("Hanya angka yang diperbolehkan, huruf & karakter lain dihapus.");
       }
       const n = Math.floor(Number(clean));
       if (!Number.isFinite(n) || n <= 0) {
@@ -143,7 +143,7 @@ async function init(config) {
       customOrder = { amount: n, dp, price };
       perkiraanEl.classList.remove("error");
       perkiraanEl.innerHTML =
-        `<b>${n.toLocaleString("id-ID")} ${customCfg.unit} (DP ${dp.toLocaleString("id-ID")})</b> — ${formatRupiah(price)}`;
+        `<b>${n.toLocaleString("id-ID")} ${customCfg.unit} (DP ${dp.toLocaleString("id-ID")})</b> → ${formatRupiah(price)}`;
       // custom nominal dipakai -> batalkan pilihan item di grid
       document.querySelectorAll(".item.selected").forEach((i) => i.classList.remove("selected"));
     });
@@ -251,7 +251,7 @@ async function init(config) {
     if (!hint) return;
     if (user) {
       hint.classList.add("ok");
-      hint.innerHTML = `✅ Membeli sebagai <b>${user.displayName || user.email}</b> — transaksi otomatis tercatat di <b>Riwayat Transaksi</b> akunmu.`;
+      hint.innerHTML = `✅ Membeli sebagai <b>${user.displayName || user.email}</b>, transaksi otomatis tercatat di <b>Riwayat Transaksi</b> akunmu.`;
     } else {
       hint.classList.remove("ok");
       hint.innerHTML = `🔒 Pembelian wajib <b>login / daftar</b> dulu supaya transaksimu terdata &amp; masuk riwayat. <button type="button" class="gate-login-btn">Login / Daftar</button>`;
@@ -336,7 +336,7 @@ async function init(config) {
         // harga terhadap dokumen produk (custom nominal tidak punya dokumen).
         // Pesanan custom dikonfirmasi manual ke admin via WhatsApp.
         isCustom = true;
-        label = `${customOrder.amount} ${customCfg.unit} (DP ${customOrder.dp}) — Custom`;
+        label = `Custom: ${customOrder.amount} ${customCfg.unit} (DP ${customOrder.dp})`;
         basePrice = customOrder.price;
       }
 
@@ -435,7 +435,7 @@ async function init(config) {
       <div class="row"><span class="k">Metode</span><span class="v">${paymentMethod}</span></div>
       ${akunRow}
       <div class="row"><span class="k">${config.idLabel || "User ID"}</span><span class="v">${uidValue}<button class="copy-mini" data-copy="${uidValue}" title="Salin">📋</button></span></div>
-      <div class="row"><span class="k">Kode Promo</span><span class="v">${nopro && nopro.value ? nopro.value : "—"}</span></div>
+      <div class="row"><span class="k">Kode Promo</span><span class="v">${nopro && nopro.value ? nopro.value : "-"}</span></div>
       <div class="row"><span class="k">Invoice</span><span class="v">${invoiceId}<button class="copy-mini" data-copy="${invoiceId}" title="Salin ID Invoice">📋</button></span></div>
       <div class="row total-row"><span class="k">Total Bayar</span><span class="v">${formatRupiah(total)}</span></div>
       ${loginNote}
@@ -526,7 +526,7 @@ async function init(config) {
     if (status === "completed") {
       el.classList.add("st-done");
       el.innerHTML =
-        "✅ <b>Done — Pesanan Selesai!</b> Pesananmu sudah diverifikasi admin. " +
+        "✅ <b>Done: Pesanan Selesai!</b> Pesananmu sudah diverifikasi admin. " +
         "Poin loyalti otomatis masuk saat kamu membuka halaman Profil.";
       updateStepper("completed");
       burstConfetti();
@@ -540,7 +540,7 @@ async function init(config) {
       el.classList.add("st-pending");
       el.innerHTML =
         "⏳ <b>Menunggu verifikasi admin.</b> Setelah pembayaran dicek & pesanan diproses, " +
-        "status di sini otomatis berubah jadi <b>Selesai ✅</b> — tidak perlu refresh halaman.";
+        "status di sini otomatis berubah jadi <b>Selesai ✅</b>, tidak perlu refresh halaman.";
       updateStepper("pending");
     }
   }

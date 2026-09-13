@@ -4,7 +4,7 @@
 // MODE SPARK PLAN: poin tidak disimpan sebagai satu angka yang di-increment
 // (itu butuh Cloud Function/transaction server agar aman dari race
 // condition). Sebagai gantinya, tiap order yang statusnya sudah 'completed'
-// bisa "diklaim" jadi 1 dokumen di users/{uid}/pointClaims/{orderId} — nilai
+// bisa "diklaim" jadi 1 dokumen di users/{uid}/pointClaims/{orderId}, nilai
 // poinnya divalidasi oleh firestore.rules langsung dari order.total asli.
 // Total poin yang ditampilkan = jumlah semua dokumen klaim itu.
 

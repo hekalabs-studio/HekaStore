@@ -18,13 +18,13 @@ Contoh kategori yang sudah ada:
 - `freefire`, `mobilelegend`, `roblox` (game)
 - `pulsatelkomsel`, `pulsaindosat`, `pulsaxl`, `pulsatri` (pulsa)
 - `tokenlistrik` (token listrik)
-- `jasadigital` (jasa digital HekaLabs Studio: website, UI/UX, edit video, IoT, Python)
+- `jasadigital` (jasa digital HekaLabs Studio: website, edit video, IoT)
 
 Untuk kategori baru, cukup tambahkan data produk dengan `category` yang baru.
 
 ## Halaman Jasa Digital
 `html/jasaDigital.html` mempromosikan jasa HekaLabs Studio (web development,
-UI/UX, edit video, IoT, tools Python) dengan portofolio
+edit video, IoT) dengan portofolio
 (Smartoring, EasyCounting, Hekaapedia) dan alur order generic yang sama dengan
 halaman top up (invoice, timer, konfirmasi WA).
 
@@ -40,7 +40,7 @@ window.HEKA_PAGE_CONFIG = {
 };
 ```
 
-Semua opsi bersifat opsional — halaman lama tanpa `HEKA_PAGE_CONFIG` tetap
+Semua opsi bersifat opsional, halaman lama tanpa `HEKA_PAGE_CONFIG` tetap
 jalan dengan default. Style khusus halaman ada di `css/jasaDigital.css`, dan
 link promosi Jasa Digital sudah dipasang di nav/footer semua halaman +
 section `#jasaPromo` di `index.html`.
@@ -99,7 +99,7 @@ navigasi dengan panah kiri/kanan atau dot di bawah banner.
 - Mode ini 100% jalan di Spark plan (tanpa Cloud Functions sama sekali).
 - Order ditulis langsung dari browser ke Firestore, divalidasi oleh
   `firestore.rules` (harga selalu dicocokkan ke dokumen produk asli).
-- Poin loyalitas JALAN di Spark plan — tidak pakai counter yang di-increment,
+- Poin loyalitas JALAN di Spark plan, tidak pakai counter yang di-increment,
   tapi 1 dokumen klaim per order `completed` di `users/{uid}/pointClaims`,
   yang nilainya divalidasi rules langsung dari `order.total`. Lihat
   `js/profile.js` dan bagian `pointClaims` di `firestore.rules`.
@@ -107,16 +107,16 @@ navigasi dengan panah kiri/kanan atau dot di bawah banner.
 - Setiap order baru mengirim **email verifikasi ke admin** (`hekoding@gmail.com`)
   dengan tombol **Verify**. Admin klik Verify (setelah item game masuk) → order
   `completed` → riwayat user jadi "Selesai" + poin masuk otomatis. Backend-nya
-  Google Apps Script (gratis, tanpa Blaze) — setup di `apps-script/README.md`.
+  Google Apps Script (gratis, tanpa Blaze), setup di `apps-script/README.md`.
   Menandai `completed` juga tetap bisa manual lewat Firebase Console.
 - Alur ini berlaku untuk **semua halaman produk** (game, pulsa, token listrik,
-  dst) — backend meng-query order berdasarkan `status`, bukan kategori, jadi
+  dst), backend meng-query order berdasarkan `status`, bukan kategori, jadi
   tidak ada yang khusus Free Fire/Mobile Legends saja.
 - Halaman pembayaran menampilkan **banner status real-time**: selama menunggu
   tampil "⏳ Menunggu verifikasi admin", dan berubah otomatis jadi
-  "✅ Done — Pesanan Selesai" begitu admin klik Verify (tanpa refresh). Ini
+  "✅ Done: Pesanan Selesai" begitu admin klik Verify (tanpa refresh). Ini
   hanya untuk pembeli yang **login** (aturan Firestore cuma mengizinkan pemilik
   order membaca dokumennya); pembeli tamu tidak melihat banner ini.
 - `functions/index.js` (integrasi Xendit + Digiflazz untuk pembayaran &
-  top up otomatis) TIDAK aktif selama Spark plan — disimpan sebagai
+  top up otomatis) TIDAK aktif selama Spark plan, disimpan sebagai
   referensi kalau nanti upgrade ke Blaze plan.

@@ -3,7 +3,7 @@ rules_version = '2';
 // Project ini pakai Spark plan (gratis) -> TIDAK ada Cloud Functions.
 // Semua validasi yang tadinya dilakukan Cloud Function `createOrder`
 // sekarang dipindah ke sini. Rules tetap dieksekusi di server Firestore,
-// jadi tetap tidak bisa dimanipulasi lewat DevTools — cuma bedanya tidak
+// jadi tetap tidak bisa dimanipulasi lewat DevTools, cuma bedanya tidak
 // butuh Blaze plan.
 
 service cloud.firestore {
@@ -30,7 +30,7 @@ service cloud.firestore {
     // ---------------- Order / Transaksi ----------------
     // WAJIB LOGIN: setiap order WAJIB punya pemilik (uid) supaya pendataan &
     // riwayat transaksi bekerja. Client sudah memintanya lewat gate di
-    // checkout.js; di sini server MENOLAK order tamu tanpa uid — lapisan
+    // checkout.js; di sini server MENOLAK order tamu tanpa uid, lapisan
     // ke-2 kalau client diubah lewat DevTools. Setiap field harga tetap
     // di-cross-check ke dokumen produk aslinya sebelum write diizinkan.
     match /orders/{orderId} {

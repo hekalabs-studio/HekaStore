@@ -129,7 +129,7 @@ header {
   font-size: 0.8rem;
   padding: 6px 13px;
 }
-/* "Beranda" di logo — tidak perlu jadi chip di layar sempit */
+/* "Beranda" di logo, tidak perlu jadi chip di layar sempit */
 .quick-link[href="#bannerSlider"],
 .quick-link[href="../index.html"] {
   display: none;

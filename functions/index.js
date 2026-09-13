@@ -3,14 +3,14 @@
  *
  * ⚠️ TIDAK AKTIF SELAMA PROJECT MASIH DI SPARK PLAN (GRATIS).
  * Cloud Functions (semua isi file ini) butuh Blaze plan untuk bisa
- * di-deploy. Selama masih Spark, folder ini TIDAK ikut di-deploy — lihat
+ * di-deploy. Selama masih Spark, folder ini TIDAK ikut di-deploy, lihat
  * firebase.json (tidak ada key "functions" di sana secara sengaja).
  * Situs saat ini berjalan tanpa file ini sama sekali: order dibuat
  * langsung dari browser + divalidasi oleh firestore.rules (lihat
  * js/checkout.js dan firestore.rules).
  *
  * File ini disimpan sebagai referensi/rencana ke depan kalau nanti upgrade
- * ke Blaze plan — isinya pembayaran otomatis via Xendit + top up otomatis
+ * ke Blaze plan, isinya pembayaran otomatis via Xendit + top up otomatis
  * via Digiflazz. Untuk mengaktifkan nanti: tambahkan kembali key
  * "functions" di firebase.json, isi functions/.env dengan API key Xendit
  * & Digiflazz, lalu firebase deploy --only functions.

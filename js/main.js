@@ -133,7 +133,7 @@ const banners = [
     gradient: "linear-gradient(135deg, #0c937b 0%, #0eb193 45%, #2ed9b3 100%)",
     icon: "🛠️",
     title: "Jasa Digital HekaLabs Studio",
-    subtitle: "Website, UI/UX, edit video, IoT — kerjakan proyekmu sekarang.",
+    subtitle: "Website, edit video, IoT. Kerjakan proyekmu sekarang.",
     btnText: "Pesan Jasa",
     btnLink: "html/jasaDigital.html",
   },

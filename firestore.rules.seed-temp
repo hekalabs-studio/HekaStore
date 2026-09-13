@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// SEMENTARA — HANYA untuk sekali proses seeding lewat tools/seed-once.html
+// SEMENTARA: HANYA untuk sekali proses seeding lewat tools/seed-once.html
 //
 // Bedanya dengan firestore.rules yang asli: baris "products write" di bawah
 // dibuka untuk user yang login (request.auth != null), supaya seed-once.html
@@ -15,7 +15,7 @@ rules_version = '2';
 //   3. SEGERA setelah selesai: firebase deploy --only firestore:rules
 //      (ini akan pakai firestore.rules yang asli lagi, sesuai firebase.json)
 //
-// Jangan biarkan rules ini aktif lebih lama dari yang perlu — selama aktif,
+// Jangan biarkan rules ini aktif lebih lama dari yang perlu, selama aktif,
 // SIAPA SAJA yang berhasil bikin akun di situsmu bisa menulis/mengubah data
 // produk (harga, dll).
 

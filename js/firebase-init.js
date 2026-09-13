@@ -11,7 +11,7 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/12.18.0/firebas
 // Catatan: TIDAK ada import firebase-functions di sini. Project ini pakai
 // Spark plan (gratis) yang tidak bisa deploy Cloud Functions. Validasi
 // harga & aturan order sekarang dilakukan lewat Firestore Security Rules
-// (firestore.rules) — tetap server-side dan tidak bisa dimanipulasi dari
+// (firestore.rules), tetap server-side dan tidak bisa dimanipulasi dari
 // browser, tapi tidak butuh Blaze plan. Lihat js/checkout.js.
 
 const firebaseConfig = {
@@ -29,7 +29,7 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 
 // Analytics gagal di beberapa lingkungan (mis. dibuka dari file://, atau
-// browser dengan ad-blocker) — jangan sampai melempar error yang
+// browser dengan ad-blocker), jangan sampai melempar error yang
 // menghentikan seluruh halaman.
 analyticsIsSupported()
   .then((ok) => {

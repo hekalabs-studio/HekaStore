@@ -310,7 +310,7 @@
 }
 
 /* ============================================================
-   Animasi & interaksi tambahan (v2 — meyakinkan + interaktif)
+   Animasi & interaksi tambahan (v2, meyakinkan + interaktif)
    ============================================================ */
 
 /* ---------- Keyframes ---------- */
@@ -489,17 +489,38 @@ html { scroll-behavior: smooth; }
 }
 .jd-faq-item summary::-webkit-details-marker { display: none; }
 .jd-faq-item summary::after {
-  content: "+";
+  /* Batang horizontal: berpasangan dengan ::before membentuk tanda "+",
+     dan tetap jadi satu garis lurus saat item dibuka (tanpa karakter dash). */
+  content: "";
   position: absolute;
-  right: 16px;
+  right: 15px;
   top: 50%;
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: #0c937b;
   transform: translateY(-50%);
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #0c937b;
   transition: transform 0.25s ease;
 }
-.jd-faq-item[open] summary::after { content: "–"; transform: translateY(-50%) rotate(180deg); }
+.jd-faq-item summary::before {
+  /* Batang vertikal tanda "+" - digambar pakai CSS, bukan karakter teks.
+     Saat item dibuka batangnya hilang sehingga tersisa satu garis lurus. */
+  content: "";
+  position: absolute;
+  right: 21px;
+  top: 50%;
+  width: 2px;
+  height: 15px;
+  border-radius: 2px;
+  background: #0c937b;
+  transform: translateY(-50%);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.jd-faq-item[open] summary::before {
+  transform: translateY(-50%) scaleY(0);
+  opacity: 0;
+}
+.jd-faq-item[open] summary::after { transform: translateY(-50%); }
 .jd-faq-item .jd-faq-body {
   padding: 0 16px 14px;
   font-size: 0.85rem;

@@ -90,7 +90,7 @@ const MODAL_CSS = `
 function injectStylesOnce() {
   // CSS chip profil & modal harus terpasang SEJAK AWAL.
   // Kalau hanya di-inject saat modal dibuka, user yang sudah login
-  // melihat chip profil tanpa style (berantakan) — bug lama.
+  // melihat chip profil tanpa style (berantakan), bug lama.
   if (document.getElementById("hekaAuthStyles")) return;
   const style = document.createElement("style");
   style.id = "hekaAuthStyles";

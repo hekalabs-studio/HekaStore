@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8" />
-<title>Seed Produk — Hekaapedia (khusus admin)</title>
+<title>Seed Produk | Hekaapedia (khusus admin)</title>
 <meta name="robots" content="noindex, nofollow" />
 <style>
   body{font-family:system-ui,sans-serif;max-width:640px;margin:40px auto;padding:0 20px;color:#111}
@@ -40,7 +40,7 @@
 <script type="module">
   import { auth, db } from "../js/firebase-init.js";
   import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-  import { doc, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+  import { doc, collection, getDocs, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
   import { PRODUCTS } from "../data/products-seed.mjs";
 
   const logEl = document.getElementById("log");
@@ -75,6 +75,7 @@
     log(`Mulai seeding ${PRODUCTS.length} produk...`);
 
     const counters = {};
+    const seededIds = new Set();
     let batch = writeBatch(db);
     let opCount = 0;
     let total = 0;
@@ -86,6 +87,7 @@
 
         const slug = p.label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
         const docId = `${p.category}-${p.type}-${slug}`.slice(0, 140);
+        seededIds.add(docId);
 
         batch.set(doc(db, "products", docId), {
           category: p.category,
@@ -108,6 +110,36 @@
       }
       if (opCount > 0) await batch.commit();
       log(`✅ Selesai! ${total} produk berhasil ditulis ke koleksi 'products'.`);
+
+      // Sinkron penghapusan: nonaktifkan (active:false, bukan delete) produk
+      // yang masih ada di Firestore tapi sudah tidak ada di products-seed.mjs,
+      // supaya paket yang dihapus tidak lagi muncul di form pemesanan.
+      try {
+        const existing = await getDocs(collection(db, "products"));
+        const stale = [];
+        existing.forEach((d) => {
+          if (!seededIds.has(d.id) && d.data().active !== false) stale.push(d);
+        });
+        if (stale.length > 0) {
+          let staleBatch = writeBatch(db);
+          let staleCount = 0;
+          for (const d of stale) {
+            staleBatch.update(d.ref, { active: false, updatedAt: serverTimestamp() });
+            staleCount++;
+            if (staleCount >= 400) {
+              await staleBatch.commit();
+              staleBatch = writeBatch(db);
+              staleCount = 0;
+            }
+          }
+          if (staleCount > 0) await staleBatch.commit();
+          log(`🔁 ${stale.length} produk lama dinonaktifkan (sudah tidak ada di seed):`);
+          stale.forEach((d) => log(`  - ${d.id}`));
+        }
+      } catch (syncErr) {
+        log(`⚠️ Gagal sinkron nonaktif produk lama: ${syncErr.message}`);
+      }
+
       log(`\nSEKARANG: deploy ulang firestore.rules yang asli (bukan yang -seed-temp), lalu hapus/jangan host halaman ini lagi.`);
     } catch (err) {
       log("❌ Gagal: " + err.message);

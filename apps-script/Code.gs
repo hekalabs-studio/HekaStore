@@ -1,5 +1,5 @@
 /**
- * Hekaapedia — Email Verify Order (Google Apps Script)
+ * Hekaapedia: Email Verify Order (Google Apps Script)
  * =====================================================
  * Backend GRATIS (tanpa Blaze / tanpa Cloud Functions) untuk fitur:
  *   1) Kirim email ke admin (hekoding@gmail.com) tiap ada order baru.
@@ -66,7 +66,7 @@ function notifyPendingOrders() {
 
 /* =========================================================================
  * 2) doGet: halaman "Review & Verify" (dibuka dari link di email)
- *    GET ini HANYA MENAMPILKAN halaman — tidak mengubah data — supaya
+ *    GET ini HANYA MENAMPILKAN halaman, tidak mengubah data, supaya
  *    scanner/anti-virus email yang suka "prefetch" link tidak menyelesaikan
  *    order tanpa sengaja. Perubahan status terjadi lewat doPost (tombol).
  * ========================================================================= */
@@ -181,7 +181,7 @@ function sendAdminEmail_(order, token) {
 
   MailApp.sendEmail({
     to: adminEmail_(),
-    subject: 'Order baru ' + (d.invoiceId || order.id) + ' — perlu verifikasi (' + formatRupiah_(d.total) + ')',
+    subject: 'Order baru ' + (d.invoiceId || order.id) + ', perlu verifikasi (' + formatRupiah_(d.total) + ')',
     htmlBody: html,
     name: 'Hekaapedia Order Bot'
   });
@@ -301,8 +301,33 @@ function makeToken_() { return (Utilities.getUuid() + Utilities.getUuid()).repla
 function nowIso_() { return new Date().toISOString(); }
 
 function esc_(s) {
-  return String(s == null ? '' : s)
+  return noDash_(String(s == null ? '' : s))
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+/* Buang tanda garis panjang (em dash U+2014, en dash U+2013, dsb.) dari teks
+   order sebelum masuk email admin / halaman review, supaya seragam dengan
+   tampilan di situs (lihat js/dash-guard.js). Hyphen ASCII "-" dibiarkan. */
+function noDash_(s) {
+  var runs = /[\u2010\u2011\u2012\u2013\u2014\u2015\u2212\u2E3A\u2E3B\uFE58\uFE63\uFF0D]+/g;
+  runs.lastIndex = 0;
+  if (!runs.test(s)) return s;
+  runs.lastIndex = 0;
+  var chunks = s.split(runs);
+  if (chunks.length < 2) return s;
+  var out = chunks[0];
+  for (var i = 1; i < chunks.length; i++) {
+    var left = out, right = chunks[i];
+    var lt = left.replace(/\s+$/, ''), rt = right.replace(/^\s+/, '');
+    var rep;
+    if (lt === '' || rt === '') rep = '';
+    else if (/\d$/.test(lt) && /^\d/.test(rt)) rep = ' s/d ';
+    else if (/^rp[\s.\d]/i.test(rt) && /(\d|rb|jt|ribu|juta|miliar)$/i.test(lt)) rep = ' s/d ';
+    else if (/\s$/.test(left) && /^\s/.test(right)) rep = ', ';
+    else rep = (/\s$/.test(left) || /^\s/.test(right)) ? ' ' : ', ';
+    out += rep + right;
+  }
+  return out.replace(/[ \t]{2,}/g, ' ').replace(/[ \t]+([,.;:!])/g, '$1');
 }
 
 function formatRupiah_(num) {
@@ -371,7 +396,7 @@ function checkScopes() {
   var scopes = (info.scope || '').split(' ');
   console.log('Scope aktif:\n- ' + scopes.join('\n- '));
   console.log(scopes.indexOf('https://www.googleapis.com/auth/datastore') >= 0
-    ? '✅ Scope datastore ADA — Firestore harusnya bisa diakses.'
-    : '❌ Scope datastore TIDAK ADA — otorisasi ulang script (lihat README).');
+    ? '✅ Scope datastore ADA: Firestore harusnya bisa diakses.'
+    : '❌ Scope datastore TIDAK ADA, otorisasi ulang script (lihat README).');
 }
 

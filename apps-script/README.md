@@ -1,15 +1,15 @@
-# Email Verify Order — Backend Apps Script (GRATIS)
+# Email Verify Order: Backend Apps Script (GRATIS)
 
 Backend gratis untuk mengirim **email verifikasi order** ke admin
 (`hekoding@gmail.com`) dan tombol **Verify** yang menandai order `completed`.
-Tidak butuh Blaze plan / Cloud Functions — tetap 100% di Spark plan.
+Tidak butuh Blaze plan / Cloud Functions, tetap 100% di Spark plan.
 
 Isi folder ini (`Code.gs`, `appsscript.json`) di-**paste** ke project Apps
 Script baru di https://script.google.com (Apps Script tidak nge-deploy dari
 repo ini; file di sini cuma sumber yang di-version-control).
 
 ## Cara kerja singkat
-1. User checkout → order masuk Firestore (`status: pending_confirmation`) — tidak berubah.
+1. User checkout → order masuk Firestore (`status: pending_confirmation`), tidak berubah.
 2. Trigger waktu (tiap 1 menit) `notifyPendingOrders()` mencari order pending yang
    belum dinotifikasi → kirim email ke admin dengan tombol **Review & Verify**.
 3. Admin buka link → halaman ringkasan order → klik **✅ Tandai Selesai**.
@@ -17,7 +17,7 @@ repo ini; file di sini cuma sumber yang di-version-control).
    dan poin loyalti otomatis masuk (mekanisme lama di `js/profile.js`).
 
 > Link di email hanya **menampilkan** halaman (GET). Perubahan status terjadi
-> lewat **tombol (POST)** — supaya scanner/anti-virus email yang suka "prefetch"
+> lewat **tombol (POST)**, supaya scanner/anti-virus email yang suka "prefetch"
 > link tidak menyelesaikan order tanpa sengaja.
 
 ## Setup (sekali saja, ~10 menit)
@@ -48,7 +48,7 @@ Ini yang membuat token script boleh membaca/menulis Firestore (bypass rules).
 
 ### 4. Deploy sebagai Web app
 1. **Deploy** → **New deployment** → ⚙️ pilih type **Web app**.
-2. **Execute as:** `Me` — **Who has access:** `Anyone`.
+2. **Execute as:** `Me`, **Who has access:** `Anyone`.
 3. Klik **Deploy** → **Authorize access** → login → setujui izin
    (Firestore, kirim email, akses jaringan).
 4. Salin **Web app URL** (bentuknya `https://script.google.com/macros/s/XXXX/exec`).
@@ -60,7 +60,7 @@ Ini yang membuat token script boleh membaca/menulis Firestore (bypass rules).
 
 ### 5. Pasang trigger waktu (kirim email otomatis)
 1. Ikon ⏰ **Triggers** (panel kiri) → **Add Trigger**.
-2. Function: **`notifyPendingOrders`** — Event source: **Time-driven** —
+2. Function: **`notifyPendingOrders`**. Event source: **Time-driven**,
    Type: **Minutes timer** → **Every minute**.
 3. Save (authorize lagi kalau diminta).
 
@@ -69,7 +69,7 @@ Ini yang membuat token script boleh membaca/menulis Firestore (bypass rules).
   **Execution log**: harus muncul jumlah order pending (bukti koneksi Firestore OK).
 - Pilih fungsi **`sendTestEmail`** → **Run** → cek inbox `hekoding@gmail.com`
   (email contoh; link Verify-nya sengaja tidak valid).
-- Buat order asli di situs → dalam ≤1–2 menit email masuk dengan tombol
+- Buat order asli di situs → dalam ≤1-2 menit email masuk dengan tombol
   **Review & Verify** → klik → **Tandai Selesai** → cek Firestore Console:
   `status` jadi `completed`. Buka Profil user → riwayat "Selesai" + poin bertambah.
 
@@ -78,7 +78,7 @@ Ini yang membuat token script boleh membaca/menulis Firestore (bypass rules).
   ada di inbox admin + dokumen Firestore. `orderId` = ID acak Firestore.
 - Verify menolak kalau status bukan `pending_confirmation` (anti dobel-proses).
 - Guard `adminNotified` mencegah email dobel.
-- Token IAM tidak pernah keluar ke browser — semua di sisi Apps Script.
+- Token IAM tidak pernah keluar ke browser, semua di sisi Apps Script.
 
 ## Troubleshooting: error 403 "insufficient authentication scopes"
 Pesan `ACCESS_TOKEN_SCOPE_INSUFFICIENT` / `Request had insufficient
@@ -106,10 +106,10 @@ harus dari manifest **dan** script harus di-otorisasi ULANG. Perbaikan:
 > Catatan: error ini soal **scope OAuth**, beda dari error IAM. Kalau scope
 > sudah benar tapi masih 403 dengan pesan *"Missing or insufficient
 > permissions"*, berarti akun pemilik script belum punya IAM role di project
-> (lihat langkah 1 Setup — role **Cloud Datastore User**).
+> (lihat langkah 1 Setup, role **Cloud Datastore User**).
 
 ## Kalau akun script BUKAN anggota project hekaapedia
-Alternatif: pakai **service account key** (kamu sudah familiar — lihat
+Alternatif: pakai **service account key** (kamu sudah familiar, lihat
 `DEPLOY.md` "Cara B"). Buat service account dengan role *Cloud Datastore User*,
 generate JSON key, lalu ganti `ScriptApp.getOAuthToken()` di `Code.gs` dengan
 token OAuth2 dari service account (mis. library `OAuth2` untuk Apps Script,

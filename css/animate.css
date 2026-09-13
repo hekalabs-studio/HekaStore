@@ -1,10 +1,10 @@
 /* ==========================================================================
-   animate.css — lapisan animasi & micro-interaction bersama (HekaStore)
+   animate.css: lapisan animasi & micro-interaction bersama (HekaStore)
    Dipakai oleh: index.html, profile.html, dan seluruh halaman top up di html/
    Cara kerja  : js/animate.js memberi atribut [data-an] pada elemen yang ada
                  di DOM (termasuk yang baru dibuat belakangan oleh checkout.js
                  dan main.js), lalu menampilkannya saat masuk viewport.
-                 Tanpa JS, konten tetap tampil normal — animasi ini murni bonus.
+                 Tanpa JS, konten tetap tampil normal, animasi ini murni bonus.
    Catatan     : sengaja TIDAK memakai ::before/::after pada class warisan
                  (.item, .konfirm-btn, .timer-box, .invoice-header, .tab, dll)
                  karena pseudo-element tersebut sudah dipakai style lama.
@@ -18,7 +18,7 @@ html.an-js {
 /*
    Reveal state. PENTING: setelah transisi selesai, animate.js MENGHAPUS
    atribut data-an dari elemen, jadi elemen "kembali milik" CSS-nya sendiri
-   (hover, scale, transform bawaan) — itulah yang bikin hover terasa hidup
+   (hover, scale, transform bawaan), itulah yang bikin hover terasa hidup
    dan tidak kaku. Elemen reveal tidak punya transform permanen, jadi pelepasan
    ini tidak pernah menyebabkan lompatan visual.
 */
@@ -127,7 +127,7 @@ html.an-js .banner:hover img {
 /*
    NOTE: aturan transition hover ini ASLINYA menutupi transition reveal pada
    elemen yang sekaligus target reveal. Masalahnya sudah diatasi dengan
-   animate.js yang melepas atribut data-an setelah reveal — sehingga aturan di
+   animate.js yang melepas atribut data-an setelah reveal, sehingga aturan di
    sini hanya dipakai untuk hover, dan hover jadi responsif (0.28s + pegas).
 */
 html.an-js .card,
@@ -261,7 +261,7 @@ html.an-js .search-box:focus-within {
   /* transform di atas membuat .search-box jadi stacking context sendiri
      (z-index: auto = level 0). Dropdown saran (z-index: 700) ikut "terjebak"
      di dalamnya, lalu kalah dari .quick-links-wrap yang muncul setelahnya
-     di DOM — baris chip pun menggambar di ATAS bagian atas dropdown.
+     di DOM, baris chip pun menggambar di ATAS bagian atas dropdown.
      z-index eksplisit mengangkat seluruh konteks .search-box di atas
      .quick-links-wrap (z auto/0) selama search fokus, tanpa mengubah
      perilaku swipe/panah quick-links. Menu user (z-600) tetap di atas. */

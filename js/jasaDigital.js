@@ -11,7 +11,7 @@
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-  // Penanda JS aktif — animasi reveal hanya jalan bila class ini ada
+  // Penanda JS aktif: animasi reveal hanya jalan bila class ini ada
   // (tanpa JS, semua konten tetap tampil normal).
   document.documentElement.classList.add("jd-js");
 
@@ -92,7 +92,7 @@
   // =========================
   var typeEl = document.getElementById("jdTypeWord");
   if (typeEl && !reduceMotion) {
-    var words = ["Website", "UI/UX Design", "Video Editing", "IoT Pintar", "Tools Otomasi"];
+    var words = ["Website", "Video Editing", "IoT Pintar"];
     var wi = 0;
     var ci = words[0].length; // mulai dari kata pertama yang sudah lengkap
     var deleting = true;
@@ -151,7 +151,7 @@
   });
 
   // ===================================
-  // 6. FAQ accordion — buka satu saja
+  // 6. FAQ accordion: buka satu saja
   // ===================================
   var faqItems = document.querySelectorAll(".jd-faq-item");
   faqItems.forEach(function (item) {

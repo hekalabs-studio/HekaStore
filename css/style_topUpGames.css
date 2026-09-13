@@ -521,7 +521,7 @@ input::placeholder {
 }
 
 /* ============================================================
-   INVOICE — MODERN REDESIGN
+   INVOICE: MODERN REDESIGN
    ============================================================ */
 @keyframes inv-fade-up {
   from { opacity: 0; transform: translateY(14px); }
